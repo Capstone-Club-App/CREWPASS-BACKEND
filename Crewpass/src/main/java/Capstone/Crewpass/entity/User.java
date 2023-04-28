@@ -3,15 +3,15 @@ package Capstone.Crewpass.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Blob;
 
 @Entity
 @Data
 @Table(name="user")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +37,9 @@ public class User {
     private String school;
 
     @Column(name="user_profile")
-    private Blob userProfile;
+    private String userProfile;
 
-    public User(Integer userId, String userLoginId, String userPw, String userName, String userEmail, String job, String school, Blob userProfile) {
+    public User(Integer userId, String userLoginId, String userPw, String userName, String userEmail, String job, String school, String userProfile) {
         this.userId = userId;
         this.userLoginId = userLoginId;
         this.userPw = userPw;
