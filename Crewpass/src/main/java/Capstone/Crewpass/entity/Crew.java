@@ -3,8 +3,6 @@ package Capstone.Crewpass.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Blob;
-
 @Entity
 @Data
 @Table(name = "crew")

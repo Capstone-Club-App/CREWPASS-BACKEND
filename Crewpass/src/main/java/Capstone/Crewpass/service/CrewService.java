@@ -6,13 +6,11 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,9 +36,8 @@ public class CrewService {
                 .build()
                 .getService();
 
-        String bucketName = "crewpass-cloud-storage";
-        BlobInfo blobInfo = storage.create(
-                BlobInfo.newBuilder(bucketName, fileName)
+        storage.create(
+                BlobInfo.newBuilder("crewpass-cloud-storage", fileName)
                         .build(),
                 profile.getInputStream()
         );
