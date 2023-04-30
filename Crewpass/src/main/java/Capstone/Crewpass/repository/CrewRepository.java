@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CrewRepository extends JpaRepository<Crew, Integer> {
     Optional<Crew> findByCrewLoginId(String crewLoginId);
+
+    Optional<Crew> findByCrewLoginIdAndCrewPw(String loginId, String password);
 }
