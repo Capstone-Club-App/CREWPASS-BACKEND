@@ -2,8 +2,10 @@ package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.User;
 import Capstone.Crewpass.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +33,19 @@ public class UserController {
     ) throws IOException {
         User user = new User(null, loginId, password, name, email, job, school, userService.uploadProfile(profile));
         userService.joinUser(user);
+    }
 
+    @PostMapping("/user/local")
+    public void loginUser(
+            @RequestParam("loginId") String loginId,
+            @RequestParam("password") String password,
+            HttpServletRequest request
+    ){
+        userService.loginUser(loginId, password, request);
+    }
+
+    @DeleteMapping("/user/local")
+    public void logoutCrew(HttpServletRequest request){
+        userService.logoutUser(request);
     }
 }

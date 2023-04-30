@@ -6,6 +6,8 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +56,23 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
         if(optionalUser.isPresent()){
             throw new IllegalStateException("이미 존재하는 회원 ID 입니다.");
+        }
+    }
+
+    public void loginUser(String loginId, String password, HttpServletRequest request) {
+        Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(loginId,password);
+        if(optionalUser.isPresent()){
+            HttpSession session = request.getSession(true);
+            Integer userId = optionalUser.get().getUserId();
+            session.setAttribute("userId", String.valueOf(userId));
+        }
+    }
+
+
+    public void logoutUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
         }
     }
 }
