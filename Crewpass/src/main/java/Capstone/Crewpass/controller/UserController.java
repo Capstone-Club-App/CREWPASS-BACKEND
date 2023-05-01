@@ -56,4 +56,19 @@ public class UserController {
         String userId = (String) session.getAttribute("userId");
         return userService.getUserBasicInfo(userId);
     }
+
+    @PutMapping("/user")
+    public void updateUserBasicInfo(
+            @RequestParam("name") String name,
+            @RequestParam("password") String password,
+            @RequestParam("email") String email,
+            @RequestParam("job") String job,
+            @RequestParam("school") String school,
+            @RequestParam("profile")MultipartFile profile,
+            HttpServletRequest request
+    ) throws IOException {
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute("userId");
+        userService.updateUserBasicInfo(userId, name, password, email, job, school, userService.uploadProfile(profile));
+    }
 }
