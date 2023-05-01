@@ -1,5 +1,6 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.dto.RecruitmentListInterface;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -63,5 +65,10 @@ public class RecruitmentService {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    // 로그인한 동아리가 작성한 모집글 목록 조회
+    public List<RecruitmentListInterface> checkMyRecruitmentList(Integer crewId) {
+        return recruitmentRepository.findMyRecruitmentList(crewId);
     }
 }
