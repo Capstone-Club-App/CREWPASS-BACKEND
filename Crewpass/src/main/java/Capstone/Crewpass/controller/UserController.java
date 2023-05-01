@@ -3,14 +3,14 @@ package Capstone.Crewpass.controller;
 import Capstone.Crewpass.entity.User;
 import Capstone.Crewpass.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -47,5 +47,13 @@ public class UserController {
     @DeleteMapping("/user/local")
     public void logoutCrew(HttpServletRequest request){
         userService.logoutUser(request);
+    }
+
+    @ResponseBody
+    @GetMapping("/user")
+    public Optional<User> getUserBasicInfo(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute("userId");
+        return userService.getUserBasicInfo(userId);
     }
 }
