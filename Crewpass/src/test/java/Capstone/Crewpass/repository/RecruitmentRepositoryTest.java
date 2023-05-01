@@ -29,8 +29,8 @@ class RecruitmentRepositoryTest {
     // 모집글 작성 테스트 // 미완성
     @Test
     public void recruitmentSave_success() throws Exception {
-        // Given
-        LocalDateTime now = LocalDateTime.now(); // 로컬컴퓨터의 현재 날짜와 시간 정보 // ex) 2019-11-12T16:34:30.388
+//        // Given
+//        LocalDateTime now = LocalDateTime.now(); // 로컬컴퓨터의 현재 날짜와 시간 정보 // ex) 2019-11-12T16:34:30.388
 
 //        Recruitment recruitment1 = Recruitment.builder()
 //                .title("제목1")

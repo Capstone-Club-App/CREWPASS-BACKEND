@@ -38,7 +38,7 @@ public class RecruitmentController {
             ) throws IOException {
 
         HttpSession session = request.getSession();
-        session.setAttribute("crewId", 2); // 테스트용 : 세션에 crewId 넣음
+//        session.setAttribute("crewId", 2); // 테스트용 : 세션에 crewId 넣음
         int crewid = (Integer) session.getAttribute("crewId");
 
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
