@@ -68,4 +68,13 @@ public class RecruitmentController {
 
         return recruitmentService.checkMyRecruitmentList(crewId);
     }
+
+    // 동아리 분야 별 최신순으로 모집글 목록 조회
+    @GetMapping(value = "/recruitment/list/total/recent")
+    public List<RecruitmentListInterface> checkRecruitListByNewest(
+            HttpServletRequest request
+    ) throws IOException {
+
+        return recruitmentService.checkRecruitmentListByNewest();
+    }
 }
