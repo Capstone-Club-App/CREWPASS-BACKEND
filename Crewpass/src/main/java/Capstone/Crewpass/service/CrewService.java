@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class CrewService {
     private final CrewRepository crewRepository;
@@ -74,5 +75,11 @@ public class CrewService {
         if(session != null){
             session.invalidate();
         }
+    }
+
+    public Optional<Crew> getCrewBasicInfo(String crewId){
+        Optional<Crew> optionalCrew = crewRepository.findById(Integer.valueOf(crewId));
+        log.info(String.valueOf(optionalCrew));
+        return optionalCrew;
     }
 }

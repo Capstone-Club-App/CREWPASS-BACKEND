@@ -4,14 +4,14 @@ import Capstone.Crewpass.entity.Crew;
 import Capstone.Crewpass.service.CrewService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 public class CrewController {
@@ -46,17 +46,33 @@ public class CrewController {
             HttpServletRequest request
     ){
         crewService.loginCrew(loginId, password, request);
-        
-        /* 세션에 저장해놓은 crewId 가져오는 방법 */
-        /*
-        HttpSession session = request.getSession();
-        String crewId = (String) session.getAttribute("crewId");
-        System.out.println(crewId);
-         */
     }
 
     @DeleteMapping("/crew/local")
     public void logoutCrew(HttpServletRequest request){
         crewService.logoutCrew(request);
+    }
+
+    @ResponseBody
+    @GetMapping("/crew")
+    public Optional<Crew> getCrewBasicInfo(HttpServletRequest request){
+        HttpSession session = request.getSession(); //session에 저장해놓은 crewId 추출
+        String crewId = (String) session.getAttribute("crewId");
+        return crewService.getCrewBasicInfo(crewId);
+    }
+
+    @PutMapping("/crew")
+    public void updateCrewBasicInfo(
+            @RequestParam("name") String name,
+            @RequestParam("password") String password,
+            @RequestParam("region1") String region1,
+            @RequestParam("region2") String region2,
+            @RequestParam("field1") String field1,
+            @RequestParam("field2") String field2,
+            @RequestParam("masterEmail") String masterEmail,
+            @RequestParam("subEmail") String subEmail,
+            @RequestParam("profile") MultipartFile profile
+    ){
+
     }
 }
