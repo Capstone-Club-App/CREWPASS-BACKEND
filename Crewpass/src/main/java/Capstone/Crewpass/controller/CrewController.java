@@ -71,8 +71,11 @@ public class CrewController {
             @RequestParam("field2") String field2,
             @RequestParam("masterEmail") String masterEmail,
             @RequestParam("subEmail") String subEmail,
-            @RequestParam("profile") MultipartFile profile
-    ){
-
+            @RequestParam("profile") MultipartFile profile,
+            HttpServletRequest request
+    ) throws IOException {
+        HttpSession session = request.getSession(); //session에 저장해놓은 crewId 추출
+        String crewId = (String) session.getAttribute("crewId");
+        crewService.updateCrewBasicInfo(crewId, name, password, region1, region2, field1, field2, masterEmail, subEmail, crewService.uploadProfile(profile));
     }
 }
