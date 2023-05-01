@@ -8,6 +8,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -74,5 +76,11 @@ public class UserService {
         if(session != null){
             session.invalidate();
         }
+    }
+
+    public Optional<User> getUserBasicInfo(String userId) {
+        Optional<User> optionalUser = userRepository.findById(Integer.valueOf(userId));
+        log.info(String.valueOf(optionalUser));
+        return optionalUser;
     }
 }
