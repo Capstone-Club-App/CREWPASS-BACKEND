@@ -1,5 +1,6 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.entity.User;
 import Capstone.Crewpass.repository.UserRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -56,27 +57,33 @@ public class UserService {
         return fileName;
     }
 
-    public void joinUser(User user) {
-        validateDuplicateUser(user);
-        userRepository.save(user);
-    }
-
-    public void validateDuplicateUser(User user){
-        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
-        if(optionalUser.isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원 ID 입니다.");
+    public String joinUser(User user) {
+        if(validateDuplicateUser(user)!=null){
+            userRepository.save(user);
+            return "joinUser - success";
+        }else{
+            return null;
         }
     }
 
-    public void loginUser(String loginId, String password, HttpServletRequest request) {
-        Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(loginId,password);
+    public String validateDuplicateUser(User user){
+        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
         if(optionalUser.isPresent()){
-            log.info("회원 로그인 ID : " + loginId);
+            return null;
+        }else{
+            return "validateDuplicateUser - success";
+        }
+    }
+
+    public Login loginUser(Login login, HttpServletRequest request) {
+        Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(login.getLoginId(), login.getPassword());
+        if(optionalUser.isPresent()){
             HttpSession session = request.getSession(true);
             Integer userId = optionalUser.get().getUserId();
             session.setAttribute("userId", String.valueOf(userId));
+            return login;
         }else{
-            log.info("회원 로그인 실패 - 일치하는 회원 정보 없음");
+            return null;
         }
     }
 
@@ -90,7 +97,6 @@ public class UserService {
 
     public Optional<User> getUserBasicInfo(String userId) {
         Optional<User> optionalUser = userRepository.findById(Integer.valueOf(userId));
-        log.info("userId가 " + userId + "인 회원 정보 조회 완료");
         return optionalUser;
     }
 
@@ -108,7 +114,5 @@ public class UserService {
         user.setUserProfile(profile); //영속 엔티티 데이터 수정
 
         transaction.commit();
-
-        log.info("userId가 " + userId + "인 회원 정보 수정 완료");
     }
 }

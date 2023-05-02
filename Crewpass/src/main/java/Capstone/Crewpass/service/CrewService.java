@@ -1,6 +1,7 @@
 package Capstone.Crewpass.service;
 
 import Capstone.Crewpass.entity.Crew;
+import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.repository.CrewRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
@@ -55,27 +56,33 @@ public class CrewService {
         return fileName;
     }
 
-    public void joinCrew(Crew crew){
-        validateDuplicateCrew(crew);
-        crewRepository.save(crew);
-    }
-
-    public void validateDuplicateCrew(Crew crew){
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(crew.getCrewLoginId());
-        if(optionalCrew.isPresent()){
-            throw new IllegalStateException("이미 존재하는 동아리 ID 입니다.");
+    public String joinCrew(Crew crew){
+        if(validateDuplicateCrew(crew) != null) {
+            crewRepository.save(crew);
+            return "joinCrew - success";
+        }else{
+            return null;
         }
     }
 
-    public void loginCrew(String loginId, String password, HttpServletRequest request){
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewPw(loginId, password);
-        if(optionalCrew.isPresent()){ //로그인 성공
-            log.info("동아리 로그인 ID : " + loginId);
+    public String validateDuplicateCrew(Crew crew){
+        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(crew.getCrewLoginId());
+        if(optionalCrew.isPresent()){
+            return null;
+        }else{
+            return "validateDuplicateCrew - success";
+        }
+    }
+
+    public Login loginCrew(Login login, HttpServletRequest request){
+        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewPw(login.getLoginId(), login.getPassword());
+        if(optionalCrew.isPresent()){
             HttpSession session = request.getSession(true);
             Integer crewId = optionalCrew.get().getCrewId();
             session.setAttribute("crewId", String.valueOf(crewId));
+            return login;
         }else{
-            log.info("동아리 로그인 실패 - 일치하는 동아리 정보 없음");
+            return null;
         }
     }
 
@@ -88,7 +95,6 @@ public class CrewService {
 
     public Optional<Crew> getCrewBasicInfo(String crewId){
         Optional<Crew> optionalCrew = crewRepository.findById(Integer.valueOf(crewId));
-        log.info("crewId가 " + crewId + "인 동아리 정보 조회 완료");
         return optionalCrew;
     }
 
@@ -109,7 +115,5 @@ public class CrewService {
         crew.setCrewProfile(profile); //영속 엔티티 데이터 수정
 
         transaction.commit();
-
-        log.info("crewId가 " + crewId + "인 동아리 정보 수정 완료");
     }
 }
