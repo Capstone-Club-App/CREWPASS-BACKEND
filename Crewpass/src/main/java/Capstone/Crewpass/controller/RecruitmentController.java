@@ -1,5 +1,6 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.dto.RecruitmentDeadlineListInterface;
 import Capstone.Crewpass.dto.RecruitmentListInterface;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.service.RecruitmentService;
@@ -76,5 +77,14 @@ public class RecruitmentController {
     ) throws IOException {
 
         return recruitmentService.checkRecruitmentListByNewest();
+    }
+
+    // 동아리 분야 별 마감임박순으로 모집글 목록 조회
+    @GetMapping(value = "/recruitment/list/total/deadline")
+    public List<RecruitmentDeadlineListInterface> checkRecruitListByDeadline(
+            HttpServletRequest request
+    ) throws IOException {
+
+        return recruitmentService.checkRecruitmentListByDeadline();
     }
 }

@@ -1,5 +1,6 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.dto.RecruitmentDeadlineListInterface;
 import Capstone.Crewpass.dto.RecruitmentListInterface;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
@@ -77,5 +78,10 @@ public class RecruitmentService {
     // 동아리 분야 별 최신순으로 모집글 목록 조회
     public List<RecruitmentListInterface> checkRecruitmentListByNewest() {
         return recruitmentRepository.findAllRecruitmentListByNewest();
+    }
+
+    // 동아리 분야 별 마감임박순으로 모집글 목록 조회
+    public List<RecruitmentDeadlineListInterface> checkRecruitmentListByDeadline() {
+        return recruitmentRepository.findAllRecruitmentListByDeadline();
     }
 }
