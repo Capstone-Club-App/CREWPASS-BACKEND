@@ -1,6 +1,7 @@
 package Capstone.Crewpass.service;
 
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
@@ -95,5 +96,11 @@ public class RecruitmentService {
 
         // 분야가 선택된 경우
         return recruitmentRepository.findFieldRecruitmentListByDeadline(field);
+    }
+
+    // 선택한 모집글 상세 조회
+    public List<RecruitmentDetail> checkRecruitmentDetail(Integer recruitmentId) {
+
+        return recruitmentRepository.getRecruitmentDetail(recruitmentId);
     }
 }

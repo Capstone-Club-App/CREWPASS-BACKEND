@@ -69,9 +69,8 @@ public class RecruitmentController {
 
     // 동아리 분야 별 "최신순"으로 모집글 목록 조회
     @GetMapping(value = "/recruitment/list/{field}/recent")
-    public ResponseEntity checkRecruitListByNewest(
-            @PathVariable("field") String field,
-            HttpServletRequest request
+    public ResponseEntity checkRecruitmentListByNewest(
+            @PathVariable("field") String field
     ) throws IOException {
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_LIST_RECENT, recruitmentService.checkRecruitmentListByNewest(field)), HttpStatus.OK);
@@ -79,11 +78,18 @@ public class RecruitmentController {
 
     // 동아리 분야 별 "마감임박순"으로 모집글 목록 조회
     @GetMapping(value = "/recruitment/list/{field}/deadline")
-    public ResponseEntity checkRecruitListByDeadline(
-            @PathVariable("field") String field,
-            HttpServletRequest request
+    public ResponseEntity checkRecruitmentListByDeadline(
+            @PathVariable("field") String field
     ) throws IOException {
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_LIST_DEADLINE, recruitmentService.checkRecruitmentListByDeadline(field)), HttpStatus.OK);
+    }
+
+    // 선택한 모집글 상세 조회
+    @GetMapping(value = "/recruitment/detail/{recruitmentId}")
+    public ResponseEntity checkRecruitmentDetail (
+            @PathVariable("recruitmentId") Integer recruitmentId
+    ) throws IOException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_DETAIL, recruitmentService.checkRecruitmentDetail(recruitmentId)), HttpStatus.OK);
     }
 }

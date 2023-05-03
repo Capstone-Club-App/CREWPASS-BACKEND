@@ -1,6 +1,7 @@
 package Capstone.Crewpass.repository;
 
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -72,6 +73,14 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             , nativeQuery = true)
     List<RecruitmentDeadlineList> findFieldRecruitmentListByDeadline(@Param("field") String field);
 
-    //    // Crew Id로 모집글 찾기
-//    Optional<Recruitment> findByCrewId(Integer id);
+    // 선택한 모집글 상세 조회
+    @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
+            " r.title, r.register_time, r.deadline, r.content, r.image," +
+            " q.question_id" +
+            " FROM crewpass.recruitment r" +
+            " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id" +
+            " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
+            " WHERE r.recruitment_id = :recruitmentId"
+            , nativeQuery = true)
+    List<RecruitmentDetail> getRecruitmentDetail(@Param("recruitmentId") Integer recruitmentId);
 }
