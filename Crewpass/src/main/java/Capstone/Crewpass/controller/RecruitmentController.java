@@ -1,19 +1,20 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineList;
-import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.response.ResponseFormat;
+import Capstone.Crewpass.response.ResponseMessage;
+import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.RecruitmentService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.List;
 
 @RestController
 public class RecruitmentController {
@@ -30,7 +31,7 @@ public class RecruitmentController {
 
     // 모집글 작성
     @PostMapping(value = "/recruitment/new")
-    public String registerRecruitment(
+    public ResponseEntity registerRecruitment(
             @RequestParam("title") String title,
             @RequestParam("isDeleted") Integer isDeleted,
             @RequestParam("registerTime") String registerTime,
@@ -48,41 +49,41 @@ public class RecruitmentController {
                 content,
                 recruitmentService.uploadImage(image), crewId);
 
-        recruitmentService.registerRecruitment(recruitment);
-
-        return (questionView + recruitment.getRecruitmentId());
+        if (recruitmentService.registerRecruitment(recruitment) != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
+        }
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
     @GetMapping(value = "/recruitment/myList")
-    public List<RecruitmentRecentList> checkMyRecruitList(
+    public ResponseEntity checkMyRecruitList(
             HttpServletRequest request
         ) throws IOException {
 
-        HttpSession session = request.getSession();
-
         Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
-        return recruitmentService.checkMyRecruitmentList(crewId);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_RECRUITMENT_LIST, recruitmentService.checkMyRecruitmentList(crewId)), HttpStatus.OK);
     }
 
     // 동아리 분야 별 "최신순"으로 모집글 목록 조회
     @GetMapping(value = "/recruitment/list/{field}/recent")
-    public List<RecruitmentRecentList> checkRecruitListByNewest(
+    public ResponseEntity checkRecruitListByNewest(
             @PathVariable("field") String field,
             HttpServletRequest request
     ) throws IOException {
 
-        return recruitmentService.checkRecruitmentListByNewest(field);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_LIST_RECENT, recruitmentService.checkRecruitmentListByNewest(field)), HttpStatus.OK);
     }
 
     // 동아리 분야 별 "마감임박순"으로 모집글 목록 조회
     @GetMapping(value = "/recruitment/list/{field}/deadline")
-    public List<RecruitmentDeadlineList> checkRecruitListByDeadline(
+    public ResponseEntity checkRecruitListByDeadline(
             @PathVariable("field") String field,
             HttpServletRequest request
     ) throws IOException {
 
-        return recruitmentService.checkRecruitmentListByDeadline(field);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_LIST_DEADLINE, recruitmentService.checkRecruitmentListByDeadline(field)), HttpStatus.OK);
     }
 }

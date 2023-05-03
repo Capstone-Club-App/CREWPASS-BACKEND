@@ -1,11 +1,14 @@
 package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.Question;
+import Capstone.Crewpass.response.ResponseFormat;
+import Capstone.Crewpass.response.ResponseMessage;
+import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.QuestionService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,7 +25,7 @@ public class QuestionController {
 
     // 질문 객체 생성
     @RequestMapping("/recruitment/new/question/new/{recruitmentId}")
-    public void registerQuestion (
+    public ResponseEntity registerQuestion (
             @RequestParam("question1") String question1,
             @RequestParam("question2") String question2,
             @RequestParam("question3") String question3,
@@ -47,6 +50,10 @@ public class QuestionController {
                 question1, question2, question3, question4, question5, question6, question7,
                 question1Limit, question2Limit, question3Limit, question4Limit, question5Limit, question6Limit, question7Limit,
                 recruitmentId,crewId);
-        questionService.registerQuestion(question);
+        if (questionService.registerQuestion(question) != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_QUESTION, null), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_QUESTION, null), HttpStatus.OK);
+        }
     }
 }

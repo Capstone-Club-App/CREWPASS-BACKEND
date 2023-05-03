@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -50,30 +51,29 @@ public class RecruitmentService {
     }
 
     // 모집글 등록
-    public int registerRecruitment(Recruitment recruitment) {
-        validateDuplicateRecruitment(recruitment);
-        recruitmentRepository.save(recruitment);
-        return recruitment.getRecruitmentId();
+    public String registerRecruitment(Recruitment recruitment) {
+        if (validateDuplicateRecruitment(recruitment) != null) {
+            recruitmentRepository.save(recruitment);
+            return "registerRecruitment - success" + " : RecruitmentId = " + recruitment.getRecruitmentId();
+        } else {
+            return null;
+        }
     }
 
-    // 중복 글 검증
-    private void validateDuplicateRecruitment(Recruitment recruitment) {
-        recruitmentRepository.findByRecruitmentId(recruitment.getRecruitmentId())
-                .ifPresent(r -> {
-                    try {
-                        throw new IllegalAccessException("이미 존재하는 모집글입니다.");
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                });
+    // 중복 모집글 검증
+    private String validateDuplicateRecruitment(Recruitment recruitment) {
+        Optional<Recruitment> optionalRecruitment = recruitmentRepository.findByRecruitmentId(recruitment.getRecruitmentId());
+        if (optionalRecruitment.isPresent()) {
+            return null;
+        } else {
+            return "validateDuplicateRecruitment - success";
+        }
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
     public List<RecruitmentRecentList> checkMyRecruitmentList(Integer crewId) {
         return recruitmentRepository.findMyRecruitmentList(crewId);
     }
-
-    //
 
     // 동아리 분야 별 "최신순"으로 모집글 목록 조회
     public List<RecruitmentRecentList> checkRecruitmentListByNewest(String field) {
