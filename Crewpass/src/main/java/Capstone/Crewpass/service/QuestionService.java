@@ -27,7 +27,7 @@ public class QuestionService {
 
     // 중복 질문 검증
     private String validateDuplicateQuestion(Question question) {
-        Optional<Recruitment> optionalQuestion = questionRepository.findByRecruitmentId(question.getRecruitmentId());
+        Optional<Question> optionalQuestion = questionRepository.findByRecruitmentId(question.getRecruitmentId());
         if (optionalQuestion.isPresent()) {
             return null;
         } else {

@@ -50,7 +50,7 @@ public class RecruitmentController {
                 recruitmentService.uploadImage(image), crewId);
 
         if (recruitmentService.registerRecruitment(recruitment) != null) {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, questionView + recruitment.getRecruitmentId()), HttpStatus.OK);
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
         }
