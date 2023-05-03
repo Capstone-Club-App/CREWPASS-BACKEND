@@ -1,16 +1,13 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineListInterface;
-import Capstone.Crewpass.dto.RecruitmentListInterface;
+import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.service.RecruitmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,6 +20,8 @@ public class RecruitmentController {
 
     private RecruitmentService recruitmentService;
 
+    private String questionView = "redirect:/recruitment/new/question/new/";
+
     // 생성자로 DI 주입
     @Autowired
     public RecruitmentController(RecruitmentService recruitmentService) {
@@ -31,7 +30,7 @@ public class RecruitmentController {
 
     // 모집글 작성
     @PostMapping(value = "/recruitment/new")
-    public void registerRecruitment(
+    public String registerRecruitment(
             @RequestParam("title") String title,
             @RequestParam("isDeleted") Integer isDeleted,
             @RequestParam("registerTime") String registerTime,
@@ -41,50 +40,49 @@ public class RecruitmentController {
             HttpServletRequest request
             ) throws IOException {
 
-        HttpSession session = request.getSession();
-//        session.setAttribute("crewId", 1); // 테스트용 : 세션에 crewId 넣음
-        int crewid = (Integer) session.getAttribute("crewId");
+        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
                 Timestamp.from(Instant.parse(registerTime)),
                 Timestamp.from(Instant.parse(deadline)),
                 content,
-                recruitmentService.uploadImage(image), crewid);
+                recruitmentService.uploadImage(image), crewId);
 
         recruitmentService.registerRecruitment(recruitment);
 
-        session.setAttribute("recruitmentId", recruitment.getRecruitmentId());
+        return (questionView + recruitment.getRecruitmentId());
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
     @GetMapping(value = "/recruitment/myList")
-    public List<RecruitmentListInterface> checkMyRecruitList(
+    public List<RecruitmentRecentList> checkMyRecruitList(
             HttpServletRequest request
         ) throws IOException {
 
         HttpSession session = request.getSession();
-        session.setAttribute("crewId", 1); // 테스트용 : 세션에 crewId 넣음
 
-        Integer crewId = (Integer) session.getAttribute("crewId");
+        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         return recruitmentService.checkMyRecruitmentList(crewId);
     }
 
-    // 동아리 분야 별 최신순으로 모집글 목록 조회
-    @GetMapping(value = "/recruitment/list/total/recent")
-    public List<RecruitmentListInterface> checkRecruitListByNewest(
+    // 동아리 분야 별 "최신순"으로 모집글 목록 조회
+    @GetMapping(value = "/recruitment/list/{field}/recent")
+    public List<RecruitmentRecentList> checkRecruitListByNewest(
+            @PathVariable("field") String field,
             HttpServletRequest request
     ) throws IOException {
 
-        return recruitmentService.checkRecruitmentListByNewest();
+        return recruitmentService.checkRecruitmentListByNewest(field);
     }
 
-    // 동아리 분야 별 마감임박순으로 모집글 목록 조회
-    @GetMapping(value = "/recruitment/list/total/deadline")
-    public List<RecruitmentDeadlineListInterface> checkRecruitListByDeadline(
+    // 동아리 분야 별 "마감임박순"으로 모집글 목록 조회
+    @GetMapping(value = "/recruitment/list/{field}/deadline")
+    public List<RecruitmentDeadlineList> checkRecruitListByDeadline(
+            @PathVariable("field") String field,
             HttpServletRequest request
     ) throws IOException {
 
-        return recruitmentService.checkRecruitmentListByDeadline();
+        return recruitmentService.checkRecruitmentListByDeadline(field);
     }
 }

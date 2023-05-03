@@ -6,9 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -23,8 +21,8 @@ public class QuestionController {
     }
 
     // 질문 객체 생성
-    @PostMapping(value = "/recruitment/new/question")
-    public void registerQuestion(
+    @RequestMapping("/recruitment/new/question/new/{recruitmentId}")
+    public void registerQuestion (
             @RequestParam("question1") String question1,
             @RequestParam("question2") String question2,
             @RequestParam("question3") String question3,
@@ -39,17 +37,16 @@ public class QuestionController {
             @RequestParam(value = "question5Limit", required = false) Integer question5Limit,
             @RequestParam(value = "question6Limit", required = false) Integer question6Limit,
             @RequestParam(value = "question7Limit", required = false) Integer question7Limit,
+            @PathVariable ("recruitmentId") Integer recruitmentId,
             HttpServletRequest request
     ) throws IOException {
 
-        HttpSession session = request.getSession();
-        int crewid = (Integer) session.getAttribute("crewId");
-        int recruitmentId = (Integer) session.getAttribute("recruitmentId");
+        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         Question question = new Question(null,
                 question1, question2, question3, question4, question5, question6, question7,
                 question1Limit, question2Limit, question3Limit, question4Limit, question5Limit, question6Limit, question7Limit,
-                recruitmentId,crewid);
+                recruitmentId,crewId);
         questionService.registerQuestion(question);
     }
 }

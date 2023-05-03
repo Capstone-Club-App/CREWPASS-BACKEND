@@ -1,7 +1,7 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineListInterface;
-import Capstone.Crewpass.dto.RecruitmentListInterface;
+import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,17 +69,31 @@ public class RecruitmentService {
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
-    public List<RecruitmentListInterface> checkMyRecruitmentList(Integer crewId) {
+    public List<RecruitmentRecentList> checkMyRecruitmentList(Integer crewId) {
         return recruitmentRepository.findMyRecruitmentList(crewId);
     }
 
-    // 동아리 분야 별 최신순으로 모집글 목록 조회
-    public List<RecruitmentListInterface> checkRecruitmentListByNewest() {
-        return recruitmentRepository.findAllRecruitmentListByNewest();
+    //
+
+    // 동아리 분야 별 "최신순"으로 모집글 목록 조회
+    public List<RecruitmentRecentList> checkRecruitmentListByNewest(String field) {
+
+        if (field.equals("total")) { // 전체 분야인 경우
+            return recruitmentRepository.findAllRecruitmentListByNewest();
+        }
+
+        // 분야가 선택된 경우
+        return recruitmentRepository.findFieldRecruitmentListByNewest(field);
     }
 
-    // 동아리 분야 별 마감임박순으로 모집글 목록 조회
-    public List<RecruitmentDeadlineListInterface> checkRecruitmentListByDeadline() {
-        return recruitmentRepository.findAllRecruitmentListByDeadline();
+    // 동아리 분야 별 "마감임박순"으로 모집글 목록 조회
+    public List<RecruitmentDeadlineList> checkRecruitmentListByDeadline(String field) {
+
+        if (field.equals("total")) { // 전체 분야인 경우
+            return recruitmentRepository.findAllRecruitmentListByDeadline();
+        }
+
+        // 분야가 선택된 경우
+        return recruitmentRepository.findFieldRecruitmentListByDeadline(field);
     }
 }
