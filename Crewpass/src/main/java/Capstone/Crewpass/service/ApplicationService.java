@@ -1,11 +1,14 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.dto.ApplicationRecentList;
+import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Application;
 import Capstone.Crewpass.entity.Question;
 import Capstone.Crewpass.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +38,10 @@ public class ApplicationService {
         } else {
             return "validateDuplicateApplication - success";
         }
+    }
+
+    // 로그인한 회원이 지원한 지원서 목록 조회
+    public List<ApplicationRecentList> checkMyApplicationList(Integer userId) {
+        return applicationRepository.findMyApplicationList(userId);
     }
 }

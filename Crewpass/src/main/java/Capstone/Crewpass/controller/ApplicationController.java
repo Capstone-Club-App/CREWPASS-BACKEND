@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -72,5 +69,16 @@ public class ApplicationController {
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_APPLICATION, null), HttpStatus.OK);
         }
+    }
+
+    // 로그인한 회원이 지원한 지원서 목록 조회
+    @GetMapping(value = "/application/myList")
+    public ResponseEntity checkMyApplyList(
+            HttpServletRequest request
+    ) throws IOException {
+
+        Integer userId = Integer.valueOf((String) request.getSession().getAttribute("userId"));
+
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_APPLICATION_LIST, applicationService.checkMyApplicationList(userId)), HttpStatus.OK);
     }
 }
