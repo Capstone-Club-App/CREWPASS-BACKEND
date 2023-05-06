@@ -9,7 +9,6 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +22,6 @@ import java.util.UUID;
 public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
-    @Autowired
     public RecruitmentService(RecruitmentRepository recruitmentRepository) {
         this.recruitmentRepository = recruitmentRepository;
     }
