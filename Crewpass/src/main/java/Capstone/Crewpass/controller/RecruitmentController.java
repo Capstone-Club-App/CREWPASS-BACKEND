@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @RestController
 public class RecruitmentController {
@@ -34,7 +36,6 @@ public class RecruitmentController {
     public ResponseEntity registerRecruitment(
             @RequestParam("title") String title,
             @RequestParam("isDeleted") Integer isDeleted,
-            @RequestParam("registerTime") String registerTime,
             @RequestParam("deadline") String deadline,
             @RequestParam("content") String content,
             @RequestParam("image") MultipartFile image,
@@ -44,8 +45,8 @@ public class RecruitmentController {
         Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
-                Timestamp.from(Instant.parse(registerTime)),
-                Timestamp.from(Instant.parse(deadline)),
+                Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
+                Timestamp.valueOf(deadline),
                 content,
                 recruitmentService.uploadImage(image), crewId);
 
