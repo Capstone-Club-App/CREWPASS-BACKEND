@@ -25,21 +25,9 @@ dependencies {
 	implementation group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.33.3' // [GCS]
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.8.RELEASE' // [GCS]
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.8.RELEASE' // [GC3]
-  implementation 'org.springframework.boot:spring-boot-starter-security' //POSTMAN 401 ERR 해결
+  	implementation 'org.springframework.boot:spring-boot-starter-security' //POSTMAN 401 ERR 해결
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation "org.junit.jupiter:junit-jupiter"
-	testImplementation "org.assertj:assertj-core"
-
-	// [TEST] JUnit4 추가
-	testImplementation("org.junit.vintage:junit-vintage-engine") {
-		exclude group: "org.hamcrest", module: "hamcrest-core"
-	}
-
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
