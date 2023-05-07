@@ -26,6 +26,7 @@ public class ResponseMessage {
 
     public static final String REGISTER_SUCCESS_APPLICATION = "지원서 등록 성공";
     public static final String READ_MY_APPLICATION_LIST = "로그인한 회원의 지원서 목록 조회 성공";
+    public static final String READ_APPLICATION_DETAIL = "선택한 지원서 상세 조회 성공";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";

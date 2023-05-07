@@ -1,6 +1,8 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.dto.ApplicationDetail;
 import Capstone.Crewpass.dto.ApplicationRecentList;
+import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Application;
 import Capstone.Crewpass.entity.Question;
@@ -43,5 +45,13 @@ public class ApplicationService {
     // 로그인한 회원이 지원한 지원서 목록 조회
     public List<ApplicationRecentList> checkMyApplicationList(Integer userId) {
         return applicationRepository.findMyApplicationList(userId);
+    }
+
+
+
+    // 선택한 지원서 상세 조회
+    public List<ApplicationDetail> checkApplicationDetail(Integer applicationId) {
+
+        return applicationRepository.getApplicationDetail(applicationId);
     }
 }

@@ -81,4 +81,12 @@ public class ApplicationController {
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_APPLICATION_LIST, applicationService.checkMyApplicationList(userId)), HttpStatus.OK);
     }
+
+    // 선택한 지원서 상세 조회
+    @GetMapping(value = "/application/detail/{applicationId}")
+    public ResponseEntity checkApplicationDetail (
+            @PathVariable("applicationId") Integer applicationId
+    ) throws IOException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_APPLICATION_DETAIL, applicationService.checkApplicationDetail(applicationId)), HttpStatus.OK);
+    }
 }
