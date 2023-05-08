@@ -1,11 +1,9 @@
 package Capstone.Crewpass.repository;
 
 import Capstone.Crewpass.dto.ApplicationDetail;
-import Capstone.Crewpass.dto.ApplicationRecentList;
-import Capstone.Crewpass.dto.RecruitmentDetail;
-import Capstone.Crewpass.dto.RecruitmentRecentList;
+import Capstone.Crewpass.dto.ApplicationRecentListByCrew;
+import Capstone.Crewpass.dto.ApplicationRecentListByUser;
 import Capstone.Crewpass.entity.Application;
-import Capstone.Crewpass.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,7 +24,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " FROM crewpass.application a" +
             " INNER JOIN crewpass.crew c ON a.question_recruitment_crew_crew_id = c.crew_id" +
             " WHERE a.user_user_id = :userId", nativeQuery = true)
-    List<ApplicationRecentList> findMyApplicationList(@Param("userId") Integer userId);
+    List<ApplicationRecentListByUser> findMyApplicationList(@Param("userId") Integer userId);
 
     // 선택한 지원서 상세 조회
     @Query(value = " SELECT u.user_profile, u.user_name," +
@@ -41,4 +39,15 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             "  WHERE a.application_id = :applicationId"
             , nativeQuery = true)
     List<ApplicationDetail> getApplicationDetail(@Param("applicationId") Integer applicationId);
+
+    // 선택한 모집글에 대한 지원서를 최신순으로 목록 조회
+    @Query(value = "SELECT u.user_id, u.user_profile, u.user_name," +
+            " a.application_id, a.submit_time" +
+            " FROM crewpass.application a" +
+            " INNER JOIN crewpass.user u ON a.user_user_id = u.user_id" +
+            " INNER JOIN crewpass.question q ON a.question_question_id = q.question_id" +
+            " WHERE q.question_id = :questionId" +
+            " ORDER BY a.submit_time DESC"
+            , nativeQuery = true)
+    List<ApplicationRecentListByCrew> findApplicationListByQuestion(@Param("questionId") Integer questionId);
 }

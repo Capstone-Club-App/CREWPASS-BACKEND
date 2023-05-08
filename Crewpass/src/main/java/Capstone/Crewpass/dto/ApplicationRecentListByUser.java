@@ -2,7 +2,7 @@ package Capstone.Crewpass.dto;
 
 import java.sql.Timestamp;
 
-public interface ApplicationRecentList {
+public interface ApplicationRecentListByUser {
     Integer getUser_user_id();
     String getCrew_profile();
     String getCrew_name();

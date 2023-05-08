@@ -1,14 +1,12 @@
 package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.Application;
-import Capstone.Crewpass.repository.QuestionRepository;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.ApplicationService;
 import Capstone.Crewpass.service.QuestionService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,5 +86,13 @@ public class ApplicationController {
             @PathVariable("applicationId") Integer applicationId
     ) throws IOException {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_APPLICATION_DETAIL, applicationService.checkApplicationDetail(applicationId)), HttpStatus.OK);
+    }
+
+    // 선택한 모집글에 대한 지원서를 최신순으로 목록 조회
+    @GetMapping(value = "/application/list/{questionId}")
+    public ResponseEntity checkApplyListByRecruitment(
+            @PathVariable("questionId") Integer questionId
+    ) throws IOException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_APPLICATION_LIST_BY_QUESTION, applicationService.checkApplicationListByQuestion(questionId)), HttpStatus.OK);
     }
 }
