@@ -1,7 +1,8 @@
 package Capstone.Crewpass.repository;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineListInterface;
-import Capstone.Crewpass.dto.RecruitmentListInterface;
+import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentDetail;
+import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,9 +25,9 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
             " WHERE c.crew_id = :crewId", nativeQuery = true)
-    List<RecruitmentListInterface> findMyRecruitmentList(@Param("crewId") Integer crewId);
+    List<RecruitmentRecentList> findMyRecruitmentList(@Param("crewId") Integer crewId);
 
-    // 전체 동아리의 모집글 목록 최신순으로 조회
+    // "전체" 동아리의 모집글 목록 "최신순"으로 조회
     @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
             " r.recruitment_id, r.title, r.register_time," +
             " q.question_id" +
@@ -35,9 +36,21 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
             " ORDER BY r.register_time DESC, r.recruitment_id"
             , nativeQuery = true)
-    List<RecruitmentListInterface> findAllRecruitmentListByNewest();
+    List<RecruitmentRecentList> findAllRecruitmentListByNewest();
 
-    // 전체 동아리의 모집글 목록 마감임박순으로 조회
+    // 동아리 "분야 별" "최신순"으로 모집글 목록 조회
+    @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
+            " r.recruitment_id, r.title, r.register_time," +
+            " q.question_id" +
+            " FROM crewpass.recruitment r " +
+            " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
+            " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
+            " WHERE c.field1 = :field OR c.field2 = :field" +
+            " ORDER BY r.register_time DESC, r.recruitment_id"
+            , nativeQuery = true)
+    List<RecruitmentRecentList> findFieldRecruitmentListByNewest(@Param("field") String field);
+
+    // "전체" 동아리의 모집글 목록 "마감임박순"으로 조회
     @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
             " r.recruitment_id, r.title, r.register_time, r.deadline," +
             " q.question_id" +
@@ -46,8 +59,28 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
-    List<RecruitmentDeadlineListInterface> findAllRecruitmentListByDeadline();
+    List<RecruitmentDeadlineList> findAllRecruitmentListByDeadline();
 
-    //    // Crew Id로 모집글 찾기
-//    Optional<Recruitment> findByCrewId(Integer id);
+    // 동아리 "분야 별" "마감임박순"으로 모집글 목록 조회
+    @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
+            " r.recruitment_id, r.title, r.register_time, r.deadline," +
+            " q.question_id" +
+            " FROM crewpass.recruitment r " +
+            " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
+            " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
+            " WHERE c.field1 = :field OR c.field2 = :field" +
+            " ORDER BY now() - r.deadline DESC, r.recruitment_id"
+            , nativeQuery = true)
+    List<RecruitmentDeadlineList> findFieldRecruitmentListByDeadline(@Param("field") String field);
+
+    // 선택한 모집글 상세 조회
+    @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
+            " r.title, r.register_time, r.deadline, r.content, r.image," +
+            " q.question_id" +
+            " FROM crewpass.recruitment r" +
+            " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id" +
+            " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
+            " WHERE r.recruitment_id = :recruitmentId"
+            , nativeQuery = true)
+    List<RecruitmentDetail> getRecruitmentDetail(@Param("recruitmentId") Integer recruitmentId);
 }

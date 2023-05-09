@@ -1,25 +1,33 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineListInterface;
-import Capstone.Crewpass.dto.RecruitmentListInterface;
+import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentDetail;
+import Capstone.Crewpass.dto.RecruitmentRecentList;
+import Capstone.Crewpass.entity.Crew;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class RecruitmentService {
+    @Autowired
+    EntityManagerFactory emf;
     private final RecruitmentRepository recruitmentRepository;
 
     public RecruitmentService(RecruitmentRepository recruitmentRepository) {
@@ -52,36 +60,75 @@ public class RecruitmentService {
     }
 
     // 모집글 등록
-    public int registerRecruitment(Recruitment recruitment) {
-        validateDuplicateRecruitment(recruitment);
-        recruitmentRepository.save(recruitment);
-        return recruitment.getRecruitmentId();
+    public String registerRecruitment(Recruitment recruitment) {
+        if (validateDuplicateRecruitment(recruitment) != null) {
+            recruitmentRepository.save(recruitment);
+            return "registerRecruitment - success" + " : RecruitmentId = " + recruitment.getRecruitmentId();
+        } else {
+            return null;
+        }
     }
 
-    // 중복 글 검증
-    private void validateDuplicateRecruitment(Recruitment recruitment) {
-        recruitmentRepository.findByRecruitmentId(recruitment.getRecruitmentId())
-                .ifPresent(r -> {
-                    try {
-                        throw new IllegalAccessException("이미 존재하는 모집글입니다.");
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                });
+    // 중복 모집글 검증
+    private String validateDuplicateRecruitment(Recruitment recruitment) {
+        Optional<Recruitment> optionalRecruitment = recruitmentRepository.findByRecruitmentId(recruitment.getRecruitmentId());
+        if (optionalRecruitment.isPresent()) {
+            return null;
+        } else {
+            return "validateDuplicateRecruitment - success";
+        }
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
-    public List<RecruitmentListInterface> checkMyRecruitmentList(Integer crewId) {
+    public List<RecruitmentRecentList> checkMyRecruitmentList(Integer crewId) {
         return recruitmentRepository.findMyRecruitmentList(crewId);
     }
 
-    // 동아리 분야 별 최신순으로 모집글 목록 조회
-    public List<RecruitmentListInterface> checkRecruitmentListByNewest() {
-        return recruitmentRepository.findAllRecruitmentListByNewest();
+    // 동아리 분야 별 "최신순"으로 모집글 목록 조회
+    public List<RecruitmentRecentList> checkRecruitmentListByNewest(String field) {
+
+        if (field.equals("total")) { // 전체 분야인 경우
+            return recruitmentRepository.findAllRecruitmentListByNewest();
+        }
+
+        // 분야가 선택된 경우
+        return recruitmentRepository.findFieldRecruitmentListByNewest(field);
     }
 
-    // 동아리 분야 별 마감임박순으로 모집글 목록 조회
-    public List<RecruitmentDeadlineListInterface> checkRecruitmentListByDeadline() {
-        return recruitmentRepository.findAllRecruitmentListByDeadline();
+    // 동아리 분야 별 "마감임박순"으로 모집글 목록 조회
+    public List<RecruitmentDeadlineList> checkRecruitmentListByDeadline(String field) {
+
+        if (field.equals("total")) { // 전체 분야인 경우
+            return recruitmentRepository.findAllRecruitmentListByDeadline();
+        }
+
+        // 분야가 선택된 경우
+        return recruitmentRepository.findFieldRecruitmentListByDeadline(field);
+    }
+
+    // 선택한 모집글 상세 조회
+    public List<RecruitmentDetail> checkRecruitmentDetail(Integer recruitmentId) {
+
+        return recruitmentRepository.getRecruitmentDetail(recruitmentId);
+    }
+
+
+    // 모집글 수정
+    public void updateRecruitment(Integer recruitmentId, String title, String content, String image, String deadline) {
+        EntityManager em = emf.createEntityManager();
+
+        // DB 트랜잭션 시작
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        Recruitment recruitment = em.find(Recruitment.class, recruitmentId); // 데이터 조회(영속)
+
+        recruitment.setTitle(title);
+        recruitment.setContent(content);
+        recruitment.setImage(image);
+        recruitment.setDeadline(Timestamp.valueOf(deadline));
+
+        transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
+        em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
     }
 }

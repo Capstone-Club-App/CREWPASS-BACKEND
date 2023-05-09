@@ -1,7 +1,7 @@
 package Capstone.Crewpass.response;
 
 public class StatusCode {
-    public static final int SUCCES = 200;
+    public static final int SUCCESS = 200;
     public static final int FAIL = 444;
     public static final int CREATED = 201;
     public static final int NO_CONTENT = 204;

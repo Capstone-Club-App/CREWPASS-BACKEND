@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 @Table(name = "recruitment")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recruitment {
 
@@ -50,30 +51,5 @@ public class Recruitment {
         this.content = content;
         this.image = image;
         this.crewId = crewId;
-    }
-
-    // 정보 수정
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setRegisterTime(Timestamp registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public void setDeadline(Timestamp deadline) {
-        this.deadline = deadline;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 }
