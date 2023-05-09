@@ -43,9 +43,21 @@ public class CrewController {
     ) throws IOException {
         Crew crew = new Crew(null, name, loginId, password, region1, region2, field1, field2, masterEmail, subEmail, crewService.uploadProfile(profile));
         if(crewService.joinCrew(crew)!=null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.CREATED_SUCCESS_CREW, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_SUCCESS_CREW, null), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_FAIL_CREW, null), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/crew/new/name")
+    public ResponseEntity checkDuplicateCrewName(
+            @RequestParam("name") String name
+    ){
+        String result = crewService.checkDuplicateCrewName(name);
+        if(result == null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_CREW_NAME, null), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_CREW_NAME, null), HttpStatus.OK);
         }
     }
 
@@ -58,7 +70,7 @@ public class CrewController {
         Login login = new Login(loginId, password);
         Login result = crewService.loginCrew(login, request);
         if(result != null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.LOGIN_SUCCESS_CREW, result), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGIN_SUCCESS_CREW, result), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.LOGIN_FAIL_CREW, null), HttpStatus.OK);
         }
@@ -67,7 +79,7 @@ public class CrewController {
     @DeleteMapping("/crew/local")
     public ResponseEntity logoutCrew(HttpServletRequest request){
         crewService.logoutCrew(request);
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.LOGOUT_SUCCESS_CREW, null), HttpStatus.OK);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS  , ResponseMessage.LOGOUT_SUCCESS_CREW, null), HttpStatus.OK);
     }
 
     @PostMapping("/crew/loginId")
@@ -77,7 +89,7 @@ public class CrewController {
     ){
         CertificateNumb result = crewService.findCrewLoginId(crewName, email);
         if(result != null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_CERTIFICATENUMB_FAIL_CREW,null),HttpStatus.OK);
         }
@@ -92,7 +104,7 @@ public class CrewController {
     ){
         Login result = crewService.verifyCertificateNumb4LoginId(crewName, email, certificateNumb, inputCertificateNumb);
         if(result != null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.VERIFY_CERTIFICATENUMB_FAIL_CREW,null),HttpStatus.OK);
         }
@@ -105,7 +117,7 @@ public class CrewController {
     ){
         CertificateNumb result = crewService.findCrewPassword(loginId, email);
         if(result != null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_CERTIFICATENUMB_FAIL_CREW,null),HttpStatus.OK);
         }
@@ -120,7 +132,7 @@ public class CrewController {
     ){
         Login result = crewService.verifyCertificateNumb4Password(loginId, email, certificateNumb, inputCertificateNumb);
         if(result != null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.VERIFY_CERTIFICATENUMB_FAIL_CREW,null),HttpStatus.OK);
         }
@@ -131,7 +143,7 @@ public class CrewController {
     public ResponseEntity getCrewBasicInfo(HttpServletRequest request){
         HttpSession session = request.getSession(); //session에 저장해놓은 crewId 추출
         String crewId = (String) session.getAttribute("crewId");
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.READ_CREW, crewService.getCrewBasicInfo(crewId)), HttpStatus.OK);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CREW, crewService.getCrewBasicInfo(crewId)), HttpStatus.OK);
     }
 
     @PutMapping("/crew")
@@ -150,6 +162,6 @@ public class CrewController {
         HttpSession session = request.getSession(); //session에 저장해놓은 crewId 추출
         String crewId = (String) session.getAttribute("crewId");
         crewService.updateCrewBasicInfo(crewId, name, password, region1, region2, field1, field2, masterEmail, subEmail, crewService.uploadProfile(profile));
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.UPDATE_CREW, null), HttpStatus.OK);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_CREW, null), HttpStatus.OK);
     }
 }
