@@ -1,44 +1,36 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.entity.CertificateNumb;
-import Capstone.Crewpass.entity.Crew;
-import Capstone.Crewpass.entity.Login;
-import Capstone.Crewpass.repository.CrewRepository;
+import Capstone.Crewpass.entity.User;
+import Capstone.Crewpass.repository.UserRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
 @Service
-public class CrewService {
+public class UserService {
     @Autowired
     EntityManagerFactory emf;
-    @Autowired
-    JavaMailSender javaMailSender;
-    private final CrewRepository crewRepository;
 
-    public CrewService(CrewRepository crewRepository) {
-        this.crewRepository = crewRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public String uploadProfile(MultipartFile profile) throws IOException {
@@ -64,160 +56,59 @@ public class CrewService {
         return fileName;
     }
 
-    public String joinCrew(Crew crew){
-        if(validateDuplicateCrew(crew) != null) {
-            crewRepository.save(crew);
-            return "joinCrew - success";
-        }else{
-            return null;
+    public void joinUser(User user) {
+        validateDuplicateUser(user);
+        userRepository.save(user);
+    }
+
+    public void validateDuplicateUser(User user){
+        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
+        if(optionalUser.isPresent()){
+            throw new IllegalStateException("이미 존재하는 회원 ID 입니다.");
         }
     }
 
-    public String validateDuplicateCrew(Crew crew){
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(crew.getCrewLoginId());
-        if(optionalCrew.isPresent()){
-            return null;
-        }else{
-            return "validateDuplicateCrew - success";
-        }
-    }
-
-    public Login loginCrew(Login login, HttpServletRequest request){
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewPw(login.getLoginId(), login.getPassword());
-        if(optionalCrew.isPresent()){
+    public void loginUser(String loginId, String password, HttpServletRequest request) {
+        Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(loginId,password);
+        if(optionalUser.isPresent()){
+            log.info("회원 로그인 ID : " + loginId);
             HttpSession session = request.getSession(true);
-            Integer crewId = optionalCrew.get().getCrewId();
-            session.setAttribute("crewId", String.valueOf(crewId));
-            return login;
+            Integer userId = optionalUser.get().getUserId();
+            session.setAttribute("userId", String.valueOf(userId));
         }else{
-            return null;
+            log.info("회원 로그인 실패 - 일치하는 회원 정보 없음");
         }
     }
 
-    public void logoutCrew(HttpServletRequest request) {
+
+    public void logoutUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if(session != null){
             session.invalidate();
         }
     }
 
-    public CertificateNumb findCrewLoginId(String crewName, String email) {
-        Optional<Crew> optionalCrew = crewRepository.findByCrewNameAndCrewEmail(crewName, email);
-        if(optionalCrew.isPresent()){
-            //인증번호 생성: 111111 ~ 999999
-            //Integer certificateNumb = makeCertificateNumb();
-            CertificateNumb certificateNumb = new CertificateNumb(makeCertificateNumb());
-            //email 주소로 보내고자 하는 내용
-            String sender = "crewpass@crewpass.com";
-            String receiver = email;
-            String title = "[Crewpass] 인증번호 발송";
-            String content =
-                    "안녕하세요."
-                            + "<br>"
-                            + "회원님께서는 아이디 찾기를 요청하셨습니다. "
-                            + "요쳥하신게 맞다면 계속해서 아이디 찾기를 진행해주세요. "
-                            + "아이디 변경을 위한 인증번호는 다음과 같습니다."
-                            + "<br>"
-                            + certificateNumb.getCertificateNumb()
-                            + "<br>"
-                            + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
-            //email 주소로 전송
-            sendCertificateNumb(sender, receiver, title, content);
-            return certificateNumb;
-        }else{
-            return null;
-        }
+    public Optional<User> getUserBasicInfo(String userId) {
+        Optional<User> optionalUser = userRepository.findById(Integer.valueOf(userId));
+        log.info("userId가 " + userId + "인 회원 정보 조회 완료");
+        return optionalUser;
     }
 
-    public CertificateNumb findCrewPassword(String loginId, String email) {
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewEmail(loginId, email);
-        if(optionalCrew.isPresent()){
-            //인증번호 생성: 111111 ~ 999999
-            //Integer certificateNumb = makeCertificateNumb();
-            CertificateNumb certificateNumb = new CertificateNumb(makeCertificateNumb());
-            //email 주소로 보내고자 하는 내용
-            String sender = "crewpass@crewpass.com";
-            String receiver = email;
-            String title = "[Crewpass] 인증번호 발송";
-            String content =
-                    "안녕하세요."
-                            + "<br>"
-                            + "회원님께서는 비밀번호 찾기를 요청하셨습니다. "
-                            + "요쳥하신게 맞다면 계속해서 비밀번호 찾기를 진행해주세요. "
-                            + "비밀번호 변경을 위한 인증번호는 다음과 같습니다."
-                            + "<br>"
-                            + certificateNumb.getCertificateNumb()
-                            + "<br>"
-                            + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
-            //email 주소로 전송
-            sendCertificateNumb(sender, receiver, title, content);
-            return certificateNumb;
-        }else{
-            return null;
-        }
-    }
-
-    public Integer makeCertificateNumb(){
-        Random random = new Random();
-        Integer certificateNumb = random.nextInt(888888) + 111111;
-        return certificateNumb;
-    }
-
-    public void sendCertificateNumb(String sender, String receiver, String title, String content){
-        try{
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-            helper.setFrom(sender);
-            helper.setTo(receiver);
-            helper.setSubject(title);
-            helper.setText(content, true);
-            javaMailSender.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Login verifyCertificateNumb4LoginId(String crewName, String email, Integer certificateNumb, Integer inputCertificateNumb){
-        if(certificateNumb.equals(inputCertificateNumb)){
-            Optional<Crew> optionalCrew = crewRepository.findByCrewNameAndCrewEmail(crewName, email);
-            Login loginId = new Login(optionalCrew.get().getCrewLoginId(), null);
-            return loginId;
-        }else{
-            return null;
-        }
-    }
-
-    public Login verifyCertificateNumb4Password(String loginId, String email, Integer certificateNumb, Integer inputCertificateNumb){
-        if(certificateNumb.equals(inputCertificateNumb)){
-            Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewEmail(loginId, email);
-            Login password = new Login(null, optionalCrew.get().getCrewPw());
-            return password;
-        }else{
-            return null;
-        }
-    }
-
-    public Optional<Crew> getCrewBasicInfo(String crewId){
-        Optional<Crew> optionalCrew = crewRepository.findById(Integer.valueOf(crewId));
-        return optionalCrew;
-    }
-
-    public void updateCrewBasicInfo(String crewId, String name, String password, String region1, String region2, String field1, String field2, String masterEmail, String subEmail, String profile) {
+    public void updateUserBasicInfo(String userId, String name, String password, String email, String job, String school, String profile) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         transaction.begin(); //트랜잭션 시작
 
-        Crew crew = em.find(Crew.class, crewId); // 영속 엔티티 조회
-        crew.setCrewName(name);
-        crew.setCrewPw(password);
-        crew.setRegion1(region1);
-        crew.setRegion2(region2);
-        crew.setField1(field1);
-        crew.setField2(field2);
-        crew.setCrewMasterEmail(masterEmail);
-        crew.setCrewSubEmail(subEmail);
-        crew.setCrewProfile(profile); //영속 엔티티 데이터 수정
+        User user = em.find(User.class, userId);
+        user.setUserName(name);
+        user.setUserPw(password);
+        user.setUserEmail(email);
+        user.setJob(job);
+        user.setSchool(school);
+        user.setUserProfile(profile); //영속 엔티티 데이터 수정
 
         transaction.commit();
+
+        log.info("userId가 " + userId + "인 회원 정보 수정 완료");
     }
 }
