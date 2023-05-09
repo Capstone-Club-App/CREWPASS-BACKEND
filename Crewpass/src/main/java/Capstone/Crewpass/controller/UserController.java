@@ -44,6 +44,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/user/new/loginId")
+    public ResponseEntity checkDuplicateUserLoginId(
+            @RequestParam("loginId") String loginId
+    ){
+        String result = userService.checkDuplicateUserLoginId(loginId);
+        if(result == null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/user/local")
     public ResponseEntity loginUser(
             @RequestParam("loginId") String loginId,

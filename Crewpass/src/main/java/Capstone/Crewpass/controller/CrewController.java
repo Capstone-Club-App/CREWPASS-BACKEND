@@ -67,9 +67,9 @@ public class CrewController {
     ){
         String result = crewService.checkDuplicateCrewLoginId(loginId);
         if(result == null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_CREW_LOGINID, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
         }else{
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_CREW_LOGINID, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
         }
     }
 

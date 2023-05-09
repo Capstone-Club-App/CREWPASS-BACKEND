@@ -58,20 +58,16 @@ public class UserService {
     }
 
     public String joinUser(User user) {
-        if(validateDuplicateUser(user)!=null){
-            userRepository.save(user);
-            return "joinUser - success";
-        }else{
-            return null;
-        }
+        userRepository.save(user);
+        return "joinUser - success";
     }
 
-    public String validateDuplicateUser(User user){
-        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
-        if(optionalUser.isPresent()){
+    public String checkDuplicateUserLoginId(String loginId) {
+        Optional<User> optionalUser = userRepository.findByUserLoginId(loginId);
+        if(optionalUser.isEmpty()){
             return null;
         }else{
-            return "validateDuplicateUser - success";
+            return "이미 사용 중인 로그인 아이디입니다.";
         }
     }
 
