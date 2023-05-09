@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -38,7 +37,7 @@ public class RecruitmentController {
             @RequestParam("isDeleted") Integer isDeleted,
             @RequestParam("deadline") String deadline,
             @RequestParam("content") String content,
-            @RequestParam("image") MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile image,
             HttpServletRequest request
             ) throws IOException {
 
@@ -92,5 +91,18 @@ public class RecruitmentController {
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_DETAIL, recruitmentService.checkRecruitmentDetail(recruitmentId)), HttpStatus.OK);
+    }
+
+    // 모집글 수정
+    @PutMapping(value = "/recruitment/{recruitmentId}")
+    public ResponseEntity updateRecruitmentDetail (
+            @RequestParam("title") String title,
+            @RequestParam("deadline") String deadline,
+            @RequestParam("content") String content,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @PathVariable("recruitmentId") Integer recruitmentId
+    ) throws IOException {
+        recruitmentService.updateRecruitment(recruitmentId, title, content, recruitmentService.uploadImage(image), deadline);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_RECRUITMENT, null), HttpStatus.OK);
     }
 }
