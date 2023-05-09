@@ -40,4 +40,6 @@ public class ResponseMessage {
     public static final String DB_ERROR = "데이터베이스 에러";
     public static final String PASS_DUPLICATE_CREW_NAME = "사용 가능한 동아리명";
     public static final String NONPASS_DUPLICATE_CREW_NAME = "사용 불가능한 동아리명";
+    public static final String PASS_DUPLICATE_CREW_LOGINID = "사용 가능한 동아리 로그인 아이디";
+    public static final String NONPASS_DUPLICATE_CREW_LOGINID = "사용 불가능한 동아리 로그인 아이디";
 }

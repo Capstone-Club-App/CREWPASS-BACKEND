@@ -77,7 +77,15 @@ public class CrewService {
         }else{
             return "이미 존재하는 동아리명입니다.";
         }
+    }
 
+    public String checkDuplicateCrewLoginId(String loginId) {
+        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(loginId);
+        if(optionalCrew.isEmpty()){
+            return null;
+        }else{
+            return "이미 사용 중인 동아리 로그인 아이디입니다.";
+        }
     }
 
     public Login loginCrew(Login login, HttpServletRequest request){

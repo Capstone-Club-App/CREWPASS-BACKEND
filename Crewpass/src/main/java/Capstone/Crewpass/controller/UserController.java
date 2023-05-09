@@ -38,7 +38,7 @@ public class UserController {
     ) throws IOException {
         User user = new User(null, loginId, password, name, email, job, school, userService.uploadProfile(profile));
         if(userService.joinUser(user)!=null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.CREATED_SUCCESS_USER, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_SUCCESS_USER, null), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_FAIL_USER, null), HttpStatus.OK);
         }
@@ -53,7 +53,7 @@ public class UserController {
         Login login = new Login(loginId, password);
         Login result = userService.loginUser(login, request);
         if(result != null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.LOGIN_SUCCESS_USER, result), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGIN_SUCCESS_USER, result), HttpStatus.OK);
         }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.LOGIN_FAIL_USER, null), HttpStatus.OK);
         }
@@ -62,7 +62,7 @@ public class UserController {
     @DeleteMapping("/user/local")
     public ResponseEntity logoutCrew(HttpServletRequest request){
         userService.logoutUser(request);
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.LOGOUT_SUCCESS_USER, null), HttpStatus.OK);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGOUT_SUCCESS_USER, null), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -70,7 +70,7 @@ public class UserController {
     public ResponseEntity getUserBasicInfo(HttpServletRequest request){
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("userId");
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.READ_USER, userService.getUserBasicInfo(userId)), HttpStatus.OK);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_USER, userService.getUserBasicInfo(userId)), HttpStatus.OK);
     }
 
     @PutMapping("/user")
@@ -86,7 +86,6 @@ public class UserController {
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("userId");
         userService.updateUserBasicInfo(userId, name, password, email, job, school, userService.uploadProfile(profile));
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.UPDATE_USER, null), HttpStatus.OK);
-
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_USER, null), HttpStatus.OK);
     }
 }
