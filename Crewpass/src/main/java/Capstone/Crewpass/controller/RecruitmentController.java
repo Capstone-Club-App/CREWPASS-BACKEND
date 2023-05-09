@@ -1,6 +1,8 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.entity.QuestionId;
 import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.entity.RecruitmentId;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -21,8 +23,6 @@ import java.time.ZoneId;
 public class RecruitmentController {
 
     private RecruitmentService recruitmentService;
-
-    private String questionView = "redirect:/recruitment/new/question/new/";
 
     // 생성자로 DI 주입
     @Autowired
@@ -50,7 +50,8 @@ public class RecruitmentController {
                 recruitmentService.uploadImage(image), crewId);
 
         if (recruitmentService.registerRecruitment(recruitment) != null) {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, questionView + recruitment.getRecruitmentId()), HttpStatus.OK);
+            RecruitmentId recruitmentId = new RecruitmentId(recruitment.getRecruitmentId());
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, recruitmentId), HttpStatus.OK);
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
         }
