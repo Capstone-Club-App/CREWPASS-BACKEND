@@ -1,5 +1,6 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.entity.CertificateNumb;
 import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
@@ -67,6 +68,36 @@ public class CrewController {
     public ResponseEntity logoutCrew(HttpServletRequest request){
         crewService.logoutCrew(request);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.LOGOUT_SUCCESS_CREW, null), HttpStatus.OK);
+    }
+
+    @PostMapping("/crew/loginId")
+    public ResponseEntity findCrewLoginId(
+            @RequestParam("crewName") String crewName,
+            @RequestParam("email") String email,
+            HttpServletRequest request
+    ){
+        CertificateNumb result = crewService.findCrewLoginId(crewName, email);
+        if(result != null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_CERTIFICATENUMB_FAIL_CREW,null),HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/crew/loginId/{crewName}/{email}/{certificateNumb}")
+    public ResponseEntity verifyCertificateNumb(
+            @PathVariable("crewName") String crewName,
+            @PathVariable("email") String email,
+            @PathVariable ("certificateNumb") Integer certificateNumb,
+            @RequestParam("inputCertificateNumb") Integer inputCertificateNumb,
+            HttpServletRequest request
+    ){
+        Login result = crewService.verifyCertificateNumb(crewName, email, certificateNumb, inputCertificateNumb);
+        if(result != null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCES, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.VERIFY_CERTIFICATENUMB_FAIL_CREW,null),HttpStatus.OK);
+        }
     }
 
     @ResponseBody
