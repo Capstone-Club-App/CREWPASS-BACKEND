@@ -129,6 +129,34 @@ public class CrewService {
         }
     }
 
+    public CertificateNumb findCrewPassword(String loginId, String email) {
+        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewEmail(loginId, email);
+        if(optionalCrew.isPresent()){
+            //인증번호 생성: 111111 ~ 999999
+            //Integer certificateNumb = makeCertificateNumb();
+            CertificateNumb certificateNumb = new CertificateNumb(makeCertificateNumb());
+            //email 주소로 보내고자 하는 내용
+            String sender = "crewpass@crewpass.com";
+            String receiver = email;
+            String title = "[Crewpass] 인증번호 발송";
+            String content =
+                    "안녕하세요."
+                            + "<br>"
+                            + "회원님께서는 비밀번호 찾기를 요청하셨습니다. "
+                            + "요쳥하신게 맞다면 계속해서 비밀번호 찾기를 진행해주세요. "
+                            + "비밀번호 변경을 위한 인증번호는 다음과 같습니다."
+                            + "<br>"
+                            + certificateNumb.getCertificateNumb()
+                            + "<br>"
+                            + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+            //email 주소로 전송
+            sendCertificateNumb(sender, receiver, title, content);
+            return certificateNumb;
+        }else{
+            return null;
+        }
+    }
+
     public Integer makeCertificateNumb(){
         Random random = new Random();
         Integer certificateNumb = random.nextInt(888888) + 111111;
@@ -149,11 +177,21 @@ public class CrewService {
         }
     }
 
-    public Login verifyCertificateNumb(String crewName, String email, Integer certificateNumb, Integer inputCertificateNumb){
+    public Login verifyCertificateNumb4LoginId(String crewName, String email, Integer certificateNumb, Integer inputCertificateNumb){
         if(certificateNumb.equals(inputCertificateNumb)){
             Optional<Crew> optionalCrew = crewRepository.findByCrewNameAndCrewEmail(crewName, email);
-            Login loginId = new Login(optionalCrew.get().getCrewLoginId());
+            Login loginId = new Login(optionalCrew.get().getCrewLoginId(), null);
             return loginId;
+        }else{
+            return null;
+        }
+    }
+
+    public Login verifyCertificateNumb4Password(String loginId, String email, Integer certificateNumb, Integer inputCertificateNumb){
+        if(certificateNumb.equals(inputCertificateNumb)){
+            Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewEmail(loginId, email);
+            Login password = new Login(null, optionalCrew.get().getCrewPw());
+            return password;
         }else{
             return null;
         }

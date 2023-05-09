@@ -10,8 +10,8 @@ public class ResponseMessage {
     public static final String UPDATE_CREW = "동아리 정보 수정 성공";
     public static final String CREATED_CERTIFICATENUMB_SUCCESS_CREW = "동아리 ID/PW 찾기 인증번호 생성 성공";
     public static final String CREATED_CERTIFICATENUMB_FAIL_CREW = "동아리 ID/PW 찾기 인증번호 생성 실패";
-    public static final String VERIFY_CERTIFICATENUMB_SUCCESS_CREW = "동아리 ID 찾기 인증번호 검증 성공";
-    public static final String VERIFY_CERTIFICATENUMB_FAIL_CREW = "동아리 ID 찾기 인증번호 검증 실패";
+    public static final String VERIFY_CERTIFICATENUMB_SUCCESS_CREW = "동아리 ID/PW 찾기 인증번호 검증 성공";
+    public static final String VERIFY_CERTIFICATENUMB_FAIL_CREW = "동아리 ID/PW 찾기 인증번호 검증 실패";
     public static final String LOGIN_SUCCESS_USER = "회원 로그인 성공";
     public static final String LOGIN_FAIL_USER = "회원 로그인 실패";
     public static final String LOGOUT_SUCCESS_USER = "회원 로그아웃 성공";

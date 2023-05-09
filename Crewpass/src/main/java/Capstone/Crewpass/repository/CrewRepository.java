@@ -21,4 +21,12 @@ public interface CrewRepository extends JpaRepository<Crew, Integer> {
             nativeQuery = true
     )
     Optional<Crew> findByCrewNameAndCrewEmail(@Param("crewName") String crewName, @Param("email") String email);
+
+    @Query(value="SELECT * " +
+            "FROM crewpass.crew c " +
+            "WHERE c.crew_login_id = :loginId AND c.crew_master_email = :email " +
+            "OR c.crew_login_id = :loginId AND c.crew_sub_email= :email",
+            nativeQuery = true
+    )
+    Optional<Crew> findByCrewLoginIdAndCrewEmail(@Param("loginId") String loginId, @Param("email") String email);
 }
