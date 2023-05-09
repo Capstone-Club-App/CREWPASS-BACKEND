@@ -29,5 +29,4 @@ public class ResponseFormat<T> {
                 .responseMessage(responseMessage)
                 .build();
     }
-
 }
