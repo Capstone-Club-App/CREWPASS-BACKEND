@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     // Recruitment Id로 찾기
     // Recruitment : Question = 1 : 1 관계이므로 RecruitmentId로 찾는 것으로 진행함
-    Optional<Question> findByRecruitmentId(Integer id);
+    Optional<Question> findByRecruitmentId(Integer recruitmentId);
+
+    Optional<Question> findByQuestionId(Integer questionId);
 }

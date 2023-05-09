@@ -30,6 +30,7 @@ public class RecruitmentService {
     EntityManagerFactory emf;
     private final RecruitmentRepository recruitmentRepository;
 
+    @Autowired
     public RecruitmentService(RecruitmentRepository recruitmentRepository) {
         this.recruitmentRepository = recruitmentRepository;
     }
