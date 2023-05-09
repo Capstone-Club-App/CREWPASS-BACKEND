@@ -16,6 +16,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -65,21 +66,18 @@ public class CrewService {
     }
 
     public String joinCrew(Crew crew){
-        if(validateDuplicateCrew(crew) != null) {
-            crewRepository.save(crew);
-            return "joinCrew - success";
-        }else{
-            return null;
-        }
+        crewRepository.save(crew);
+        return "joinCrew - success";
     }
 
-    public String validateDuplicateCrew(Crew crew){
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(crew.getCrewLoginId());
-        if(optionalCrew.isPresent()){
+    public String checkDuplicateCrewName(String name){
+        Optional<Crew> optionalCrew = crewRepository.findByCrewName(name);
+        if(optionalCrew.isEmpty()){
             return null;
         }else{
-            return "validateDuplicateCrew - success";
+            return "이미 존재하는 동아리명입니다.";
         }
+
     }
 
     public Login loginCrew(Login login, HttpServletRequest request){
