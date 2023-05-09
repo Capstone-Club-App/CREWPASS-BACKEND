@@ -34,12 +34,12 @@ public class CrewController {
             @RequestParam("loginId") String loginId,
             @RequestParam("password") String password,
             @RequestParam("region1") String region1,
-            @RequestParam("region2") String region2,
+            @RequestParam(value = "region2", required = false) String region2,
             @RequestParam("field1") String field1,
-            @RequestParam("field2") String field2,
+            @RequestParam(value = "field2", required = false) String field2,
             @RequestParam("masterEmail") String masterEmail,
             @RequestParam("subEmail") String subEmail,
-            @RequestParam("profile") MultipartFile profile
+            @RequestParam(value = "profile", required = false) MultipartFile profile
     ) throws IOException {
         Crew crew = new Crew(null, name, loginId, password, region1, region2, field1, field2, masterEmail, subEmail, crewService.uploadProfile(profile));
         if(crewService.joinCrew(crew)!=null){
@@ -163,12 +163,12 @@ public class CrewController {
             @RequestParam("name") String name,
             @RequestParam("password") String password,
             @RequestParam("region1") String region1,
-            @RequestParam("region2") String region2,
+            @RequestParam(value = "region2", required = false) String region2,
             @RequestParam("field1") String field1,
-            @RequestParam("field2") String field2,
+            @RequestParam(value = "field2", required = false) String field2,
             @RequestParam("masterEmail") String masterEmail,
             @RequestParam("subEmail") String subEmail,
-            @RequestParam("profile") MultipartFile profile,
+            @RequestParam(value ="profile", required = false) MultipartFile profile,
             HttpServletRequest request
     ) throws IOException {
         HttpSession session = request.getSession(); //session에 저장해놓은 crewId 추출

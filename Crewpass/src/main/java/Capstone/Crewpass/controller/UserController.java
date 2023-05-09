@@ -33,8 +33,8 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("job") String job,
-            @RequestParam("school") String school,
-            @RequestParam("profile")MultipartFile profile
+            @RequestParam(value = "school", required = false) String school,
+            @RequestParam(value = "profile", required = false)MultipartFile profile
     ) throws IOException {
         User user = new User(null, loginId, password, name, email, job, school, userService.uploadProfile(profile));
         if(userService.joinUser(user)!=null){
@@ -91,8 +91,8 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("job") String job,
-            @RequestParam("school") String school,
-            @RequestParam("profile")MultipartFile profile,
+            @RequestParam(value = "school", required = false) String school,
+            @RequestParam(value = "profile", required = false)MultipartFile profile,
             HttpServletRequest request
     ) throws IOException {
         HttpSession session = request.getSession();
