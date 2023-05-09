@@ -3,23 +3,31 @@ package Capstone.Crewpass.service;
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
+import Capstone.Crewpass.entity.Crew;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class RecruitmentService {
+    @Autowired
+    EntityManagerFactory emf;
     private final RecruitmentRepository recruitmentRepository;
 
     public RecruitmentService(RecruitmentRepository recruitmentRepository) {
@@ -102,5 +110,25 @@ public class RecruitmentService {
     public List<RecruitmentDetail> checkRecruitmentDetail(Integer recruitmentId) {
 
         return recruitmentRepository.getRecruitmentDetail(recruitmentId);
+    }
+
+
+    // 모집글 수정
+    public void updateRecruitment(Integer recruitmentId, String title, String content, String image, String deadline) {
+        EntityManager em = emf.createEntityManager();
+
+        // DB 트랜잭션 시작
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        Recruitment recruitment = em.find(Recruitment.class, recruitmentId); // 데이터 조회(영속)
+
+        recruitment.setTitle(title);
+        recruitment.setContent(content);
+        recruitment.setImage(image);
+        recruitment.setDeadline(Timestamp.valueOf(deadline));
+
+        transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
+        em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
     }
 }
