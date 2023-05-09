@@ -113,14 +113,14 @@ public class CrewService {
             String title = "[Crewpass] 인증번호 발송";
             String content =
                     "안녕하세요."
-                            + "<br>"
-                            + "회원님께서는 아이디 찾기를 요청하셨습니다. "
-                            + "요쳥하신게 맞다면 계속해서 아이디 찾기를 진행해주세요. "
-                            + "아이디 변경을 위한 인증번호는 다음과 같습니다."
-                            + "<br>"
-                            + certificateNumb.getCertificateNumb()
-                            + "<br>"
-                            + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+                    + "<br>"
+                    + "회원님께서는 아이디 찾기를 요청하셨습니다. "
+                    + "요쳥하신게 맞다면 계속해서 아이디 찾기를 진행해주세요. "
+                    + "아이디 변경을 위한 인증번호는 다음과 같습니다."
+                    + "<br>"
+                    + certificateNumb.getCertificateNumb()
+                    + "<br>"
+                    + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
             //email 주소로 전송
             sendCertificateNumb(sender, receiver, title, content);
             return certificateNumb;
