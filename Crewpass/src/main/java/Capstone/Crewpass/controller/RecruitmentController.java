@@ -106,4 +106,13 @@ public class RecruitmentController {
         recruitmentService.updateRecruitment(recruitmentId, title, content, recruitmentService.uploadImage(image), deadline);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_RECRUITMENT, null), HttpStatus.OK);
     }
+
+    // 모집글 삭제
+    @PutMapping(value = "/recruitment/delete/{recruitmentId}")
+    public ResponseEntity deleteRecruitment (
+            @PathVariable("recruitmentId") Integer recruitmentId
+    ) throws IOException {
+        recruitmentService.deleteRecruitment(recruitmentId);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_RECRUITMENT, null), HttpStatus.OK);
+    }
 }

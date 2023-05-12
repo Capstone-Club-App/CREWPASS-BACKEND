@@ -3,7 +3,6 @@ package Capstone.Crewpass.service;
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
-import Capstone.Crewpass.entity.Crew;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -131,5 +130,10 @@ public class RecruitmentService {
 
         transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
         em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
+    }
+
+    // 모집글 삭제
+    public void deleteRecruitment(Integer recruitmentId) {
+        recruitmentRepository.deleteRecruitment(recruitmentId);
     }
 }

@@ -5,13 +5,16 @@ import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Repository
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Integer> {
     // Recruitment Id로 찾기
@@ -83,4 +86,10 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " WHERE r.recruitment_id = :recruitmentId"
             , nativeQuery = true)
     List<RecruitmentDetail> getRecruitmentDetail(@Param("recruitmentId") Integer recruitmentId);
+
+    // 모집글 삭제
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE crewpass.recruitment SET isDeleted = 1 WHERE recruitment_id = :recruitmentId", nativeQuery = true)
+    void deleteRecruitment(@Param("recruitmentId") Integer recruitmentId);
 }
