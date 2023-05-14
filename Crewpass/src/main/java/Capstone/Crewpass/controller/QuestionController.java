@@ -41,11 +41,8 @@ public class QuestionController {
             @RequestParam(value = "question6Limit", required = false) Integer question6Limit,
             @RequestParam(value = "question7Limit", required = false) Integer question7Limit,
             @PathVariable ("recruitmentId") Integer recruitmentId,
-            HttpServletRequest request
+            @RequestHeader("crewId") Integer crewId
     ) throws IOException {
-
-        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
-
         Question question = new Question(null,
                 question1, question2, question3, question4, question5, question6, question7,
                 question1Limit, question2Limit, question3Limit, question4Limit, question5Limit, question6Limit, question7Limit,
