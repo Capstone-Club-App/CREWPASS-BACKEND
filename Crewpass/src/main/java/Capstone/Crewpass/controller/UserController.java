@@ -6,8 +6,7 @@ import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,14 +43,26 @@ public class UserController {
         }
     }
 
+    @PostMapping("/user/new/loginId")
+    public ResponseEntity checkDuplicateUserLoginId(
+            @RequestParam("loginId") String loginId
+    ){
+        String result = userService.checkDuplicateUserLoginId(loginId);
+        if(result == null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/user/local")
     public ResponseEntity loginUser(
             @RequestParam("loginId") String loginId,
             @RequestParam("password") String password,
-            HttpServletRequest request
+            HttpServletResponse response
     ){
-        Login login = new Login(loginId, password);
-        Login result = userService.loginUser(login, request);
+        Login login = new Login(null, loginId, password);
+        Login result = userService.loginUser(login, response);
         if(result != null){
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGIN_SUCCESS_USER, result), HttpStatus.OK);
         }else{
@@ -60,16 +71,16 @@ public class UserController {
     }
 
     @DeleteMapping("/user/local")
-    public ResponseEntity logoutCrew(HttpServletRequest request){
-        userService.logoutUser(request);
+    public ResponseEntity logoutCrew(HttpServletResponse response){
+        userService.logoutUser(response);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGOUT_SUCCESS_USER, null), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/user")
-    public ResponseEntity getUserBasicInfo(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String userId = (String) session.getAttribute("userId");
+    public ResponseEntity getUserBasicInfo(
+            @RequestHeader("userId") String userId
+    ){
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_USER, userService.getUserBasicInfo(userId)), HttpStatus.OK);
     }
 
@@ -81,10 +92,8 @@ public class UserController {
             @RequestParam("job") String job,
             @RequestParam("school") String school,
             @RequestParam("profile")MultipartFile profile,
-            HttpServletRequest request
+            @RequestHeader("userId") String userId
     ) throws IOException {
-        HttpSession session = request.getSession();
-        String userId = (String) session.getAttribute("userId");
         userService.updateUserBasicInfo(userId, name, password, email, job, school, userService.uploadProfile(profile));
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_USER, null), HttpStatus.OK);
     }

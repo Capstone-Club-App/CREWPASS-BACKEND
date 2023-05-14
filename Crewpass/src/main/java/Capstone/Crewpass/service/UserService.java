@@ -10,8 +10,7 @@ import com.google.cloud.storage.StorageOptions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -58,29 +57,25 @@ public class UserService {
     }
 
     public String joinUser(User user) {
-        if(validateDuplicateUser(user)!=null){
-            userRepository.save(user);
-            return "joinUser - success";
-        }else{
+        userRepository.save(user);
+        return "joinUser - success";
+    }
+
+    public String checkDuplicateUserLoginId(String loginId) {
+        Optional<User> optionalUser = userRepository.findByUserLoginId(loginId);
+        if(optionalUser.isEmpty()){
             return null;
+        }else{
+            return "이미 사용 중인 로그인 아이디입니다.";
         }
     }
 
-    public String validateDuplicateUser(User user){
-        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
-        if(optionalUser.isPresent()){
-            return null;
-        }else{
-            return "validateDuplicateUser - success";
-        }
-    }
-
-    public Login loginUser(Login login, HttpServletRequest request) {
+    public Login loginUser(Login login, HttpServletResponse response) {
         Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(login.getLoginId(), login.getPassword());
         if(optionalUser.isPresent()){
-            HttpSession session = request.getSession(true);
             Integer userId = optionalUser.get().getUserId();
-            session.setAttribute("userId", String.valueOf(userId));
+            response.addHeader("userId", String.valueOf(userId));
+            login.setCrew_user_id(String.valueOf(userId));
             return login;
         }else{
             return null;
@@ -88,11 +83,8 @@ public class UserService {
     }
 
 
-    public void logoutUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if(session != null){
-            session.invalidate();
-        }
+    public void logoutUser(HttpServletResponse response) {
+        response.reset();
     }
 
     public Optional<User> getUserBasicInfo(String userId) {

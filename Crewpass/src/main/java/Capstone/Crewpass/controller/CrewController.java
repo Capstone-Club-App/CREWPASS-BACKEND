@@ -90,8 +90,8 @@ public class CrewController {
     }
 
     @DeleteMapping("/crew/local")
-    public ResponseEntity logoutCrew(HttpServletResponse reponse) {
-        crewService.logoutCrew(reponse);
+    public ResponseEntity logoutCrew(HttpServletResponse response) {
+        crewService.logoutCrew(response);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGOUT_SUCCESS_CREW, null), HttpStatus.OK);
     }
 
