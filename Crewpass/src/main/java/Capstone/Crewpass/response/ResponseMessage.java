@@ -35,6 +35,9 @@ public class ResponseMessage {
     public static final String READ_MY_APPLICATION_LIST = "로그인한 회원의 지원서 목록 조회 성공";
     public static final String READ_APPLICATION_DETAIL = "선택한 지원서 상세 조회 성공";
     public static final String READ_APPLICATION_LIST_BY_QUESTION = "선택한 모집글에 대한 지원서를 최신순으로 목록 조회 성공";
+
+    public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
+    public static final String DB_ERROR = "데이터베이스 에러";
     public static final String PASS_DUPLICATE_CREW_NAME = "사용 가능한 동아리명";
     public static final String NONPASS_DUPLICATE_CREW_NAME = "사용 불가능한 동아리명";
     public static final String PASS_DUPLICATE_LOGINID = "사용 가능한 로그인 아이디";
