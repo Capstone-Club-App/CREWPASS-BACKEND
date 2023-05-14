@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +91,15 @@ public class ApplicationService {
         application.setAnswer7(answer7);
         application.setAnswer7Count(answer7Count);
 
+        // submitTime 재설정
+        application.setSubmitTime(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+
         transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
         em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
+    }
+
+    // 지원서 삭제
+    public void deleteApplication(Integer applicationId) {
+        applicationRepository.deleteById(applicationId);
     }
 }

@@ -36,6 +36,7 @@ public class ResponseMessage {
     public static final String READ_APPLICATION_DETAIL = "선택한 지원서 상세 조회 성공";
     public static final String READ_APPLICATION_LIST_BY_QUESTION = "선택한 모집글에 대한 지원서를 최신순으로 목록 조회 성공";
     public static final String UPDATE_APPLICATION = "지원서 수정 성공";
+    public static final String DELETE_APPLICATION = "지원서 삭제 성공";
 
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
