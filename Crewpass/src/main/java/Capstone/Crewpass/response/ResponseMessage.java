@@ -21,7 +21,7 @@ public class ResponseMessage {
     public static final String CREATED_FAIL_USER = "회원 가입 실패";
     public static final String READ_USER = "회원 기본 정보 조회 성공";
     public static final String UPDATE_USER = "회원 정보 수정 성공";
-  
+
     public static final String REGISTER_SUCCESS_RECRUITMENT = "모집글 등록 성공";
     public static final String READ_MY_RECRUITMENT_LIST = "로그인한 동아리의 모집글 목록 조회 성공";
     public static final String READ_RECRUITMENT_LIST_RECENT = "동아리 분야 별 최신순으로 모집글 목록 조회 성공";
