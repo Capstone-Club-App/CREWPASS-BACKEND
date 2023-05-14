@@ -38,10 +38,8 @@ public class RecruitmentController {
             @RequestParam("deadline") String deadline,
             @RequestParam("content") String content,
             @RequestParam(value = "image", required = false) MultipartFile image,
-            HttpServletRequest request
+            @RequestHeader("crewId") Integer crewId
             ) throws IOException {
-
-        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
@@ -60,10 +58,8 @@ public class RecruitmentController {
     // 로그인한 동아리가 작성한 모집글 목록 조회
     @GetMapping(value = "/recruitment/myList")
     public ResponseEntity checkMyRecruitList(
-            HttpServletRequest request
+            @RequestHeader("crewId") Integer crewId
         ) throws IOException {
-
-        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_RECRUITMENT_LIST, recruitmentService.checkMyRecruitmentList(crewId)), HttpStatus.OK);
     }
@@ -108,7 +104,7 @@ public class RecruitmentController {
     }
 
     // 모집글 삭제
-    @PutMapping(value = "/recruitment/delete/{recruitmentId}")
+    @PutMapping(value = "/recruitment/{recruitmentId}/delete")
     public ResponseEntity deleteRecruitment (
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
