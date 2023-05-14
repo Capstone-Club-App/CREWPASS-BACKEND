@@ -1,16 +1,21 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.entity.User;
+import Capstone.Crewpass.response.ResponseFormat;
+import Capstone.Crewpass.response.ResponseMessage;
+import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -22,14 +27,14 @@ public class UserController {
     }
 
     @PostMapping("/user/new")
-    public void joinUser(
+    public ResponseEntity joinUser(
             @RequestParam("name") String name,
             @RequestParam("loginId") String loginId,
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("job") String job,
-            @RequestParam(value = "school", required = false) String school,
-            @RequestParam(value = "profile", required = false)MultipartFile profile
+            @RequestParam("school") String school,
+            @RequestParam("profile")MultipartFile profile
     ) throws IOException {
         User user = new User(null, loginId, password, name, email, job, school, userService.uploadProfile(profile));
         if(userService.joinUser(user)!=null){
@@ -39,20 +44,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/new/loginId")
-    public ResponseEntity checkDuplicateUserLoginId(
-            @RequestParam("loginId") String loginId
-    ){
-        String result = userService.checkDuplicateUserLoginId(loginId);
-        if(result == null){
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
-        }else{
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
-        }
-    }
-
     @PostMapping("/user/local")
-    public void loginUser(
+    public ResponseEntity loginUser(
             @RequestParam("loginId") String loginId,
             @RequestParam("password") String password,
             HttpServletRequest request
@@ -67,27 +60,27 @@ public class UserController {
     }
 
     @DeleteMapping("/user/local")
-    public void logoutCrew(HttpServletRequest request){
+    public ResponseEntity logoutCrew(HttpServletRequest request){
         userService.logoutUser(request);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGOUT_SUCCESS_USER, null), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/user")
-    public Optional<User> getUserBasicInfo(HttpServletRequest request){
+    public ResponseEntity getUserBasicInfo(HttpServletRequest request){
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("userId");
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_USER, userService.getUserBasicInfo(userId)), HttpStatus.OK);
     }
 
     @PutMapping("/user")
-    public void updateUserBasicInfo(
+    public ResponseEntity updateUserBasicInfo(
             @RequestParam("name") String name,
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("job") String job,
-            @RequestParam(value = "school", required = false) String school,
-            @RequestParam(value = "profile", required = false)MultipartFile profile,
+            @RequestParam("school") String school,
+            @RequestParam("profile")MultipartFile profile,
             HttpServletRequest request
     ) throws IOException {
         HttpSession session = request.getSession();

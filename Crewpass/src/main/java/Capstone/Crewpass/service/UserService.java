@@ -1,5 +1,6 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.entity.User;
 import Capstone.Crewpass.repository.UserRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -57,28 +58,32 @@ public class UserService {
     }
 
     public String joinUser(User user) {
-        userRepository.save(user);
-        return "joinUser - success";
-    }
-
-    public String checkDuplicateUserLoginId(String loginId) {
-        Optional<User> optionalUser = userRepository.findByUserLoginId(loginId);
-        if(optionalUser.isEmpty()){
-            return null;
+        if(validateDuplicateUser(user)!=null){
+            userRepository.save(user);
+            return "joinUser - success";
         }else{
-            return "이미 사용 중인 로그인 아이디입니다.";
+            return null;
         }
     }
 
-    public void loginUser(String loginId, String password, HttpServletRequest request) {
-        Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(loginId,password);
+    public String validateDuplicateUser(User user){
+        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
         if(optionalUser.isPresent()){
-            log.info("회원 로그인 ID : " + loginId);
+            return null;
+        }else{
+            return "validateDuplicateUser - success";
+        }
+    }
+
+    public Login loginUser(Login login, HttpServletRequest request) {
+        Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(login.getLoginId(), login.getPassword());
+        if(optionalUser.isPresent()){
             HttpSession session = request.getSession(true);
             Integer userId = optionalUser.get().getUserId();
             session.setAttribute("userId", String.valueOf(userId));
+            return login;
         }else{
-            log.info("회원 로그인 실패 - 일치하는 회원 정보 없음");
+            return null;
         }
     }
 
@@ -92,7 +97,6 @@ public class UserService {
 
     public Optional<User> getUserBasicInfo(String userId) {
         Optional<User> optionalUser = userRepository.findById(Integer.valueOf(userId));
-        log.info("userId가 " + userId + "인 회원 정보 조회 완료");
         return optionalUser;
     }
 
@@ -110,7 +114,5 @@ public class UserService {
         user.setUserProfile(profile); //영속 엔티티 데이터 수정
 
         transaction.commit();
-
-        log.info("userId가 " + userId + "인 회원 정보 수정 완료");
     }
 }
