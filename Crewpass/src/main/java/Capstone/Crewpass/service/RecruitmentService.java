@@ -3,7 +3,6 @@ package Capstone.Crewpass.service;
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
-import Capstone.Crewpass.entity.Crew;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -20,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -129,7 +130,15 @@ public class RecruitmentService {
         recruitment.setImage(image);
         recruitment.setDeadline(Timestamp.valueOf(deadline));
 
+        // registerTime 재설정
+        recruitment.setRegisterTime(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+
         transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
         em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
+    }
+
+    // 모집글 삭제
+    public void deleteRecruitment(Integer recruitmentId) {
+        recruitmentRepository.deleteRecruitment(recruitmentId);
     }
 }

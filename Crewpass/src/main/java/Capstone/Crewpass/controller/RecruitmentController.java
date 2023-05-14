@@ -1,6 +1,8 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.entity.QuestionId;
 import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.entity.RecruitmentId;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -22,8 +24,6 @@ public class RecruitmentController {
 
     private RecruitmentService recruitmentService;
 
-    private String questionView = "redirect:/recruitment/new/question/new/";
-
     // 생성자로 DI 주입
     @Autowired
     public RecruitmentController(RecruitmentService recruitmentService) {
@@ -38,10 +38,8 @@ public class RecruitmentController {
             @RequestParam("deadline") String deadline,
             @RequestParam("content") String content,
             @RequestParam(value = "image", required = false) MultipartFile image,
-            HttpServletRequest request
+            @RequestHeader("crewId") Integer crewId
             ) throws IOException {
-
-        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
@@ -50,7 +48,8 @@ public class RecruitmentController {
                 recruitmentService.uploadImage(image), crewId);
 
         if (recruitmentService.registerRecruitment(recruitment) != null) {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, questionView + recruitment.getRecruitmentId()), HttpStatus.OK);
+            RecruitmentId recruitmentId = new RecruitmentId(recruitment.getRecruitmentId());
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, recruitmentId), HttpStatus.OK);
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
         }
@@ -59,10 +58,8 @@ public class RecruitmentController {
     // 로그인한 동아리가 작성한 모집글 목록 조회
     @GetMapping(value = "/recruitment/myList")
     public ResponseEntity checkMyRecruitList(
-            HttpServletRequest request
+            @RequestHeader("crewId") Integer crewId
         ) throws IOException {
-
-        Integer crewId = Integer.valueOf((String) request.getSession().getAttribute("crewId"));
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_RECRUITMENT_LIST, recruitmentService.checkMyRecruitmentList(crewId)), HttpStatus.OK);
     }
@@ -104,5 +101,14 @@ public class RecruitmentController {
     ) throws IOException {
         recruitmentService.updateRecruitment(recruitmentId, title, content, recruitmentService.uploadImage(image), deadline);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_RECRUITMENT, null), HttpStatus.OK);
+    }
+
+    // 모집글 삭제
+    @PutMapping(value = "/recruitment/{recruitmentId}/delete")
+    public ResponseEntity deleteRecruitment (
+            @PathVariable("recruitmentId") Integer recruitmentId
+    ) throws IOException {
+        recruitmentService.deleteRecruitment(recruitmentId);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_RECRUITMENT, null), HttpStatus.OK);
     }
 }
