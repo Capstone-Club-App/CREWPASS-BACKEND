@@ -56,15 +56,17 @@ public class UserService {
         return fileName;
     }
 
-    public void joinUser(User user) {
-        validateDuplicateUser(user);
+    public String joinUser(User user) {
         userRepository.save(user);
+        return "joinUser - success";
     }
 
-    public void validateDuplicateUser(User user){
-        Optional<User> optionalUser = userRepository.findByUserLoginId(user.getUserLoginId());
-        if(optionalUser.isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원 ID 입니다.");
+    public String checkDuplicateUserLoginId(String loginId) {
+        Optional<User> optionalUser = userRepository.findByUserLoginId(loginId);
+        if(optionalUser.isEmpty()){
+            return null;
+        }else{
+            return "이미 사용 중인 로그인 아이디입니다.";
         }
     }
 

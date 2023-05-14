@@ -28,11 +28,27 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("job") String job,
-            @RequestParam("school") String school,
-            @RequestParam("profile")MultipartFile profile
+            @RequestParam(value = "school", required = false) String school,
+            @RequestParam(value = "profile", required = false)MultipartFile profile
     ) throws IOException {
         User user = new User(null, loginId, password, name, email, job, school, userService.uploadProfile(profile));
-        userService.joinUser(user);
+        if(userService.joinUser(user)!=null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_SUCCESS_USER, null), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_FAIL_USER, null), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/user/new/loginId")
+    public ResponseEntity checkDuplicateUserLoginId(
+            @RequestParam("loginId") String loginId
+    ){
+        String result = userService.checkDuplicateUserLoginId(loginId);
+        if(result == null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
+        }
     }
 
     @PostMapping("/user/local")
@@ -41,12 +57,19 @@ public class UserController {
             @RequestParam("password") String password,
             HttpServletRequest request
     ){
-        userService.loginUser(loginId, password, request);
+        Login login = new Login(loginId, password);
+        Login result = userService.loginUser(login, request);
+        if(result != null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGIN_SUCCESS_USER, result), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.LOGIN_FAIL_USER, null), HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/user/local")
     public void logoutCrew(HttpServletRequest request){
         userService.logoutUser(request);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGOUT_SUCCESS_USER, null), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -54,7 +77,7 @@ public class UserController {
     public Optional<User> getUserBasicInfo(HttpServletRequest request){
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("userId");
-        return userService.getUserBasicInfo(userId);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_USER, userService.getUserBasicInfo(userId)), HttpStatus.OK);
     }
 
     @PutMapping("/user")
@@ -63,12 +86,13 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("job") String job,
-            @RequestParam("school") String school,
-            @RequestParam("profile")MultipartFile profile,
+            @RequestParam(value = "school", required = false) String school,
+            @RequestParam(value = "profile", required = false)MultipartFile profile,
             HttpServletRequest request
     ) throws IOException {
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("userId");
         userService.updateUserBasicInfo(userId, name, password, email, job, school, userService.uploadProfile(profile));
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_USER, null), HttpStatus.OK);
     }
 }
