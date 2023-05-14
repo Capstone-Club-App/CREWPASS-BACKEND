@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
     // Application Id로 찾기
-    Optional<Application> findByApplicationId(Integer id);
+    Optional<Application> findByApplicationId(Integer questionId);
 
     // User Id로 해당 회원이 지원한 지원서 목록 조회
     @Query(value = "SELECT a.user_user_id," +

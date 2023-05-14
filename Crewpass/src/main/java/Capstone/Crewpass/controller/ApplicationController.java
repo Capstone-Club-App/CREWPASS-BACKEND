@@ -6,11 +6,13 @@ import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.ApplicationService;
 import Capstone.Crewpass.service.QuestionService;
+import Capstone.Crewpass.service.RecruitmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -32,7 +34,7 @@ public class ApplicationController {
 
     // 지원서 작성
     @PostMapping(value = "/application/new/{questionId}")
-    public ResponseEntity registerApplicaion(
+    public ResponseEntity registerApplication(
         @RequestParam("answer1") String answer1,
         @RequestParam("answer2") String answer2,
         @RequestParam("answer3") String answer3,
@@ -94,5 +96,31 @@ public class ApplicationController {
             @PathVariable("questionId") Integer questionId
     ) throws IOException {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_APPLICATION_LIST_BY_QUESTION, applicationService.checkApplicationListByQuestion(questionId)), HttpStatus.OK);
+    }
+
+    // 지원서 수정
+    @PutMapping(value = "/application/{applicationId}")
+    public ResponseEntity updateApplicationDetail(
+            @RequestParam("answer1") String answer1,
+            @RequestParam("answer1Count") Integer answer1Count,
+            @RequestParam("answer2") String answer2,
+            @RequestParam("answer2Count") Integer answer2Count,
+            @RequestParam("answer3") String answer3,
+            @RequestParam("answer3Count") Integer answer3Count,
+            @RequestParam(value = "answer4", required = false) String answer4,
+            @RequestParam(value = "answer4Count", required = false) Integer answer4Count,
+            @RequestParam(value = "answer5", required = false) String answer5,
+            @RequestParam(value = "answer5Count", required = false) Integer answer5Count,
+            @RequestParam(value = "answer6", required = false) String answer6,
+            @RequestParam(value = "answer6Count", required = false) Integer answer6Count,
+            @RequestParam(value = "answer7", required = false) String answer7,
+            @RequestParam(value = "answer7Count", required = false) Integer answer7Count,
+            @PathVariable("applicationId") Integer applicationId,
+            HttpServletRequest request
+    ) throws IOException {
+
+        applicationService.updateApplication(applicationId, answer1, answer1Count, answer2, answer2Count, answer3, answer3Count,
+                answer4, answer4Count, answer5, answer5Count, answer6, answer6Count, answer7, answer7Count);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_APPLICATION, null), HttpStatus.OK);
     }
 }
