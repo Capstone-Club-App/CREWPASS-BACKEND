@@ -50,10 +50,8 @@ public class ApplicationController {
         @RequestParam(value = "answer6Count", required = false) Integer answer6Count,
         @RequestParam(value = "answer7Count", required = false) Integer answer7Count,
         @PathVariable("questionId") Integer questionId,
-        HttpServletRequest request
+        @RequestHeader("userId") Integer userId
     ) throws IOException {
-
-        Integer userId = Integer.valueOf((String) request.getSession().getAttribute("userId"));
 
         // recruitmentId, crewId 가져오기
         Integer recruitmentId = questionService.findRecruitmentId(questionId);
@@ -74,11 +72,8 @@ public class ApplicationController {
     // 로그인한 회원이 지원한 지원서 목록 조회
     @GetMapping(value = "/application/myList")
     public ResponseEntity checkMyApplyList(
-            HttpServletRequest request
+            @RequestHeader("userId") Integer userId
     ) throws IOException {
-
-        Integer userId = Integer.valueOf((String) request.getSession().getAttribute("userId"));
-
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_APPLICATION_LIST, applicationService.checkMyApplicationList(userId)), HttpStatus.OK);
     }
 
