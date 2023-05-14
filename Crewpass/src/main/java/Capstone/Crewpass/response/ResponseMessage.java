@@ -41,4 +41,8 @@ public class ResponseMessage {
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
+    public static final String PASS_DUPLICATE_CREW_NAME = "사용 가능한 동아리명";
+    public static final String NONPASS_DUPLICATE_CREW_NAME = "사용 불가능한 동아리명";
+    public static final String PASS_DUPLICATE_LOGINID = "사용 가능한 로그인 아이디";
+    public static final String NONPASS_DUPLICATE_LOGINID = "사용 불가능한 로그인 아이디";
 }

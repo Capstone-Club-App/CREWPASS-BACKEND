@@ -13,8 +13,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -64,46 +63,48 @@ public class CrewService {
         return fileName;
     }
 
-    public String joinCrew(Crew crew){
-        if(validateDuplicateCrew(crew) != null) {
-            crewRepository.save(crew);
-            return "joinCrew - success";
-        }else{
+    public String joinCrew(Crew crew) {
+        crewRepository.save(crew);
+        return "joinCrew - success";
+    }
+
+    public String checkDuplicateCrewName(String name) {
+        Optional<Crew> optionalCrew = crewRepository.findByCrewName(name);
+        if (optionalCrew.isEmpty()) {
             return null;
+        } else {
+            return "이미 존재하는 동아리명입니다.";
         }
     }
 
-    public String validateDuplicateCrew(Crew crew){
-        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(crew.getCrewLoginId());
-        if(optionalCrew.isPresent()){
+    public String checkDuplicateCrewLoginId(String loginId) {
+        Optional<Crew> optionalCrew = crewRepository.findByCrewLoginId(loginId);
+        if (optionalCrew.isEmpty()) {
             return null;
-        }else{
-            return "validateDuplicateCrew - success";
+        } else {
+            return "이미 사용 중인 동아리 로그인 아이디입니다.";
         }
     }
 
-    public Login loginCrew(Login login, HttpServletRequest request){
+    public Login loginCrew(Login login, HttpServletResponse response) {
         Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewPw(login.getLoginId(), login.getPassword());
-        if(optionalCrew.isPresent()){
-            HttpSession session = request.getSession(true);
+        if (optionalCrew.isPresent()) {
             Integer crewId = optionalCrew.get().getCrewId();
-            session.setAttribute("crewId", String.valueOf(crewId));
+            response.addHeader("crewId", String.valueOf(crewId));
+            login.setCrew_user_id(String.valueOf(crewId));
             return login;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public void logoutCrew(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if(session != null){
-            session.invalidate();
-        }
+    public void logoutCrew(HttpServletResponse response) {
+        response.reset();
     }
 
     public CertificateNumb findCrewLoginId(String crewName, String email) {
         Optional<Crew> optionalCrew = crewRepository.findByCrewNameAndCrewEmail(crewName, email);
-        if(optionalCrew.isPresent()){
+        if (optionalCrew.isPresent()) {
             //인증번호 생성: 111111 ~ 999999
             //Integer certificateNumb = makeCertificateNumb();
             CertificateNumb certificateNumb = new CertificateNumb(makeCertificateNumb());
@@ -113,25 +114,25 @@ public class CrewService {
             String title = "[Crewpass] 인증번호 발송";
             String content =
                     "안녕하세요."
-                    + "<br>"
-                    + "회원님께서는 아이디 찾기를 요청하셨습니다. "
-                    + "요쳥하신게 맞다면 계속해서 아이디 찾기를 진행해주세요. "
-                    + "아이디 변경을 위한 인증번호는 다음과 같습니다."
-                    + "<br>"
-                    + certificateNumb.getCertificateNumb()
-                    + "<br>"
-                    + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+                            + "<br>"
+                            + "회원님께서는 아이디 찾기를 요청하셨습니다. "
+                            + "요쳥하신게 맞다면 계속해서 아이디 찾기를 진행해주세요. "
+                            + "아이디 변경을 위한 인증번호는 다음과 같습니다."
+                            + "<br>"
+                            + certificateNumb.getCertificateNumb()
+                            + "<br>"
+                            + "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
             //email 주소로 전송
             sendCertificateNumb(sender, receiver, title, content);
             return certificateNumb;
-        }else{
+        } else {
             return null;
         }
     }
 
     public CertificateNumb findCrewPassword(String loginId, String email) {
         Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewEmail(loginId, email);
-        if(optionalCrew.isPresent()){
+        if (optionalCrew.isPresent()) {
             //인증번호 생성: 111111 ~ 999999
             //Integer certificateNumb = makeCertificateNumb();
             CertificateNumb certificateNumb = new CertificateNumb(makeCertificateNumb());
@@ -152,19 +153,19 @@ public class CrewService {
             //email 주소로 전송
             sendCertificateNumb(sender, receiver, title, content);
             return certificateNumb;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public Integer makeCertificateNumb(){
+    public Integer makeCertificateNumb() {
         Random random = new Random();
         Integer certificateNumb = random.nextInt(888888) + 111111;
         return certificateNumb;
     }
 
-    public void sendCertificateNumb(String sender, String receiver, String title, String content){
-        try{
+    public void sendCertificateNumb(String sender, String receiver, String title, String content) {
+        try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
             helper.setFrom(sender);
@@ -177,27 +178,27 @@ public class CrewService {
         }
     }
 
-    public Login verifyCertificateNumb4LoginId(String crewName, String email, Integer certificateNumb, Integer inputCertificateNumb){
-        if(certificateNumb.equals(inputCertificateNumb)){
+    public Login verifyCertificateNumb4LoginId(String crewName, String email, Integer certificateNumb, Integer inputCertificateNumb) {
+        if (certificateNumb.equals(inputCertificateNumb)) {
             Optional<Crew> optionalCrew = crewRepository.findByCrewNameAndCrewEmail(crewName, email);
-            Login loginId = new Login(optionalCrew.get().getCrewLoginId(), null);
+            Login loginId = new Login(null, optionalCrew.get().getCrewLoginId(), null);
             return loginId;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public Login verifyCertificateNumb4Password(String loginId, String email, Integer certificateNumb, Integer inputCertificateNumb){
-        if(certificateNumb.equals(inputCertificateNumb)){
+    public Login verifyCertificateNumb4Password(String loginId, String email, Integer certificateNumb, Integer inputCertificateNumb) {
+        if (certificateNumb.equals(inputCertificateNumb)) {
             Optional<Crew> optionalCrew = crewRepository.findByCrewLoginIdAndCrewEmail(loginId, email);
-            Login password = new Login(null, optionalCrew.get().getCrewPw());
+            Login password = new Login(null,null, optionalCrew.get().getCrewPw());
             return password;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public Optional<Crew> getCrewBasicInfo(String crewId){
+    public Optional<Crew> getCrewBasicInfo(String crewId) {
         Optional<Crew> optionalCrew = crewRepository.findById(Integer.valueOf(crewId));
         return optionalCrew;
     }
