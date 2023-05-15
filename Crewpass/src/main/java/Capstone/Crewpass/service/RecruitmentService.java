@@ -3,6 +3,7 @@ package Capstone.Crewpass.service;
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
+import Capstone.Crewpass.dto.ScrapRecruitmentDeadlineList;
 import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.entity.Scrap;
 import Capstone.Crewpass.repository.RecruitmentRepository;
@@ -156,4 +157,10 @@ public class RecruitmentService {
     public void deleteScrap(Integer scrapId) {
         scrapRepository.deleteById(scrapId);
     }
+
+    // 스크랩한 모집글을 "마감임박" 순으로 목록 조회
+    public List<ScrapRecruitmentDeadlineList> checkMyScrapListByDeadline(Integer userId) {
+        return scrapRepository.findAllScrapListByDeadline(userId);
+    }
+
 }

@@ -133,4 +133,13 @@ public class RecruitmentController {
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_SCRAP, null), HttpStatus.OK);
     }
+
+    // 스크랩한 모집글을 "마감임박" 순으로 목록 조회
+    @GetMapping(value = "/recruitment/scrap/{userId}")
+    public ResponseEntity checkMyScrapList(
+            @PathVariable("userId") Integer userId
+    ) throws IOException {
+
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_SCRAP_LIST, recruitmentService.checkMyScrapListByDeadline(userId)), HttpStatus.OK);
+    }
 }
