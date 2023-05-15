@@ -4,7 +4,9 @@ import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.entity.Scrap;
 import Capstone.Crewpass.repository.RecruitmentRepository;
+import Capstone.Crewpass.repository.ScrapRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
@@ -30,10 +32,12 @@ public class RecruitmentService {
     @Autowired
     EntityManagerFactory emf;
     private final RecruitmentRepository recruitmentRepository;
+    private final ScrapRepository scrapRepository;
 
     @Autowired
-    public RecruitmentService(RecruitmentRepository recruitmentRepository) {
+    public RecruitmentService(RecruitmentRepository recruitmentRepository, ScrapRepository scrapRepository) {
         this.recruitmentRepository = recruitmentRepository;
+        this.scrapRepository = scrapRepository;
     }
 
     // 사진 파일 업로드
@@ -140,5 +144,11 @@ public class RecruitmentService {
     // 모집글 삭제
     public void deleteRecruitment(Integer recruitmentId) {
         recruitmentRepository.deleteRecruitment(recruitmentId);
+    }
+
+    // 스크랩 추가
+    public String registerScrap(Scrap scrap) {
+        scrapRepository.save(scrap);
+        return "registerScrap - success" + " : scrapId = " + scrap.getScrapId();
     }
 }

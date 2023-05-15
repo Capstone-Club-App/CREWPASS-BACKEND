@@ -1,8 +1,6 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.entity.QuestionId;
-import Capstone.Crewpass.entity.Recruitment;
-import Capstone.Crewpass.entity.RecruitmentId;
+import Capstone.Crewpass.entity.*;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -110,5 +108,19 @@ public class RecruitmentController {
     ) throws IOException {
         recruitmentService.deleteRecruitment(recruitmentId);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_RECRUITMENT, null), HttpStatus.OK);
+    }
+
+    // 스크랩 추가
+    @PostMapping(value = "/recruitment/scrap/new/{recruitmentId}")
+    public ResponseEntity registerScrap(
+            @PathVariable("recruitmentId") Integer recruitmentId,
+            @RequestHeader("userId") Integer userId
+    ) throws IOException {
+        Scrap scrap = new Scrap(null, recruitmentId, userId);
+        if (recruitmentService.registerScrap(scrap) != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_SCRAP, scrap.getScrapId()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_SCRAP, scrap.getScrapId()), HttpStatus.OK);
+        }
     }
 }
