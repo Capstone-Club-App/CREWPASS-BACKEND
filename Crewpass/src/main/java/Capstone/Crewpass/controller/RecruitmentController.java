@@ -123,4 +123,14 @@ public class RecruitmentController {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_SCRAP, scrap.getScrapId()), HttpStatus.OK);
         }
     }
+
+    // 동아리 스크랩 취소
+    @DeleteMapping("/recruitment/scrap/delete/{scrapId}")
+    public ResponseEntity deleteScrap(
+            @PathVariable("scrapId") Integer scrapId
+    ) throws IOException {
+        recruitmentService.deleteScrap(scrapId);
+
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_SCRAP, null), HttpStatus.OK);
+    }
 }

@@ -151,4 +151,9 @@ public class RecruitmentService {
         scrapRepository.save(scrap);
         return "registerScrap - success" + " : scrapId = " + scrap.getScrapId();
     }
+
+    // 스크랩 삭제
+    public void deleteScrap(Integer scrapId) {
+        scrapRepository.deleteById(scrapId);
+    }
 }
