@@ -1,5 +1,6 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.entity.CertificateNumb;
 import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.entity.User;
 import Capstone.Crewpass.response.ResponseFormat;
@@ -74,6 +75,60 @@ public class UserController {
     public ResponseEntity logoutCrew(HttpServletResponse response){
         userService.logoutUser(response);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.LOGOUT_SUCCESS_USER, null), HttpStatus.OK);
+    }
+
+    @PostMapping("/user/loginId")
+    public ResponseEntity findUserLoginId(
+            @RequestParam("email") String email
+    ){
+        CertificateNumb result = userService.findUserLoginId(email);
+        if (result != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_USER, result), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_CERTIFICATENUMB_FAIL_USER, null), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/user/loginId/{email}/{certificateNumb}")
+    public ResponseEntity verifyCertificateNumb4LoginId(
+            @PathVariable("email") String email,
+            @PathVariable("certificateNumb") Integer certificateNumb,
+            @RequestParam("inputCertificateNumb") Integer inputCertificateNumb
+    ) {
+        Login result = userService.verifyCertificateNumb4LoginId(email, certificateNumb, inputCertificateNumb);
+        if (result != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_USER, result), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.VERIFY_CERTIFICATENUMB_FAIL_USER, null), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/user/password")
+    public ResponseEntity findCrewPassword(
+            @RequestParam("loginId") String loginId,
+            @RequestParam("email") String email
+    ) {
+        CertificateNumb result = userService.findUserPassword(loginId, email);
+        if (result != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_USER, result), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_CERTIFICATENUMB_FAIL_USER, null), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/user/password/{loginId}/{email}/{certificateNumb}")
+    public ResponseEntity verifyCertificateNumb4Password(
+            @PathVariable("loginId") String loginId,
+            @PathVariable("email") String email,
+            @PathVariable("certificateNumb") Integer certificateNumb,
+            @RequestParam("inputCertificateNumb") Integer inputCertificateNumb
+    ) {
+        Login result = userService.verifyCertificateNumb4Password(loginId, email, certificateNumb, inputCertificateNumb);
+        if (result != null) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.VERIFY_CERTIFICATENUMB_SUCCESS_USER, result), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.VERIFY_CERTIFICATENUMB_FAIL_USER, null), HttpStatus.OK);
+        }
     }
 
     @ResponseBody
