@@ -37,6 +37,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
+            " WHERE r.isDeleted = 0" +
             " ORDER BY r.register_time DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentRecentList> findAllRecruitmentListByNewest();
@@ -48,7 +49,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE c.field1 = :field OR c.field2 = :field" +
+            " WHERE c.field1 = :field OR c.field2 = :field AND r.isDeleted = 0" +
             " ORDER BY r.register_time DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentRecentList> findFieldRecruitmentListByNewest(@Param("field") String field);
@@ -60,6 +61,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
+            " WHERE r.isDeleted = 0" +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentDeadlineList> findAllRecruitmentListByDeadline();
@@ -71,7 +73,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE c.field1 = :field OR c.field2 = :field" +
+            " WHERE c.field1 = :field OR c.field2 = :field AND r.isDeleted = 0" +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentDeadlineList> findFieldRecruitmentListByDeadline(@Param("field") String field);
