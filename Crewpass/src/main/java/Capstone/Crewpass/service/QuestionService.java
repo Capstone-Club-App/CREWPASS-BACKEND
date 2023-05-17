@@ -1,7 +1,6 @@
 package Capstone.Crewpass.service;
 
 import Capstone.Crewpass.entity.Question;
-import Capstone.Crewpass.entity.Recruitment;
 import Capstone.Crewpass.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,24 +18,9 @@ public class QuestionService {
 
     // 질문 등록
     public String registerQuestion(Question question) {
-        if (validateDuplicateQuestion(question) != null) {
-            questionRepository.save(question);
-            return "registerQuestion - success";
-        } else {
-            return null;
-        }
+        questionRepository.save(question);
+        return "registerQuestion - success";
     }
-
-    // 중복 질문 검증
-    private String validateDuplicateQuestion(Question question) {
-        Optional<Question> optionalQuestion = questionRepository.findByRecruitmentId(question.getRecruitmentId());
-        if (optionalQuestion.isPresent()) {
-            return null;
-        } else {
-            return "validateDuplicateQuestion - success";
-        }
-    }
-
 
     // questionId로 recruitmentId 찾기
     public Integer findRecruitmentId(Integer questionId) {

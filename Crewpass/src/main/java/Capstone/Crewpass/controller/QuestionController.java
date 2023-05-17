@@ -47,9 +47,11 @@ public class QuestionController {
                 question1, question2, question3, question4, question5, question6, question7,
                 question1Limit, question2Limit, question3Limit, question4Limit, question5Limit, question6Limit, question7Limit,
                 recruitmentId,crewId);
-        if (questionService.registerQuestion(question) != null) {
+
+        String result = questionService.registerQuestion(question);
+        if(result != null){
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_QUESTION, null), HttpStatus.OK);
-        } else {
+        }else{
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_QUESTION, null), HttpStatus.OK);
         }
     }

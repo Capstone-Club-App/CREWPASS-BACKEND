@@ -68,22 +68,8 @@ public class RecruitmentService {
 
     // 모집글 등록
     public Integer registerRecruitment(Recruitment recruitment) {
-        if (validateDuplicateRecruitment(recruitment) != null) {
-            recruitmentRepository.save(recruitment);
-            return recruitment.getRecruitmentId();
-        } else {
-            return null;
-        }
-    }
-
-    // 중복 모집글 검증
-    private String validateDuplicateRecruitment(Recruitment recruitment) {
-        Optional<Recruitment> optionalRecruitment = recruitmentRepository.findByRecruitmentId(recruitment.getRecruitmentId());
-        if (optionalRecruitment.isPresent()) {
-            return null;
-        } else {
-            return "validateDuplicateRecruitment - success";
-        }
+        recruitmentRepository.save(recruitment);
+        return recruitment.getRecruitmentId();
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
