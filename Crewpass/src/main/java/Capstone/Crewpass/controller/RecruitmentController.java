@@ -5,7 +5,7 @@ import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.RecruitmentService;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@Slf4j
 @RestController
 public class RecruitmentController {
 
@@ -28,7 +29,6 @@ public class RecruitmentController {
         this.recruitmentService = recruitmentService;
     }
 
-    // 모집글 작성
     @PostMapping(value = "/recruitment/new")
     public ResponseEntity registerRecruitment(
             @RequestParam("title") String title,
@@ -37,17 +37,19 @@ public class RecruitmentController {
             @RequestParam("content") String content,
             @RequestParam(value = "image", required = false) MultipartFile image,
             @RequestHeader("crewId") Integer crewId
-            ) throws IOException {
-
+    ) throws IOException {
+        deadline = deadline.substring(1, deadline.length() - 1);
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
                 Timestamp.valueOf(deadline),
                 content,
                 recruitmentService.uploadImage(image), crewId);
 
-        if (recruitmentService.registerRecruitment(recruitment) != null) {
-            RecruitmentId recruitmentId = new RecruitmentId(recruitment.getRecruitmentId());
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, recruitmentId), HttpStatus.OK);
+        Integer recruitmentId = Integer.valueOf(recruitmentService.registerRecruitment(recruitment));
+        log.info(String.valueOf(recruitmentId));
+        if (recruitmentId != null) {
+            RecruitmentId responseId = new RecruitmentId(recruitmentId);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, responseId), HttpStatus.OK);
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
         }
@@ -57,7 +59,7 @@ public class RecruitmentController {
     @GetMapping(value = "/recruitment/myList")
     public ResponseEntity checkMyRecruitList(
             @RequestHeader("crewId") Integer crewId
-        ) throws IOException {
+    ) throws IOException {
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_MY_RECRUITMENT_LIST, recruitmentService.checkMyRecruitmentList(crewId)), HttpStatus.OK);
     }
@@ -82,7 +84,7 @@ public class RecruitmentController {
 
     // 선택한 모집글 상세 조회
     @GetMapping(value = "/recruitment/detail/{recruitmentId}")
-    public ResponseEntity checkRecruitmentDetail (
+    public ResponseEntity checkRecruitmentDetail(
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_RECRUITMENT_DETAIL, recruitmentService.checkRecruitmentDetail(recruitmentId)), HttpStatus.OK);
@@ -90,7 +92,7 @@ public class RecruitmentController {
 
     // 모집글 수정
     @PutMapping(value = "/recruitment/{recruitmentId}")
-    public ResponseEntity updateRecruitmentDetail (
+    public ResponseEntity updateRecruitmentDetail(
             @RequestParam("title") String title,
             @RequestParam("deadline") String deadline,
             @RequestParam("content") String content,
@@ -103,7 +105,7 @@ public class RecruitmentController {
 
     // 모집글 삭제
     @PutMapping(value = "/recruitment/{recruitmentId}/delete")
-    public ResponseEntity deleteRecruitment (
+    public ResponseEntity deleteRecruitment(
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
         recruitmentService.deleteRecruitment(recruitmentId);

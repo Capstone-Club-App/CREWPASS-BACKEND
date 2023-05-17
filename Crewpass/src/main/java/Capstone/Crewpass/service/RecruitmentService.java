@@ -67,10 +67,10 @@ public class RecruitmentService {
     }
 
     // 모집글 등록
-    public String registerRecruitment(Recruitment recruitment) {
+    public Integer registerRecruitment(Recruitment recruitment) {
         if (validateDuplicateRecruitment(recruitment) != null) {
             recruitmentRepository.save(recruitment);
-            return "registerRecruitment - success" + " : RecruitmentId = " + recruitment.getRecruitmentId();
+            return recruitment.getRecruitmentId();
         } else {
             return null;
         }
@@ -162,5 +162,4 @@ public class RecruitmentService {
     public List<ScrapRecruitmentDeadlineList> checkMyScrapListByDeadline(Integer userId) {
         return scrapRepository.findAllScrapListByDeadline(userId);
     }
-
 }
