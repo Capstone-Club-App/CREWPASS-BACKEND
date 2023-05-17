@@ -129,9 +129,10 @@ public class RecruitmentController {
     // 동아리 스크랩 취소
     @DeleteMapping("/recruitment/scrap/delete/{scrapId}")
     public ResponseEntity deleteScrap(
-            @PathVariable("scrapId") Integer scrapId
+            @PathVariable("scrapId") Integer scrapId,
+            @RequestHeader("userId") Integer userId
     ) throws IOException {
-        recruitmentService.deleteScrap(scrapId);
+        recruitmentService.deleteScrap(scrapId, userId);
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_SCRAP, null), HttpStatus.OK);
     }

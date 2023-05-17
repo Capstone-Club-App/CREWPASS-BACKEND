@@ -4,6 +4,7 @@ import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.ScrapRecruitmentDeadlineList;
 import Capstone.Crewpass.entity.Scrap;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,11 @@ import java.util.Optional;
 @Transactional
 @Repository
 public interface ScrapRepository extends JpaRepository<Scrap, Integer> {
+
+    // 스크랩 취소
+    @Modifying
+    @Query(value = "DELETE FROM crewpass.recruitment_scrap s WHERE s.scrap_id = :scrapId AND s.user_user_id = :userId", nativeQuery = true)
+    void deleteScrap(@Param("scrapId") Integer scrapId, @Param("userId") Integer userId);
 
     // 스크랩한 모집글을 "마감임박" 순으로 목록 조회
     @Query(value = "SELECT s.scrap_id, " +

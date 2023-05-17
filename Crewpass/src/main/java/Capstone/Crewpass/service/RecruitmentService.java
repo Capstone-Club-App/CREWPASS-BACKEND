@@ -140,8 +140,8 @@ public class RecruitmentService {
     }
 
     // 스크랩 삭제
-    public void deleteScrap(Integer scrapId) {
-        scrapRepository.deleteById(scrapId);
+    public void deleteScrap(Integer scrapId, Integer userId) {
+        scrapRepository.deleteScrap(scrapId, userId);
     }
 
     // 스크랩한 모집글을 "마감임박" 순으로 목록 조회
