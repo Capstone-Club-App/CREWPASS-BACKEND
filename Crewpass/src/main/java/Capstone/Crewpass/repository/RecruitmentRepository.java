@@ -92,6 +92,6 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
     // 모집글 삭제
     @Modifying
     @Transactional
-    @Query(value = "UPDATE crewpass.recruitment SET isDeleted = 1 WHERE recruitment_id = :recruitmentId", nativeQuery = true)
-    void deleteRecruitment(@Param("recruitmentId") Integer recruitmentId);
+    @Query(value = "UPDATE crewpass.recruitment SET isDeleted = 1 WHERE recruitment_id = :recruitmentId AND crew_crew_id = :crewId", nativeQuery = true)
+    void deleteRecruitment(@Param("recruitmentId") Integer recruitmentId, @Param("crewId") Integer crewId);
 }

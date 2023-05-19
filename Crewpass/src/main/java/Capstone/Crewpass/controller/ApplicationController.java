@@ -113,9 +113,10 @@ public class ApplicationController {
             @RequestParam(value = "answer6Count", required = false) Integer answer6Count,
             @RequestParam(value = "answer7", required = false) String answer7,
             @RequestParam(value = "answer7Count", required = false) Integer answer7Count,
+            @RequestHeader("userId") Integer userId,
             @PathVariable("applicationId") Integer applicationId
     ) throws IOException {
-        applicationService.updateApplication(applicationId, answer1, answer1Count, answer2, answer2Count, answer3, answer3Count,
+        applicationService.updateApplication(applicationId, userId, answer1, answer1Count, answer2, answer2Count, answer3, answer3Count,
                 answer4, answer4Count, answer5, answer5Count, answer6, answer6Count, answer7, answer7Count);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_APPLICATION, null), HttpStatus.OK);
     }

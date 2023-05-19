@@ -98,18 +98,20 @@ public class RecruitmentController {
             @RequestParam("deadline") String deadline,
             @RequestParam("content") String content,
             @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestHeader("crewId") Integer crewId,
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
-        recruitmentService.updateRecruitment(recruitmentId, title, content, recruitmentService.uploadImage(image), deadline);
+        recruitmentService.updateRecruitment(recruitmentId, crewId, title, content, recruitmentService.uploadImage(image), deadline);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_RECRUITMENT, null), HttpStatus.OK);
     }
 
     // 모집글 삭제
     @PutMapping(value = "/recruitment/{recruitmentId}/delete")
     public ResponseEntity deleteRecruitment(
+            @RequestHeader("crewId") Integer crewId,
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
-        recruitmentService.deleteRecruitment(recruitmentId);
+        recruitmentService.deleteRecruitment(recruitmentId, crewId);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_RECRUITMENT, null), HttpStatus.OK);
     }
 

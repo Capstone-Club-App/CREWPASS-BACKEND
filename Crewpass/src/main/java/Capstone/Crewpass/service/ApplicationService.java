@@ -52,7 +52,7 @@ public class ApplicationService {
     }
 
     // 지원서 수정
-    public void updateApplication(Integer applicationId, String answer1, Integer answer1Count, String answer2, Integer answer2Count, String answer3, Integer answer3Count,
+    public void updateApplication(Integer applicationId, Integer userId, String answer1, Integer answer1Count, String answer2, Integer answer2Count, String answer3, Integer answer3Count,
                                   String answer4, Integer answer4Count, String answer5, Integer answer5Count, String answer6, Integer answer6Count, String answer7, Integer answer7Count) {
         EntityManager em = emf.createEntityManager();
 
@@ -62,23 +62,26 @@ public class ApplicationService {
 
         Application application = em.find(Application.class, applicationId); // 데이터 조회(영속)
 
-        application.setAnswer1(answer1);
-        application.setAnswer1Count(answer1Count);
-        application.setAnswer2(answer2);
-        application.setAnswer2Count(answer2Count);
-        application.setAnswer3(answer3);
-        application.setAnswer3Count(answer3Count);
-        application.setAnswer4(answer4);
-        application.setAnswer4Count(answer4Count);
-        application.setAnswer5(answer5);
-        application.setAnswer5Count(answer5Count);
-        application.setAnswer6(answer6);
-        application.setAnswer6Count(answer6Count);
-        application.setAnswer7(answer7);
-        application.setAnswer7Count(answer7Count);
+        // Header의 userId와 일치해야만 수정 가능
+        if (application.getUserId().equals(userId)) {
+            application.setAnswer1(answer1);
+            application.setAnswer1Count(answer1Count);
+            application.setAnswer2(answer2);
+            application.setAnswer2Count(answer2Count);
+            application.setAnswer3(answer3);
+            application.setAnswer3Count(answer3Count);
+            application.setAnswer4(answer4);
+            application.setAnswer4Count(answer4Count);
+            application.setAnswer5(answer5);
+            application.setAnswer5Count(answer5Count);
+            application.setAnswer6(answer6);
+            application.setAnswer6Count(answer6Count);
+            application.setAnswer7(answer7);
+            application.setAnswer7Count(answer7Count);
 
-        // submitTime 재설정
-        application.setSubmitTime(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+            // submitTime 재설정
+            application.setSubmitTime(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+        }
 
         transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
         em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨

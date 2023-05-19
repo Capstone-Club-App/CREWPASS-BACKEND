@@ -107,7 +107,7 @@ public class RecruitmentService {
 
 
     // 모집글 수정
-    public void updateRecruitment(Integer recruitmentId, String title, String content, String image, String deadline) {
+    public void updateRecruitment(Integer recruitmentId, Integer crewId, String title, String content, String image, String deadline) {
         EntityManager em = emf.createEntityManager();
 
         // DB 트랜잭션 시작
@@ -116,21 +116,24 @@ public class RecruitmentService {
 
         Recruitment recruitment = em.find(Recruitment.class, recruitmentId); // 데이터 조회(영속)
 
-        recruitment.setTitle(title);
-        recruitment.setContent(content);
-        recruitment.setImage(image);
-        recruitment.setDeadline(Timestamp.valueOf(deadline));
+        // Header의 crewId와 일치해야만 수정 가능
+        if (recruitment.getCrewId().equals(crewId)) {
+            recruitment.setTitle(title);
+            recruitment.setContent(content);
+            recruitment.setImage(image);
+            recruitment.setDeadline(Timestamp.valueOf(deadline));
 
-        // registerTime 재설정
-        recruitment.setRegisterTime(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+            // registerTime 재설정
+            recruitment.setRegisterTime(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+        }
 
         transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
         em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
     }
 
     // 모집글 삭제
-    public void deleteRecruitment(Integer recruitmentId) {
-        recruitmentRepository.deleteRecruitment(recruitmentId);
+    public void deleteRecruitment(Integer recruitmentId, Integer crewId) {
+        recruitmentRepository.deleteRecruitment(recruitmentId, crewId);
     }
 
     // 스크랩 추가
