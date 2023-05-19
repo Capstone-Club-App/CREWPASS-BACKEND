@@ -62,12 +62,8 @@ public class Question {
     @JoinColumn(name = "recruitmentId") // foreign key
     private Integer recruitmentId;
 
-    @Column(name = "recruitment_crew_crew_id", nullable = false)
-    @JoinColumn(name = "crewId") // foreign key
-    private Integer crewId;
-
     @Builder
-    public Question(Integer questionId, String question1, String question2, String question3, String question4, String question5, String question6, String question7, Integer question1Limit, Integer question2Limit, Integer question3Limit, Integer question4Limit, Integer question5Limit, Integer question6Limit, Integer question7Limit, Integer recruitmentId, Integer crewId) {
+    public Question(Integer questionId, String question1, String question2, String question3, String question4, String question5, String question6, String question7, Integer question1Limit, Integer question2Limit, Integer question3Limit, Integer question4Limit, Integer question5Limit, Integer question6Limit, Integer question7Limit, Integer recruitmentId) {
         this.questionId = questionId;
         this.question1 = question1;
         this.question2 = question2;
@@ -84,6 +80,5 @@ public class Question {
         this.question6Limit = question6Limit;
         this.question7Limit = question7Limit;
         this.recruitmentId = recruitmentId;
-        this.crewId = crewId;
     }
 }

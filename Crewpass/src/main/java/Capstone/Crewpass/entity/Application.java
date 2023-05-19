@@ -74,12 +74,8 @@ public class Application {
     @JoinColumn(name = "recruitmentId") // foreign key
     private Integer recruitmentId;
 
-    @Column(name = "question_recruitment_crew_crew_id", nullable = false)
-    @JoinColumn(name = "crewId") // foreign key
-    private Integer crewId;
-
     @Builder
-    public Application(Integer applicationId, Timestamp submitTime, String answer1, String answer2, String answer3, String answer4, String answer5, String answer6, String answer7, Integer answer1Count, Integer answer2Count, Integer answer3Count, Integer answer4Count, Integer answer5Count, Integer answer6Count, Integer answer7Count, Integer userId, Integer questionId, Integer recruitmentId, Integer crewId) {
+    public Application(Integer applicationId, Timestamp submitTime, String answer1, String answer2, String answer3, String answer4, String answer5, String answer6, String answer7, Integer answer1Count, Integer answer2Count, Integer answer3Count, Integer answer4Count, Integer answer5Count, Integer answer6Count, Integer answer7Count, Integer userId, Integer questionId, Integer recruitmentId) {
         this.applicationId = applicationId;
         this.submitTime = submitTime;
         this.answer1 = answer1;
@@ -99,6 +95,5 @@ public class Application {
         this.userId = userId;
         this.questionId = questionId;
         this.recruitmentId = recruitmentId;
-        this.crewId = crewId;
     }
 }

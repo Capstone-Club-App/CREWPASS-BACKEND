@@ -29,6 +29,7 @@ public class RecruitmentController {
         this.recruitmentService = recruitmentService;
     }
 
+    // 모집글 등록
     @PostMapping(value = "/recruitment/new")
     public ResponseEntity registerRecruitment(
             @RequestParam("title") String title,

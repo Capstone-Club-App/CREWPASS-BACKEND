@@ -25,7 +25,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Integer> {
     // 스크랩한 모집글을 "마감임박" 순으로 목록 조회
     @Query(value = "SELECT s.scrap_id, " +
             " c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
-            " r.recruitment_id, r.title, r.register_time," +
+            " r.recruitment_id, r.title, r.register_time, r.deadline, " +
             " q.question_id" +
             " FROM crewpass.recruitment_scrap s" +
             " INNER JOIN crewpass.user u ON s.user_user_id = u.user_id" +

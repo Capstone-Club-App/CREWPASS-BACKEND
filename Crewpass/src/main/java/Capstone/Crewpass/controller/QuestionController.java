@@ -5,7 +5,6 @@ import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.QuestionService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,13 +39,12 @@ public class QuestionController {
             @RequestParam(value = "question5Limit", required = false) Integer question5Limit,
             @RequestParam(value = "question6Limit", required = false) Integer question6Limit,
             @RequestParam(value = "question7Limit", required = false) Integer question7Limit,
-            @PathVariable ("recruitmentId") Integer recruitmentId,
-            @RequestHeader("crewId") Integer crewId
+            @PathVariable ("recruitmentId") Integer recruitmentId
     ) throws IOException {
         Question question = new Question(null,
                 question1, question2, question3, question4, question5, question6, question7,
                 question1Limit, question2Limit, question3Limit, question4Limit, question5Limit, question6Limit, question7Limit,
-                recruitmentId,crewId);
+                recruitmentId);
 
         String result = questionService.registerQuestion(question);
         if(result != null){

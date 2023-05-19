@@ -1,6 +1,8 @@
 package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.Application;
+import Capstone.Crewpass.entity.ApplicationId;
+import Capstone.Crewpass.entity.RecruitmentId;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -53,17 +55,18 @@ public class ApplicationController {
         @RequestHeader("userId") Integer userId
     ) throws IOException {
 
-        // recruitmentId, crewId 가져오기
+        // recruitmentId 가져오기
         Integer recruitmentId = questionService.findRecruitmentId(questionId);
-        Integer crewId = questionService.findCrewId(questionId);
 
         Application application = new Application(null, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
                 answer1, answer2, answer3, answer4, answer5, answer6, answer7,
                 answer1Count, answer2Count, answer3Count, answer4Count, answer5Count, answer6Count, answer7Count,
-                userId, questionId, recruitmentId, crewId);
+                userId, questionId, recruitmentId);
 
-        if (applicationService.registerApplication(application) != null) {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_APPLICATION, null), HttpStatus.OK);
+        Integer applicationId = Integer.valueOf(applicationService.registerApplication(application));
+        if (applicationId != null) {
+            ApplicationId responseId = new ApplicationId(applicationId);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_APPLICATION, responseId), HttpStatus.OK);
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_APPLICATION, null), HttpStatus.OK);
         }
@@ -120,10 +123,10 @@ public class ApplicationController {
     // 지원서 삭제
     @DeleteMapping("/application/{applicationId}/delete")
     public ResponseEntity deleteApplication(
-            @PathVariable("applicationId") Integer applicationId
+            @PathVariable("applicationId") Integer applicationId,
+            @RequestHeader("userId") Integer userId
     ) throws IOException {
-        applicationService.deleteApplication(applicationId);
-
+        applicationService.deleteApplication(applicationId, userId);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.DELETE_APPLICATION, null), HttpStatus.OK);
     }
 }

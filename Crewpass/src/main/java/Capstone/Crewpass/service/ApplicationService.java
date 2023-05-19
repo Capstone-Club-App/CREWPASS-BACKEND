@@ -31,23 +31,9 @@ public class ApplicationService {
     }
 
     // 지원서 등록
-    public String registerApplication(Application application) {
-        if (validateDuplicateApplication(application) != null) {
-            applicationRepository.save(application);
-            return "registerApplication - success";
-        } else {
-            return null;
-        }
-    }
-
-    // 중복 지원서 검증
-    private String validateDuplicateApplication(Application application) {
-        Optional<Application> optionalApplication = applicationRepository.findByApplicationId(application.getApplicationId());
-        if (optionalApplication.isPresent()) {
-            return null;
-        } else {
-            return "validateDuplicateApplication - success";
-        }
+    public Integer registerApplication(Application application) {
+        applicationRepository.save(application);
+        return application.getApplicationId();
     }
 
     // 로그인한 회원이 지원한 지원서 목록 조회
@@ -99,7 +85,7 @@ public class ApplicationService {
     }
 
     // 지원서 삭제
-    public void deleteApplication(Integer applicationId) {
-        applicationRepository.deleteById(applicationId);
+    public void deleteApplication(Integer applicationId, Integer userId) {
+        applicationRepository.deleteApplication(applicationId, userId);
     }
 }

@@ -31,15 +31,5 @@ public class QuestionService {
             return null;
         }
     }
-
-    // questionId로 crewId 찾기
-    public Integer findCrewId(Integer questionId) {
-        Optional<Question> optionalQuestion = questionRepository.findByQuestionId(questionId);
-        if (optionalQuestion.isPresent()) {
-            return optionalQuestion.get().getCrewId();
-        } else {
-            return null;
-        }
-    }
 }
 
