@@ -42,7 +42,7 @@ public class CrewService {
 
     public String uploadProfile(MultipartFile profile) throws IOException {
         //GCP에 저장할 파일의 이름 생성
-        String fileName = UUID.randomUUID().toString().concat(profile.getOriginalFilename());
+        String fileName = "https://storage.googleapis.com/crewpass-cloud-storage/" + UUID.randomUUID().toString().concat(profile.getOriginalFilename());
 
         //GCP에 파일 upload
         ClassPathResource resource = new ClassPathResource("capstone-design-385100-a6607b6659e7.json");
