@@ -20,7 +20,7 @@ public class AiController {
     public ResponseEntity analyzeApplication(
             @RequestParam("userName") String userName,
             @RequestParam("applicationId") Integer applicationId
-    ){
+    ) throws NoSuchFieldException {
         aiService.analyzeApplication(applicationId);
         return null;
     }
