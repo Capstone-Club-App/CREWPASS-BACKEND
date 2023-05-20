@@ -31,5 +31,10 @@ public class QuestionService {
             return null;
         }
     }
+
+    // 선택한 질문 상세 조회
+    public Optional<Question> checkQuestionDetail(Integer questionId) {
+        return questionRepository.findByQuestionId(questionId);
+    }
 }
 
