@@ -1,8 +1,7 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineList;
+import Capstone.Crewpass.dto.RecruitmentList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
-import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.dto.ScrapRecruitmentDeadlineList;
 import Capstone.Crewpass.entity.DB.Recruitment;
 import Capstone.Crewpass.entity.DB.Scrap;
@@ -72,12 +71,12 @@ public class RecruitmentService {
     }
 
     // 로그인한 동아리가 작성한 모집글 목록 조회
-    public List<RecruitmentRecentList> checkMyRecruitmentList(Integer crewId) {
+    public List<RecruitmentList> checkMyRecruitmentList(Integer crewId) {
         return recruitmentRepository.findMyRecruitmentList(crewId);
     }
 
     // 동아리 분야 별 "최신순"으로 모집글 목록 조회
-    public List<RecruitmentRecentList> checkRecruitmentListByNewest(String field) {
+    public List<RecruitmentList> checkRecruitmentListByNewest(String field) {
 
         if (field.equals("total")) { // 전체 분야인 경우
             return recruitmentRepository.findAllRecruitmentListByNewest();
@@ -88,7 +87,7 @@ public class RecruitmentService {
     }
 
     // 동아리 분야 별 "마감임박순"으로 모집글 목록 조회
-    public List<RecruitmentDeadlineList> checkRecruitmentListByDeadline(String field) {
+    public List<RecruitmentList> checkRecruitmentListByDeadline(String field) {
 
         if (field.equals("total")) { // 전체 분야인 경우
             return recruitmentRepository.findAllRecruitmentListByDeadline();
@@ -99,7 +98,7 @@ public class RecruitmentService {
     }
 
     // 선택한 모집글 상세 조회
-    public List<RecruitmentDetail> checkRecruitmentDetail(Integer recruitmentId) {
+    public RecruitmentDetail checkRecruitmentDetail(Integer recruitmentId) {
 
         return recruitmentRepository.getRecruitmentDetail(recruitmentId);
     }

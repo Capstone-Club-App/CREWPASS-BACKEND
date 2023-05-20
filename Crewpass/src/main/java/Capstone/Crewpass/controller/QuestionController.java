@@ -45,16 +45,16 @@ public class QuestionController {
         question1 = question1.substring(1, question1.length() - 1);
         question2 = question2.substring(1, question2.length() - 1);
         question3 = question3.substring(1, question3.length() - 1);
-        if (question4 != null) {
+        if (question4 != null && question4Limit != null) {
             question4 = question4.substring(1, question4.length() - 1);
         }
-        if (question5 != null) {
+        if (question5 != null && question5Limit != null) {
             question5 = question5.substring(1, question5.length() - 1);
         }
-        if (question6 != null) {
+        if (question6 != null && question6Limit != null) {
             question6 = question6.substring(1, question6.length() - 1);
         }
-        if (question7 != null) {
+        if (question7 != null && question7Limit != null) {
             question7 = question7.substring(1, question7.length() - 1);
         }
 

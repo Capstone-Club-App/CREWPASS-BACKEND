@@ -30,6 +30,14 @@ public class ApplicationController {
         this.questionService = questionService;
     }
 
+    // 지원서 작성을 위한 질문 문항 조회
+    @GetMapping(value = "/application/new/{questionId}")
+    public ResponseEntity getQuestion(
+            @PathVariable("questionId") Integer questionId
+    ) throws IOException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_APPLICATION, questionService.checkQuestionDetail(questionId)), HttpStatus.OK);
+    }
+
     // 지원서 작성
     @PostMapping(value = "/application/new/{questionId}")
     public ResponseEntity registerApplication(
@@ -54,16 +62,16 @@ public class ApplicationController {
         answer1 = answer1.substring(1, answer1.length() - 1);
         answer2 = answer2.substring(1, answer2.length() - 1);
         answer3 = answer3.substring(1, answer3.length() - 1);
-        if (answer4 != null) {
+        if (answer4 != null && answer4Count != null) {
             answer4 = answer4.substring(1, answer4.length() - 1);
         }
-        if (answer5 != null) {
+        if (answer5 != null && answer5Count != null) {
             answer5 = answer5.substring(1, answer5.length() - 1);
         }
-        if (answer6 != null) {
+        if (answer6 != null && answer6Count != null) {
             answer6 = answer6.substring(1, answer6.length() - 1);
         }
-        if (answer7 != null) {
+        if (answer7 != null && answer7Count != null) {
             answer7 = answer7.substring(1, answer7.length() - 1);
         }
 
@@ -131,16 +139,16 @@ public class ApplicationController {
         answer1 = answer1.substring(1, answer1.length() - 1);
         answer2 = answer2.substring(1, answer2.length() - 1);
         answer3 = answer3.substring(1, answer3.length() - 1);
-        if (answer4 != null) {
+        if (answer4 != null && answer4Count != null) {
             answer4 = answer4.substring(1, answer4.length() - 1);
         }
-        if (answer5 != null) {
+        if (answer5 != null && answer5Count != null) {
             answer5 = answer5.substring(1, answer5.length() - 1);
         }
-        if (answer6 != null) {
+        if (answer6 != null && answer6Count != null) {
             answer6 = answer6.substring(1, answer6.length() - 1);
         }
-        if (answer7 != null) {
+        if (answer7 != null && answer7Count != null) {
             answer7 = answer7.substring(1, answer7.length() - 1);
         }
 
