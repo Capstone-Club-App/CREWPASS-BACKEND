@@ -1,6 +1,5 @@
 package Capstone.Crewpass.entity;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

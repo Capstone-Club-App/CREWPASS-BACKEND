@@ -36,6 +36,14 @@ public class UserController {
             @RequestParam("school") String school,
             @RequestParam("profile")MultipartFile profile
     ) throws IOException {
+        // 양끝 " 제거
+        name = name.substring(1, name.length() - 1);
+        loginId = loginId.substring(1, loginId.length() - 1);
+        password = password.substring(1, password.length() - 1);
+        email = email.substring(1, email.length() - 1);
+        job = job.substring(1, job.length() - 1);
+        school = school.substring(1, school.length() - 1);
+
         User user = new User(null, loginId, password, name, email, job, school, userService.uploadProfile(profile));
         if(userService.joinUser(user)!=null){
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_SUCCESS_USER, null), HttpStatus.OK);
@@ -48,6 +56,9 @@ public class UserController {
     public ResponseEntity checkDuplicateUserLoginId(
             @RequestParam("loginId") String loginId
     ){
+        // 양끝 " 제거
+        loginId = loginId.substring(1, loginId.length() - 1);
+
         String result = userService.checkDuplicateUserLoginId(loginId);
         if(result == null){
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
@@ -62,6 +73,10 @@ public class UserController {
             @RequestParam("password") String password,
             HttpServletResponse response
     ){
+        // 양끝 " 제거
+        loginId = loginId.substring(1, loginId.length() - 1);
+        password = password.substring(1, password.length() - 1);
+
         Login login = new Login(null, loginId, password);
         Login result = userService.loginUser(login, response);
         if(result != null){
@@ -81,6 +96,9 @@ public class UserController {
     public ResponseEntity findUserLoginId(
             @RequestParam("email") String email
     ){
+        // 양끝 " 제거
+        email = email.substring(1, email.length() - 1);
+
         CertificateNumb result = userService.findUserLoginId(email);
         if (result != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_USER, result), HttpStatus.OK);
@@ -108,6 +126,10 @@ public class UserController {
             @RequestParam("loginId") String loginId,
             @RequestParam("email") String email
     ) {
+        // 양끝 " 제거
+        loginId = loginId.substring(1, loginId.length() - 1);
+        email = email.substring(1, email.length() - 1);
+
         CertificateNumb result = userService.findUserPassword(loginId, email);
         if (result != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_USER, result), HttpStatus.OK);
@@ -149,6 +171,13 @@ public class UserController {
             @RequestParam("profile")MultipartFile profile,
             @RequestHeader("userId") String userId
     ) throws IOException {
+        // 양끝 " 제거
+        name = name.substring(1, name.length() - 1);
+        password = password.substring(1, password.length() - 1);
+        email = email.substring(1, email.length() - 1);
+        job = job.substring(1, job.length() - 1);
+        school = school.substring(1, school.length() - 1);
+
         userService.updateUserBasicInfo(userId, name, password, email, job, school, userService.uploadProfile(profile));
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_USER, null), HttpStatus.OK);
     }
