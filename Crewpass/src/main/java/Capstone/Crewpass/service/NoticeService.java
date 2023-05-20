@@ -1,6 +1,6 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.entity.User;
+import Capstone.Crewpass.entity.DB.User;
 import Capstone.Crewpass.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -10,7 +10,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j

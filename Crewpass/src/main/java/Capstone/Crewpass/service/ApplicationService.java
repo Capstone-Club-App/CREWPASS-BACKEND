@@ -3,9 +3,7 @@ package Capstone.Crewpass.service;
 import Capstone.Crewpass.dto.ApplicationDetail;
 import Capstone.Crewpass.dto.ApplicationRecentListByCrew;
 import Capstone.Crewpass.dto.ApplicationRecentListByUser;
-import Capstone.Crewpass.entity.Application;
-import Capstone.Crewpass.entity.Question;
-import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.entity.DB.Application;
 import Capstone.Crewpass.repository.ApplicationRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -17,7 +15,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApplicationService {

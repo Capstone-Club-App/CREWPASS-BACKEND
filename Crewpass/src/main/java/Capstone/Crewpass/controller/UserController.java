@@ -2,7 +2,7 @@ package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.CertificateNumb;
 import Capstone.Crewpass.entity.Login;
-import Capstone.Crewpass.entity.User;
+import Capstone.Crewpass.entity.DB.User;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;

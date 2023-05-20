@@ -1,6 +1,6 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.entity.Question;
+import Capstone.Crewpass.entity.DB.Question;
 import Capstone.Crewpass.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

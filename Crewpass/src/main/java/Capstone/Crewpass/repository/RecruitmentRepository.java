@@ -3,7 +3,7 @@ package Capstone.Crewpass.repository;
 import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
-import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.entity.DB.Recruitment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

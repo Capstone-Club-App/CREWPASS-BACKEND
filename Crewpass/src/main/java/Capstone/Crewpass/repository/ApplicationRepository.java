@@ -3,7 +3,7 @@ package Capstone.Crewpass.repository;
 import Capstone.Crewpass.dto.ApplicationDetail;
 import Capstone.Crewpass.dto.ApplicationRecentListByCrew;
 import Capstone.Crewpass.dto.ApplicationRecentListByUser;
-import Capstone.Crewpass.entity.Application;
+import Capstone.Crewpass.entity.DB.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

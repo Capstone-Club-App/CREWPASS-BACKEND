@@ -4,8 +4,8 @@ import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.RecruitmentDetail;
 import Capstone.Crewpass.dto.RecruitmentRecentList;
 import Capstone.Crewpass.dto.ScrapRecruitmentDeadlineList;
-import Capstone.Crewpass.entity.Recruitment;
-import Capstone.Crewpass.entity.Scrap;
+import Capstone.Crewpass.entity.DB.Recruitment;
+import Capstone.Crewpass.entity.DB.Scrap;
 import Capstone.Crewpass.repository.RecruitmentRepository;
 import Capstone.Crewpass.repository.ScrapRepository;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -25,7 +25,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

@@ -1,6 +1,6 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.entity.Question;
+import Capstone.Crewpass.entity.DB.Question;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -41,10 +41,25 @@ public class QuestionController {
             @RequestParam(value = "question7Limit", required = false) Integer question7Limit,
             @PathVariable ("recruitmentId") Integer recruitmentId
     ) throws IOException {
+
+        int questionCount = 3; // 최소 3개의 질문 등록
+        if (question4 != null && question4Limit != null) {
+            questionCount++;
+        }
+        if (question5 != null && question5Limit != null) {
+            questionCount++;
+        }
+        if (question6 != null && question6Limit != null) {
+            questionCount++;
+        }
+        if (question7 != null && question7Limit != null) {
+            questionCount++;
+        }
+
         Question question = new Question(null,
                 question1, question2, question3, question4, question5, question6, question7,
                 question1Limit, question2Limit, question3Limit, question4Limit, question5Limit, question6Limit, question7Limit,
-                recruitmentId);
+                questionCount, recruitmentId);
 
         String result = questionService.registerQuestion(question);
         if(result != null){

@@ -1,20 +1,16 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.entity.Application;
+import Capstone.Crewpass.entity.DB.Application;
 import Capstone.Crewpass.entity.ApplicationId;
-import Capstone.Crewpass.entity.RecruitmentId;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.ApplicationService;
 import Capstone.Crewpass.service.QuestionService;
-import Capstone.Crewpass.service.RecruitmentService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;

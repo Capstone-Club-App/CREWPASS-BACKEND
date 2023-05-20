@@ -5,7 +5,7 @@ import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
-import Capstone.Crewpass.entity.Crew;
+import Capstone.Crewpass.entity.DB.Crew;
 import Capstone.Crewpass.service.CrewService;
 
 import jakarta.servlet.http.HttpServletResponse;

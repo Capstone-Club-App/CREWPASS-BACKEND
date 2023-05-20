@@ -1,8 +1,7 @@
 package Capstone.Crewpass.repository;
 
-import Capstone.Crewpass.dto.RecruitmentDeadlineList;
 import Capstone.Crewpass.dto.ScrapRecruitmentDeadlineList;
-import Capstone.Crewpass.entity.Scrap;
+import Capstone.Crewpass.entity.DB.Scrap;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Repository

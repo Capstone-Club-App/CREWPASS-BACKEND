@@ -1,4 +1,4 @@
-package Capstone.Crewpass.entity;
+package Capstone.Crewpass.entity.DB;
 
 import jakarta.persistence.*;
 import lombok.Data;

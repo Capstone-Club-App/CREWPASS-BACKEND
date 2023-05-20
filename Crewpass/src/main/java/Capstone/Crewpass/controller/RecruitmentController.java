@@ -1,6 +1,8 @@
 package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.*;
+import Capstone.Crewpass.entity.DB.Recruitment;
+import Capstone.Crewpass.entity.DB.Scrap;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -39,7 +41,7 @@ public class RecruitmentController {
             @RequestParam(value = "image", required = false) MultipartFile image,
             @RequestHeader("crewId") Integer crewId
     ) throws IOException {
-        deadline = deadline.substring(1, deadline.length() - 1);
+//        deadline = deadline.substring(1, deadline.length() - 1);
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
                 Timestamp.valueOf(deadline),

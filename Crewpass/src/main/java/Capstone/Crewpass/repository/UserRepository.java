@@ -1,7 +1,6 @@
 package Capstone.Crewpass.repository;
 
-import Capstone.Crewpass.entity.Crew;
-import Capstone.Crewpass.entity.User;
+import Capstone.Crewpass.entity.DB.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

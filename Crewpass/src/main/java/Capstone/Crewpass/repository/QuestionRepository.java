@@ -1,7 +1,6 @@
 package Capstone.Crewpass.repository;
 
-import Capstone.Crewpass.entity.Question;
-import Capstone.Crewpass.entity.Recruitment;
+import Capstone.Crewpass.entity.DB.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

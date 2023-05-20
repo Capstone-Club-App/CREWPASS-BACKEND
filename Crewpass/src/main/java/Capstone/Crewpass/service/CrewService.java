@@ -1,7 +1,7 @@
 package Capstone.Crewpass.service;
 
 import Capstone.Crewpass.entity.CertificateNumb;
-import Capstone.Crewpass.entity.Crew;
+import Capstone.Crewpass.entity.DB.Crew;
 import Capstone.Crewpass.entity.Login;
 import Capstone.Crewpass.repository.CrewRepository;
 import com.google.auth.oauth2.GoogleCredentials;

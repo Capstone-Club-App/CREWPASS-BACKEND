@@ -1,4 +1,4 @@
-package Capstone.Crewpass.entity;
+package Capstone.Crewpass.entity.DB;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -58,12 +58,15 @@ public class Question {
     @Column(name = "question7_limit")
     private Integer question7Limit;
 
+    @Column(name = "question_count")
+    private Integer questionCount;
+
     @Column(name = "recruitment_recruitment_id", nullable = false)
     @JoinColumn(name = "recruitmentId") // foreign key
     private Integer recruitmentId;
 
     @Builder
-    public Question(Integer questionId, String question1, String question2, String question3, String question4, String question5, String question6, String question7, Integer question1Limit, Integer question2Limit, Integer question3Limit, Integer question4Limit, Integer question5Limit, Integer question6Limit, Integer question7Limit, Integer recruitmentId) {
+    public Question(Integer questionId, String question1, String question2, String question3, String question4, String question5, String question6, String question7, Integer question1Limit, Integer question2Limit, Integer question3Limit, Integer question4Limit, Integer question5Limit, Integer question6Limit, Integer question7Limit, Integer questionCount, Integer recruitmentId) {
         this.questionId = questionId;
         this.question1 = question1;
         this.question2 = question2;
@@ -79,6 +82,7 @@ public class Question {
         this.question5Limit = question5Limit;
         this.question6Limit = question6Limit;
         this.question7Limit = question7Limit;
+        this.questionCount = questionCount;
         this.recruitmentId = recruitmentId;
     }
 }

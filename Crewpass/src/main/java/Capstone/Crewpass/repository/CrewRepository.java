@@ -1,6 +1,6 @@
 package Capstone.Crewpass.repository;
 
-import Capstone.Crewpass.entity.Crew;
+import Capstone.Crewpass.entity.DB.Crew;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
