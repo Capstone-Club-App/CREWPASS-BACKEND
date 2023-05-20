@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Repository
@@ -57,4 +58,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     @Modifying
     @Query(value = "DELETE FROM crewpass.application a WHERE a.application_id = :applicationId AND a.user_user_id = :userId", nativeQuery = true)
     void deleteApplication(@Param("applicationId") Integer applicationId, @Param("userId") Integer userId);
+
+    Optional<Application> findByApplicationId(Integer applicationId);
 }
