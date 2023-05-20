@@ -51,6 +51,22 @@ public class ApplicationController {
         @RequestHeader("userId") Integer userId
     ) throws IOException {
 
+        answer1 = answer1.substring(1, answer1.length() - 1);
+        answer2 = answer2.substring(1, answer2.length() - 1);
+        answer3 = answer3.substring(1, answer3.length() - 1);
+        if (answer4 != null) {
+            answer4 = answer4.substring(1, answer4.length() - 1);
+        }
+        if (answer5 != null) {
+            answer5 = answer5.substring(1, answer5.length() - 1);
+        }
+        if (answer6 != null) {
+            answer6 = answer6.substring(1, answer6.length() - 1);
+        }
+        if (answer7 != null) {
+            answer7 = answer7.substring(1, answer7.length() - 1);
+        }
+
         // recruitmentId 가져오기
         Integer recruitmentId = questionService.findRecruitmentId(questionId);
 
@@ -112,6 +128,22 @@ public class ApplicationController {
             @RequestHeader("userId") Integer userId,
             @PathVariable("applicationId") Integer applicationId
     ) throws IOException {
+        answer1 = answer1.substring(1, answer1.length() - 1);
+        answer2 = answer2.substring(1, answer2.length() - 1);
+        answer3 = answer3.substring(1, answer3.length() - 1);
+        if (answer4 != null) {
+            answer4 = answer4.substring(1, answer4.length() - 1);
+        }
+        if (answer5 != null) {
+            answer5 = answer5.substring(1, answer5.length() - 1);
+        }
+        if (answer6 != null) {
+            answer6 = answer6.substring(1, answer6.length() - 1);
+        }
+        if (answer7 != null) {
+            answer7 = answer7.substring(1, answer7.length() - 1);
+        }
+
         applicationService.updateApplication(applicationId, userId, answer1, answer1Count, answer2, answer2Count, answer3, answer3Count,
                 answer4, answer4Count, answer5, answer5Count, answer6, answer6Count, answer7, answer7Count);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_APPLICATION, null), HttpStatus.OK);

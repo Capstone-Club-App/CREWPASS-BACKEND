@@ -41,7 +41,10 @@ public class RecruitmentController {
             @RequestParam(value = "image", required = false) MultipartFile image,
             @RequestHeader("crewId") Integer crewId
     ) throws IOException {
-//        deadline = deadline.substring(1, deadline.length() - 1);
+        title = title.substring(1, title.length() - 1);
+        deadline = deadline.substring(1, deadline.length() - 1);
+        content = content.substring(1, content.length() - 1);
+
         Recruitment recruitment = new Recruitment(null, isDeleted, title,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
                 Timestamp.valueOf(deadline),
@@ -103,6 +106,10 @@ public class RecruitmentController {
             @RequestHeader("crewId") Integer crewId,
             @PathVariable("recruitmentId") Integer recruitmentId
     ) throws IOException {
+        title = title.substring(1, title.length() - 1);
+        deadline = deadline.substring(1, deadline.length() - 1);
+        content = content.substring(1, content.length() - 1);
+
         recruitmentService.updateRecruitment(recruitmentId, crewId, title, content, recruitmentService.uploadImage(image), deadline);
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_RECRUITMENT, null), HttpStatus.OK);
     }
