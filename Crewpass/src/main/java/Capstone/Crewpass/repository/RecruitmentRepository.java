@@ -44,36 +44,36 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
 
     // 동아리 "분야 별" "최신순"으로 모집글 목록 조회
     @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
-            " r.recruitment_id, r.title, r.register_time, r.deadline, " +
+            " r.recruitment_id, r.title, r.register_time, r.deadline, TIMESTAMPDIFF(DAY, now(), r.deadline) d_day," +
             " q.question_id" +
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE c.field1 = :field OR c.field2 = :field AND r.isDeleted = 0" +
-            " ORDER BY r.register_time DESC, r.recruitment_id"
+            " WHERE r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
+            " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findFieldRecruitmentListByNewest(@Param("field") String field);
 
     // "전체" 동아리의 모집글 목록 "마감임박순"으로 조회
     @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
-            " r.recruitment_id, r.title, r.register_time, r.deadline," +
+            " r.recruitment_id, r.title, r.register_time, r.deadline, TIMESTAMPDIFF(DAY, now(), r.deadline) d_day," +
             " q.question_id" +
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE r.isDeleted = 0" +
+            " WHERE r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findAllRecruitmentListByDeadline();
 
     // 동아리 "분야 별" "마감임박순"으로 모집글 목록 조회
     @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
-            " r.recruitment_id, r.title, r.register_time, r.deadline," +
+            " r.recruitment_id, r.title, r.register_time, r.deadline, TIMESTAMPDIFF(DAY, now(), r.deadline) d_day," +
             " q.question_id" +
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE c.field1 = :field OR c.field2 = :field AND r.isDeleted = 0" +
+            " WHERE (c.field1 = :field OR c.field2 = :field) AND r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findFieldRecruitmentListByDeadline(@Param("field") String field);

@@ -58,17 +58,23 @@ public class QuestionController {
             question7 = question7.substring(1, question7.length() - 1);
         }
 
+        if (question4Limit == null) question4Limit = 0;
+        if (question5Limit == null) question5Limit = 0;
+        if (question6Limit == null) question6Limit = 0;
+        if (question7Limit == null) question7Limit = 0;
+
+
         int questionCount = 3; // 최소 3개의 질문 등록
-        if (question4 != null && question4Limit != null) {
+        if (question4 != null && question4Limit != 0) {
             questionCount++;
         }
-        if (question5 != null && question5Limit != null) {
+        if (question5 != null && question5Limit != 0) {
             questionCount++;
         }
-        if (question6 != null && question6Limit != null) {
+        if (question6 != null && question6Limit != 0) {
             questionCount++;
         }
-        if (question7 != null && question7Limit != null) {
+        if (question7 != null && question7Limit != 0) {
             questionCount++;
         }
 

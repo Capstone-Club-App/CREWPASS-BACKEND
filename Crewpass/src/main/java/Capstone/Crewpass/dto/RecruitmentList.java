@@ -15,4 +15,5 @@ public interface RecruitmentList {
     Timestamp getRegister_time();
     Timestamp getDeadline();
     Integer getQuestion_id();
+    Integer getD_day();
 }
