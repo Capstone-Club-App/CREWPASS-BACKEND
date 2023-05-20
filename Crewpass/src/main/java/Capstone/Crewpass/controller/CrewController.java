@@ -42,6 +42,17 @@ public class CrewController {
             @RequestParam("subEmail") String subEmail,
             @RequestParam(value = "profile", required = false) MultipartFile profile
     ) throws IOException {
+        // 양끝 " 제거
+        name = name.substring(1, name.length() - 1);
+        loginId = loginId.substring(1, loginId.length() - 1);
+        password = password.substring(1, password.length() - 1);
+        region1 = region1.substring(1, region1.length() - 1);
+        region2 = region2.substring(1, region2.length() - 1);
+        field1 = field1.substring(1, field1.length() - 1);
+        field2 = field2.substring(1, field2.length() - 1);
+        masterEmail = masterEmail.substring(1, masterEmail.length() - 1);
+        subEmail = subEmail.substring(1, subEmail.length() - 1);
+
         Crew crew = new Crew(null, loginId, password, name, region1, region2, field1, field2, masterEmail, subEmail, crewService.uploadProfile(profile));
         if (crewService.joinCrew(crew) != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_SUCCESS_CREW, null), HttpStatus.OK);
@@ -54,6 +65,9 @@ public class CrewController {
     public ResponseEntity checkDuplicateCrewName(
             @RequestParam("name") String name
     ) {
+        // 양끝 " 제거
+        name = name.substring(1, name.length() - 1);
+
         String result = crewService.checkDuplicateCrewName(name);
         if (result == null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_CREW_NAME, null), HttpStatus.OK);
@@ -66,6 +80,9 @@ public class CrewController {
     public ResponseEntity checkDuplicateCrewLoginId(
             @RequestParam("loginId") String loginId
     ) {
+        // 양끝 " 제거
+        loginId = loginId.substring(1, loginId.length() - 1);
+
         String result = crewService.checkDuplicateCrewLoginId(loginId);
         if (result == null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_LOGINID, null), HttpStatus.OK);
@@ -80,6 +97,10 @@ public class CrewController {
             @RequestParam("password") String password,
             HttpServletResponse response
     ) {
+        // 양끝 " 제거
+        loginId = loginId.substring(1, loginId.length() - 1);
+        password = password.substring(1, password.length() - 1);
+
         Login login = new Login(null, loginId, password);
         Login result = crewService.loginCrew(login, response);
         if (result != null) {
@@ -100,6 +121,10 @@ public class CrewController {
             @RequestParam("crewName") String crewName,
             @RequestParam("email") String email
     ) {
+        // 양끝 " 제거
+        crewName = crewName.substring(1, crewName.length() - 1);
+        email = email.substring(1, email.length() - 1);
+
         CertificateNumb result = crewService.findCrewLoginId(crewName, email);
         if (result != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
@@ -128,6 +153,10 @@ public class CrewController {
             @RequestParam("loginId") String loginId,
             @RequestParam("email") String email
     ) {
+        // 양끝 " 제거
+        loginId = loginId.substring(1, loginId.length() - 1);
+        email = email.substring(1, email.length() - 1);
+
         CertificateNumb result = crewService.findCrewPassword(loginId, email);
         if (result != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CREATED_CERTIFICATENUMB_SUCCESS_CREW, result), HttpStatus.OK);
@@ -172,6 +201,16 @@ public class CrewController {
             @RequestParam(value = "profile", required = false) MultipartFile profile,
             @RequestHeader("crewId") String crewId
     ) throws IOException {
+        // 양끝 " 제거
+        name = name.substring(1, name.length() - 1);
+        password = password.substring(1, password.length() - 1);
+        region1 = region1.substring(1, region1.length() - 1);
+        region2 = region2.substring(1, region2.length() - 1);
+        field1 = field1.substring(1, field1.length() - 1);
+        field2 = field2.substring(1, field2.length() - 1);
+        masterEmail = masterEmail.substring(1, masterEmail.length() - 1);
+        subEmail = subEmail.substring(1, subEmail.length() - 1);
+
         crewService.updateCrewBasicInfo(crewId, name, password, region1, region2, field1, field2, masterEmail, subEmail, crewService.uploadProfile(profile));
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_CREW, null), HttpStatus.OK);
     }

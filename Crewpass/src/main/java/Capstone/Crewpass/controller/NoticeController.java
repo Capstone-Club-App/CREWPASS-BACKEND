@@ -27,6 +27,10 @@ public class NoticeController {
             @RequestParam("userId") String[] userId,
             @RequestParam("msg") String msg
     ){
+        // 양끝 " 제거
+        crewName = crewName.substring(1, crewName.length() - 1);
+        msg = msg.substring(1, msg.length() - 1);
+
         String result = noticeService.notice(crewName, userId, msg);
         if (result != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.NOTICE_MSG_SUCCESS, null), HttpStatus.OK);
