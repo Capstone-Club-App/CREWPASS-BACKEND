@@ -42,7 +42,7 @@ public class RecruitmentService {
     // 사진 파일 업로드
     public String uploadImage(MultipartFile image) throws IOException {
         //GCP에 저장할 파일의 이름 생성
-        String fileName = "https://storage.googleapis.com/crewpass-cloud-storage/" + UUID.randomUUID().toString().concat(image.getOriginalFilename());
+        String fileName = UUID.randomUUID().toString().concat(image.getOriginalFilename());
 
         //GCP에 파일 upload
         ClassPathResource resource = new ClassPathResource("capstone-design-385100-a6607b6659e7.json");
@@ -61,7 +61,7 @@ public class RecruitmentService {
         );
 
         // 서버에 등록한 파일명을 반환
-        return fileName;
+        return "https://storage.googleapis.com/crewpass-cloud-storage/" + fileName;
     }
 
     // 모집글 등록
