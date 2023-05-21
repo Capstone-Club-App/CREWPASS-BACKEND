@@ -54,4 +54,5 @@ public class ResponseMessage {
     public static final String NONPASS_DUPLICATE_CREW_NAME = "사용 불가능한 동아리명";
     public static final String PASS_DUPLICATE_LOGINID = "사용 가능한 로그인 아이디";
     public static final String NONPASS_DUPLICATE_LOGINID = "사용 불가능한 로그인 아이디";
+    public static final String AI_ANALYZE_APPLICATION_SUCCESS = "chatGPT 통해 지원서 분석 성공";
 }
