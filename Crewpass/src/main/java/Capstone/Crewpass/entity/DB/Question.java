@@ -62,7 +62,6 @@ public class Question {
     private Integer questionCount;
 
     @Column(name = "recruitment_recruitment_id", nullable = false)
-    @JoinColumn(name = "recruitmentId") // foreign key
     private Integer recruitmentId;
 
     @Builder

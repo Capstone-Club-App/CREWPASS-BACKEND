@@ -15,11 +15,9 @@ public class Scrap {
     private Integer scrapId;
 
     @Column(name = "recruitment_recruitment_id", nullable = false)
-    @JoinColumn(name = "recruitmentId") // foreign key
     private Integer recruitmentId;
 
     @Column(name = "user_user_id", nullable = false)
-    @JoinColumn(name = "userId") // foreign key
     private Integer userId;
 
     @Builder

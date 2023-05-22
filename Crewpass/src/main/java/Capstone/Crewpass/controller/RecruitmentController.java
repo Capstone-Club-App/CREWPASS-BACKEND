@@ -51,13 +51,13 @@ public class RecruitmentController {
                 content,
                 recruitmentService.uploadImage(image), crewId);
 
-        Integer recruitmentId = Integer.valueOf(recruitmentService.registerRecruitment(recruitment));
+        Integer recruitmentId = recruitmentService.registerRecruitment(recruitment);
         log.info(String.valueOf(recruitmentId));
         if (recruitmentId != null) {
             RecruitmentId responseId = new RecruitmentId(recruitmentId);
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, responseId), HttpStatus.OK);
         } else {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_FAIL_RECRUITMENT, null), HttpStatus.OK);
         }
     }
 
@@ -134,7 +134,7 @@ public class RecruitmentController {
         if (recruitmentService.registerScrap(scrap) != null) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_SCRAP, scrap.getScrapId()), HttpStatus.OK);
         } else {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_SCRAP, scrap.getScrapId()), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_FAIL_SCRAP, scrap.getScrapId()), HttpStatus.OK);
         }
     }
 
