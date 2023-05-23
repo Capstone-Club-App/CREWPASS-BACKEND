@@ -49,7 +49,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
+            " WHERE (c.field1 = :field OR c.field2 = :field) AND r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findFieldRecruitmentListByNewest(@Param("field") String field);
