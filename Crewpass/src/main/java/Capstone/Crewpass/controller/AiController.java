@@ -1,7 +1,11 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.response.ResponseFormat;
+import Capstone.Crewpass.response.ResponseMessage;
+import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.AiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +25,6 @@ public class AiController {
             @RequestParam("userName") String userName,
             @RequestParam("applicationId") Integer applicationId
     ) throws NoSuchFieldException {
-        aiService.analyzeApplication(applicationId);
-        return null;
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.AI_ANALYZE_APPLICATION_SUCCESS, aiService.analyzeApplication(applicationId)), HttpStatus.OK);
     }
-
 }

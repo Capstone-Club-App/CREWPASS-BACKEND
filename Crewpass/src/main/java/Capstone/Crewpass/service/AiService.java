@@ -1,5 +1,8 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.config.ChatGptConfig;
+import Capstone.Crewpass.dto.ChatGptRequest;
+import Capstone.Crewpass.dto.ChatGptResponse;
 import Capstone.Crewpass.entity.DB.Application;
 import Capstone.Crewpass.entity.DB.Question;
 import Capstone.Crewpass.repository.ApplicationRepository;
@@ -7,7 +10,12 @@ import Capstone.Crewpass.repository.QuestionRepository;
 import io.github.flashvayne.chatgpt.service.ChatgptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -27,7 +35,7 @@ public class AiService {
         this.chatgptService = chatgptService;
     }
 
-    public String analyzeApplication(Integer applicationId) throws NoSuchFieldException {
+    public ChatGptResponse analyzeApplication(Integer applicationId) throws NoSuchFieldException {
         //application 찾기
         Optional<Application> optionalApplication = applicationRepository.findByApplicationId(applicationId);
         //question 찾기
@@ -57,7 +65,8 @@ public class AiService {
             String[] questionAnswer = questionAnswerHashMap.get(i);
             String question = "Q" + i + ". " + questionAnswer[0] + "\n";
             String answer = "A" + i + ". " + questionAnswer[1] + "\n\n";
-            content += question + answer;
+            content += answer;
+            //content += question + answer;
         }
         String prompt = "The following is the application form written by the applicant who applied for our club recruitment. "
                 + "The language is written in Korean.\n\n"
@@ -68,8 +77,36 @@ public class AiService {
                 + "When making recommendations, please number them under the title \"면접 질문 추천\".\n"
                 + "Please do not return all other content except these two requests as a result.";
         //chatGPT API에게 요청 전송
-        String result = chatgptService.sendMessage(prompt);
-        log.info(result);
-        return result;
+        ChatGptResponse response = askQuestionToChatGpt(prompt);
+        return response;
+    }
+
+    private static RestTemplate restTemplate = new RestTemplate();
+
+    public HttpEntity<ChatGptRequest> createHttpEntity(ChatGptRequest chatGptRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(ChatGptConfig.MEDIA_TYPE));
+        headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.BEARER + ChatGptConfig.CertificateKey);
+        return new HttpEntity<>(chatGptRequest, headers);
+    }
+
+    public ChatGptResponse getResponse(HttpEntity<ChatGptRequest> chatGptRequest) {
+        ResponseEntity<ChatGptResponse> responseEntity = restTemplate.postForEntity(
+                ChatGptConfig.URL,
+                chatGptRequest,
+                ChatGptResponse.class);
+        return responseEntity.getBody();
+    }
+
+    public ChatGptResponse askQuestionToChatGpt(String prompt) {
+        return this.getResponse(
+                this.createHttpEntity(
+                        ChatGptRequest.builder()
+                                .model(ChatGptConfig.MODEL)
+                                .prompt(prompt)
+                                .maxTokens(ChatGptConfig.MAX_TOKEN)
+                                .temperature(ChatGptConfig.TEMPERATURE)
+                                .topP(ChatGptConfig.TOP_P)
+                                .build()));
     }
 }

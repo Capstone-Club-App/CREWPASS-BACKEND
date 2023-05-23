@@ -27,8 +27,10 @@ dependencies {
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.8.RELEASE' // [GCS]
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // [JavaMailSender - MimeMessage]
 	implementation 'org.springframework.boot:spring-boot-starter-security' //POSTMAN 401 ERR 해결
-	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4' // [chatGPT]
-	//websocket
+	// [chatGPT]
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	// [websocket]
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.webjars:sockjs-client:1.1.2'
 	implementation 'org.webjars:stomp-websocket:2.3.3-1'
