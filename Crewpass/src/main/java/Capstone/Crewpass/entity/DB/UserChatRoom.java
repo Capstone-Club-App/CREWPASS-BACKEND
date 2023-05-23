@@ -20,7 +20,7 @@ public class UserChatRoom {
     @Column(name = "chat_room_chat_room_id", nullable = false)
     private Integer chatRoomId;
 
-    @Column(name="last_read_chat_id", nullable = false)
+    @Column(name="last_read_chat_id")
     private Integer lastReadChatId;
 
     @Builder

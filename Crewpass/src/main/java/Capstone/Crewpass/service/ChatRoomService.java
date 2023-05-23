@@ -19,4 +19,9 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
         return chatRoom.getChatRoomId();
     }
+
+    public Integer findChatRoomIdByRecruitmentId(Integer recruitmentId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRecruitmentId(recruitmentId);
+        return chatRoom.getChatRoomId();
+    }
 }

@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApplicationService {
@@ -29,8 +30,22 @@ public class ApplicationService {
 
     // 지원서 등록
     public Integer registerApplication(Application application) {
-        applicationRepository.save(application);
-        return application.getApplicationId();
+        if (checkDuplicateApplication(application.getUserId(), application.getRecruitmentId()) == null) {
+            applicationRepository.save(application);
+            return application.getApplicationId();
+        } else {
+            return -1;
+        }
+    }
+
+    // 지원서 중복 검증
+    public String checkDuplicateApplication(Integer userId, Integer recruitmentId) {
+        Optional<Application> application = applicationRepository.findByUserIdAndRecruitmentId(userId, recruitmentId);
+        if (application.isEmpty()) {
+            return null; // null이면 지원서 등록 가능
+        } else {
+            return "이미 존재하는 지원서입니다.";
+        }
     }
 
     // 로그인한 회원이 지원한 지원서 목록 조회

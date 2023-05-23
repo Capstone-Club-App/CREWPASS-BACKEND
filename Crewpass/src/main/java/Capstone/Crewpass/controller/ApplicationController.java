@@ -2,11 +2,14 @@ package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.DB.Application;
 import Capstone.Crewpass.entity.ApplicationId;
+import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.ApplicationService;
+import Capstone.Crewpass.service.ChatRoomService;
 import Capstone.Crewpass.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +19,23 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 
 @RestController
 public class ApplicationController {
 
     private ApplicationService applicationService;
     private QuestionService questionService;
+    private UserChatRoomController userChatRoomController;
+    private ChatRoomService chatRoomService;
 
     // 생성자로 DI 주입
     @Autowired
-    public ApplicationController(ApplicationService applicationService, QuestionService questionService) {
+    public ApplicationController(ApplicationService applicationService, QuestionService questionService, UserChatRoomController userChatRoomController, ChatRoomService chatRoomService) {
         this.applicationService = applicationService;
         this.questionService = questionService;
+        this.userChatRoomController = userChatRoomController;
+        this.chatRoomService = chatRoomService;
     }
 
     // 지원서 작성을 위한 질문 문항 조회
@@ -83,8 +91,17 @@ public class ApplicationController {
                 answer1Count, answer2Count, answer3Count, answer4Count, answer5Count, answer6Count, answer7Count,
                 userId, questionId, recruitmentId);
 
-        Integer applicationId = Integer.valueOf(applicationService.registerApplication(application));
-        if (applicationId != null) {
+        Integer applicationId = applicationService.registerApplication(application);
+
+        if (applicationId == -1) { // 중복된 지원서는 더이상 진행 못하게 리턴
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_APPLICATION, null), HttpStatus.OK);
+        }
+
+        // 회원 채팅방 가입
+        Integer chatRoomId = chatRoomService.findChatRoomIdByRecruitmentId(recruitmentId);
+        ResponseFormat userChatRoomResponse = (ResponseFormat) userChatRoomController.registerUserChatRoom(chatRoomId, userId).getBody();
+
+        if (Objects.requireNonNull(userChatRoomResponse).getResponseMessage().equals(ResponseMessage.REGISTER_SUCCESS_USER_CHAT_ROOM)) {
             ApplicationId responseId = new ApplicationId(applicationId);
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_APPLICATION, responseId), HttpStatus.OK);
         } else {

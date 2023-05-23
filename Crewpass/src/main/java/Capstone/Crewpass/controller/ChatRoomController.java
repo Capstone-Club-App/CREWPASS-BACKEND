@@ -31,7 +31,6 @@ public class ChatRoomController {
 
     // 채팅방 생성
     @PostMapping("/chat/new/{recruitmentId}")
-    @ResponseBody
     public ResponseEntity createChatRoom (
             @PathVariable("recruitmentId") Integer recruitmentId,
             @RequestHeader("crewId") Integer crewId
@@ -61,4 +60,12 @@ public class ChatRoomController {
         }
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_FAIL_CHAT_ROOM, null), HttpStatus.OK);
     }
+
+//    // 동아리 - 채팅방 리스트 조회
+//    @GetMapping("/chat/crew/myList")
+//    public ResponseEntity checkCrewChatRoomList (
+//            @RequestHeader("crewId") Integer crewId
+//    ) throws IOException {
+//        chatRoomService.findChatRoomListByCrewId(crewId);
+//    }
 }
