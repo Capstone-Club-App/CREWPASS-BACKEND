@@ -78,6 +78,15 @@ public class UserService {
         }
     }
 
+    public String checkDuplicateUserEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByUserEmail(email);
+        if(optionalUser.isEmpty()){
+            return null;
+        }else{
+            return "이미 사용 중인 이메일입니다.";
+        }
+    }
+
     public Login loginUser(Login login, HttpServletResponse response) {
         Optional<User> optionalUser = userRepository.findByUserLoginIdAndUserPw(login.getLoginId(), login.getPassword());
         if(optionalUser.isPresent()){

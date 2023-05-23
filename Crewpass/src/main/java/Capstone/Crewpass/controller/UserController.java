@@ -67,6 +67,21 @@ public class UserController {
         }
     }
 
+    @PostMapping("/user/new/email")
+    public ResponseEntity checkDuplicateUserEmail(
+            @RequestParam("email") String email
+    ){
+        // 양끝 " 제거
+        email = email.substring(1, email.length() - 1);
+
+        String result = userService.checkDuplicateUserEmail(email);
+        if(result == null){
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.PASS_DUPLICATE_EMAIL, null), HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.NONPASS_DUPLICATE_EMAIL, null), HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/user/local")
     public ResponseEntity loginUser(
             @RequestParam("loginId") String loginId,
@@ -120,9 +135,8 @@ public class UserController {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.VERIFY_CERTIFICATENUMB_FAIL_USER, null), HttpStatus.OK);
         }
     }
-
     @PostMapping("/user/password")
-    public ResponseEntity findCrewPassword(
+    public ResponseEntity findUserPassword(
             @RequestParam("loginId") String loginId,
             @RequestParam("email") String email
     ) {
@@ -137,7 +151,6 @@ public class UserController {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_CERTIFICATENUMB_FAIL_USER, null), HttpStatus.OK);
         }
     }
-
     @PostMapping("/user/password/{loginId}/{email}/{certificateNumb}")
     public ResponseEntity verifyCertificateNumb4Password(
             @PathVariable("loginId") String loginId,
