@@ -61,6 +61,14 @@ public class ChatRoomController {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.CREATED_FAIL_CHAT_ROOM, null), HttpStatus.OK);
     }
 
+    // 채팅방 정보 조회
+    @GetMapping("/chat/info/{chatroomId}")
+    public ResponseEntity checkChatRoomInfo (
+            @PathVariable("chatroomId") Integer chatroomId
+    ) throws IOException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CHATROOM_INFO, chatRoomService.findInfoByChatroomId(chatroomId)), HttpStatus.OK);
+    }
+
 //    // 동아리 - 채팅방 리스트 조회
 //    @GetMapping("/chat/crew/myList")
 //    public ResponseEntity checkCrewChatRoomList (

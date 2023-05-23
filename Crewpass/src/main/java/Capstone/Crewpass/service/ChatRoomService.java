@@ -1,5 +1,6 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.dto.ChatRoomInfo;
 import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,10 @@ public class ChatRoomService {
     public Integer findChatRoomIdByRecruitmentId(Integer recruitmentId) {
         ChatRoom chatRoom = chatRoomRepository.findByRecruitmentId(recruitmentId);
         return chatRoom.getChatRoomId();
+    }
+
+    // 채팅방 정보 조회
+    public ChatRoomInfo findInfoByChatroomId(Integer chatroomId) {
+        return chatRoomRepository.findInfoByChatroomId(chatroomId);
     }
 }

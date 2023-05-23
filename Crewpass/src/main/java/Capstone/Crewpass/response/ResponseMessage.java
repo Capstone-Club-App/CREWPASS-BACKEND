@@ -57,6 +57,7 @@ public class ResponseMessage {
     public static final String CREATED_FAIL_CHAT_ROOM = "채팅방 생성 실패";
     public static final String REGISTER_SUCCESS_USER_CHAT_ROOM = "회원 채팅방 가입 성공";
     public static final String REGISTER_FAIL_USER_CHAT_ROOM = "회원 채팅방 가입 성공";
+    public static final String READ_CHATROOM_INFO = "채팅방 정보 조회 성공";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
