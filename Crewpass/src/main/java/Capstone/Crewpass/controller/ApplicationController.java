@@ -88,7 +88,7 @@ public class ApplicationController {
             ApplicationId responseId = new ApplicationId(applicationId);
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_APPLICATION, responseId), HttpStatus.OK);
         } else {
-            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_SUCCESS_APPLICATION, null), HttpStatus.OK);
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_FAIL_APPLICATION, null), HttpStatus.OK);
         }
     }
 

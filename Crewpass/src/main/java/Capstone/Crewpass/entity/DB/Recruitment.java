@@ -17,7 +17,7 @@ public class Recruitment {
     @Column(name = "recruitment_id", nullable = false)
     private Integer recruitmentId;
 
-    @Column(name = "isDeleted")
+    @Column(name = "isDeleted", nullable = false)
     private Integer isDeleted;
 
     @Column(name = "title", nullable = false, length = 25)
@@ -38,7 +38,6 @@ public class Recruitment {
     private String image;
 
     @Column(name = "crew_crew_id", nullable = false)
-    @JoinColumn(name = "crewId") // foreign key
     private Integer crewId;
 
     @Builder

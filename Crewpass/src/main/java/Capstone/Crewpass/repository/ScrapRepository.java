@@ -23,14 +23,14 @@ public interface ScrapRepository extends JpaRepository<Scrap, Integer> {
     // 스크랩한 모집글을 "마감임박" 순으로 목록 조회
     @Query(value = "SELECT s.scrap_id, " +
             " c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
-            " r.recruitment_id, r.title, r.register_time, r.deadline, " +
+            " r.recruitment_id, r.title, r.register_time, r.deadline, TIMESTAMPDIFF(DAY, now(), r.deadline) d_day," +
             " q.question_id" +
             " FROM crewpass.recruitment_scrap s" +
             " INNER JOIN crewpass.user u ON s.user_user_id = u.user_id" +
             " INNER JOIN crewpass.recruitment r ON s.recruitment_recruitment_id = r.recruitment_id" +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id" +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE u.user_id = :userId" +
+            " WHERE u.user_id = :userId AND r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<ScrapRecruitmentDeadlineList> findAllScrapListByDeadline(@Param("userId") Integer userId);

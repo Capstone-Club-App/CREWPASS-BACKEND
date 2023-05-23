@@ -16,4 +16,5 @@ public interface ScrapRecruitmentDeadlineList {
     Timestamp getRegister_time();
     Timestamp getDeadline();
     Integer getQuestion_id();
+    Integer getD_day();
 }

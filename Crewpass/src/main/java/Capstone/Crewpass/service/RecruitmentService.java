@@ -149,4 +149,9 @@ public class RecruitmentService {
     public List<ScrapRecruitmentDeadlineList> checkMyScrapListByDeadline(Integer userId) {
         return scrapRepository.findAllScrapListByDeadline(userId);
     }
+
+    // recruitmentId로 찾기
+    public Recruitment findByRecruitmentId(Integer recruitmentId) {
+        return recruitmentRepository.findByRecruitmentId(recruitmentId).get();
+    }
 }

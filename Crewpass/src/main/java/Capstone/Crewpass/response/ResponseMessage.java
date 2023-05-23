@@ -28,6 +28,7 @@ public class ResponseMessage {
     public static final String VERIFY_CERTIFICATENUMB_FAIL_USER = "회원 ID/PW 찾기 인증번호 검증 실패";
   
     public static final String REGISTER_SUCCESS_RECRUITMENT = "모집글 등록 성공";
+    public static final String REGISTER_FAIL_RECRUITMENT = "모집글 등록 실패";
     public static final String READ_MY_RECRUITMENT_LIST = "로그인한 동아리의 모집글 목록 조회 성공";
     public static final String READ_RECRUITMENT_LIST_RECENT = "동아리 분야 별 최신순으로 모집글 목록 조회 성공";
     public static final String READ_RECRUITMENT_LIST_DEADLINE = "동아리 분야 별 마감임박순으로 모집글 목록 조회 성공";
@@ -36,8 +37,10 @@ public class ResponseMessage {
     public static final String DELETE_RECRUITMENT = "모집글 삭제 성공";
 
     public static final String REGISTER_SUCCESS_QUESTION = "질문 등록 성공";
+    public static final String REGISTER_FAIL_QUESTION = "질문 등록 실패";
 
     public static final String REGISTER_SUCCESS_APPLICATION = "지원서 등록 성공";
+    public static final String REGISTER_FAIL_APPLICATION = "지원서 등록 실패";
     public static final String READ_MY_APPLICATION_LIST = "로그인한 회원의 지원서 목록 조회 성공";
     public static final String READ_APPLICATION_DETAIL = "선택한 지원서 상세 조회 성공";
     public static final String READ_APPLICATION_LIST_BY_QUESTION = "선택한 모집글에 대한 지원서를 최신순으로 목록 조회 성공";
@@ -45,8 +48,12 @@ public class ResponseMessage {
     public static final String DELETE_APPLICATION = "지원서 삭제 성공";
 
     public static final String REGISTER_SUCCESS_SCRAP = "모집글 스크랩 추가 성공";
+    public static final String REGISTER_FAIL_SCRAP = "모집글 스크랩 추가 실패";
     public static final String DELETE_SCRAP = "모집글 스크랩 삭제 성공";
     public static final String READ_MY_SCRAP_LIST = "스크랩한 모집글 마감임박순으로 목록 조회 성공";
+
+    public static final String CREATED_SUCCESS_CHAT_ROOM = "채팅방 생성 성공";
+    public static final String CREATED_FAIL_CHAT_ROOM = "채팅방 생성 실패";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";

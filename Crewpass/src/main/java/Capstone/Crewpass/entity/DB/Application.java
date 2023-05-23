@@ -63,15 +63,12 @@ public class Application {
     private Integer answer7Count;
 
     @Column(name = "user_user_id", nullable = false)
-    @JoinColumn(name = "userId") // foreign key
     private Integer userId;
 
     @Column(name = "question_question_id", nullable = false)
-    @JoinColumn(name = "questionId") // foreign key
     private Integer questionId;
 
     @Column(name = "question_recruitment_recruitment_id", nullable = false)
-    @JoinColumn(name = "recruitmentId") // foreign key
     private Integer recruitmentId;
 
     @Builder
