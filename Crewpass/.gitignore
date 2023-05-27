@@ -7,6 +7,5 @@
 out
 gen
 
-
-application.properties
+**/application.properties
 capstone-design-385100-a6607b6659e7.json
