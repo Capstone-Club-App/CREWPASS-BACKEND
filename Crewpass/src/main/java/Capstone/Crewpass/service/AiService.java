@@ -96,7 +96,7 @@ public class AiService {
         //chatGPT API에게 요청 전송
         ChatGptResponse response = askQuestionToChatGpt(prompt);
         //chatGPT API에게 받은 답변 Parsing
-        ChatGptResponseText chatGptResponseText = new ChatGptResponseText(questionCount, null, null,null);
+        ChatGptResponseText chatGptResponseText = new ChatGptResponseText(null, null, null,null);
         return parsingResponseText(chatGptResponseText, response);
     }
 
