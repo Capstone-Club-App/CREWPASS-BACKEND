@@ -3,6 +3,8 @@ package Capstone.Crewpass.service;
 import Capstone.Crewpass.config.ChatGptConfig;
 import Capstone.Crewpass.dto.ChatGptRequest;
 import Capstone.Crewpass.dto.ChatGptResponse;
+import Capstone.Crewpass.dto.Choice;
+import Capstone.Crewpass.entity.ChatGptResponseText;
 import Capstone.Crewpass.entity.DB.Application;
 import Capstone.Crewpass.entity.DB.Question;
 import Capstone.Crewpass.repository.ApplicationRepository;
@@ -17,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,7 +31,6 @@ public class AiService {
     private final QuestionRepository questionRepository;
     private final ChatgptService chatgptService;
 
-
     @Autowired
     public AiService(ApplicationRepository applicationRepository, QuestionRepository questionRepository, ChatgptService chatgptService) {
         this.applicationRepository = applicationRepository;
@@ -35,12 +38,69 @@ public class AiService {
         this.chatgptService = chatgptService;
     }
 
-    public ChatGptResponse analyzeApplication(Integer applicationId) throws NoSuchFieldException {
+    public ChatGptResponseText analyzeApplication4Crew(Integer applicationId){
         //application 찾기
         Optional<Application> optionalApplication = applicationRepository.findByApplicationId(applicationId);
         //question 찾기
         Integer questionId = optionalApplication.get().getQuestionId();
         Optional<Question> optionalQuestion = questionRepository.findByQuestionId(questionId);
+        //question-answer HashMap 생성
+        HashMap<Integer, String[]> questionAnswerHashMap = getQuestionAnswerHashMap(optionalQuestion, optionalApplication);
+        //chatGPT API에게 전송할 요청
+        Integer questionCount = optionalQuestion.get().getQuestionCount();
+        String content = "";
+        for(int i = 1 ; i <= questionCount ; i++){
+            String[] questionAnswer = questionAnswerHashMap.get(i);
+            String question = "Q" + i + ". " + questionAnswer[0] + "\n";
+            String answer = "A" + i + ". " + questionAnswer[1] + "\n\n";
+            content += question + answer;
+        }
+        String prompt = "The following is the application form written by the applicant. "
+                + "The language is written in Korean.\n\n"
+                + content
+                + "First, summarize each answer written by the applicant for each question within 300 characters in Korean. "
+                + "Please provide only the summary of application answers, excluding application questions, along with the order of application answers. \n"
+                + "Second, recommend 7 interview questions in Korean to ask the applicant about the overall contents of the application. "
+                + "When making recommendations, please number them under the title \"면접 질문 추천\".\n"
+                + "Please do not return all other content except these two requests as a result.";
+        //chatGPT API에게 요청 전송
+        ChatGptResponse response = askQuestionToChatGpt(prompt);
+        //chatGPT API에게 받은 답변 Parsing
+        ChatGptResponseText chatGptResponseText = new ChatGptResponseText(questionCount, questionAnswerHashMap, null,null);
+        return parsingResponseText(chatGptResponseText, response);
+    }
+
+    public ChatGptResponseText analyzeApplication4User(Integer applicationId){
+        //application 찾기
+        Optional<Application> optionalApplication = applicationRepository.findByApplicationId(applicationId);
+        //question 찾기
+        Integer questionId = optionalApplication.get().getQuestionId();
+        Optional<Question> optionalQuestion = questionRepository.findByQuestionId(questionId);
+        //question-answer HashMap 생성
+        HashMap<Integer, String[]> questionAnswerHashMap = getQuestionAnswerHashMap(optionalQuestion, optionalApplication);
+        //chatGPT API에게 전송할 요청
+        Integer questionCount = optionalQuestion.get().getQuestionCount();
+        String content = "";
+        for(int i = 1 ; i <= questionCount ; i++){
+            String[] questionAnswer = questionAnswerHashMap.get(i);
+            String question = "Q" + i + ". " + questionAnswer[0] + "\n";
+            String answer = "A" + i + ". " + questionAnswer[1] + "\n\n";
+            content += question + answer;
+        }
+        String prompt = "The following is the application form written by the applicant. "
+                + "The language is written in Korean.\n\n"
+                + content
+                + "Recommend 12 interview questions in Korean to ask the applicant about the overall contents of the application. "
+                + "When making recommendations, please number them under the title \"면접 질문 추천\".\n"
+                + "Please do not return all other content except the request as a result.";
+        //chatGPT API에게 요청 전송
+        ChatGptResponse response = askQuestionToChatGpt(prompt);
+        //chatGPT API에게 받은 답변 Parsing
+        ChatGptResponseText chatGptResponseText = new ChatGptResponseText(questionCount, null, null,null);
+        return parsingResponseText(chatGptResponseText, response);
+    }
+
+    public HashMap<Integer, String[]> getQuestionAnswerHashMap(Optional<Question> optionalQuestion, Optional<Application> optionalApplication){
         //문항 별 question-answer 배열 생성
         String[] questionAnswer1 = {optionalQuestion.get().getQuestion1(), optionalApplication.get().getAnswer1()};
         String[] questionAnswer2 = {optionalQuestion.get().getQuestion2(), optionalApplication.get().getAnswer2()};
@@ -58,27 +118,34 @@ public class AiService {
         questionAnswerHashMap.put(5, questionAnswer5);
         questionAnswerHashMap.put(6, questionAnswer6);
         questionAnswerHashMap.put(7, questionAnswer7);
-        //chatGPT API에게 전송할 요청
-        Integer questionCount = optionalQuestion.get().getQuestionCount();
-        String content = "";
-        for(int i = 1 ; i <= questionCount ; i++){
-            String[] questionAnswer = questionAnswerHashMap.get(i);
-            String question = "Q" + i + ". " + questionAnswer[0] + "\n";
-            String answer = "A" + i + ". " + questionAnswer[1] + "\n\n";
-            content += answer;
-            //content += question + answer;
+        return questionAnswerHashMap;
+    }
+
+    public ChatGptResponseText parsingResponseText(ChatGptResponseText chatGptResponseText, ChatGptResponse response){
+        List<Choice> choice = response.getChoices();
+        String responseText = choice.get(0).getText();
+        String[] responseTextArr = responseText.replaceAll("\n\n", "\n").split("\n");
+        List<String> summary = new ArrayList<>();
+        List<String> interview = new ArrayList<>();
+        int interviewIndex = responseTextArr.length;
+        for(int i=0;i<interviewIndex;i++){
+            switch(responseTextArr[i]){
+                case "":
+                    break;
+                case "면접 질문 추천":
+                    interviewIndex = i+1;
+                    continue;
+                default:
+                    summary.add(responseTextArr[i]);
+                    break;
+            }
         }
-        String prompt = "The following is the application form written by the applicant who applied for our club recruitment. "
-                + "The language is written in Korean.\n\n"
-                + content
-                + "First, please briefly summarize the answers written by the applicant for each application question in Korean. "
-                + "Summarize the summary for each question with a title such as \"A1\".\n"
-                + "Second, please recommend 7 interview questions in Korean to ask the applicant about the overall contents of the application. "
-                + "When making recommendations, please number them under the title \"면접 질문 추천\".\n"
-                + "Please do not return all other content except these two requests as a result.";
-        //chatGPT API에게 요청 전송
-        ChatGptResponse response = askQuestionToChatGpt(prompt);
-        return response;
+        for(int j = interviewIndex; j<responseTextArr.length; j++){
+            interview.add(responseTextArr[j]);
+        }
+        chatGptResponseText.setSummary(summary);
+        chatGptResponseText.setInterview(interview);
+        return chatGptResponseText;
     }
 
     private static RestTemplate restTemplate = new RestTemplate();

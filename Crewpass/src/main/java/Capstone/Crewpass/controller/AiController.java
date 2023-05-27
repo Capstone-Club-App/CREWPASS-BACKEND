@@ -20,11 +20,17 @@ public class AiController {
         this.aiService = aiService;
     }
 
-    @PostMapping("ai/interview")
-    public ResponseEntity analyzeApplication(
-            @RequestParam("userName") String userName,
+    @PostMapping("ai/crew/interview")
+    public ResponseEntity analyzeApplication4Crew(
             @RequestParam("applicationId") Integer applicationId
     ) throws NoSuchFieldException {
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.AI_ANALYZE_APPLICATION_SUCCESS, aiService.analyzeApplication(applicationId)), HttpStatus.OK);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.AI_ANALYZE_APPLICATION_SUCCESS, aiService.analyzeApplication4Crew(applicationId)), HttpStatus.OK);
+    }
+
+    @PostMapping("ai/user/interview")
+    public ResponseEntity analyzeApplication4User(
+            @RequestParam("applicationId") Integer applicationId
+    ) throws NoSuchFieldException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.AI_ANALYZE_APPLICATION_SUCCESS, aiService.analyzeApplication4User(applicationId)), HttpStatus.OK);
     }
 }
