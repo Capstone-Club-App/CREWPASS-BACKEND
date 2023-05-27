@@ -1,2 +1,12 @@
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+
 application.properties
 capstone-design-385100-a6607b6659e7.json
