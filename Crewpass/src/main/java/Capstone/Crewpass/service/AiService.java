@@ -153,7 +153,7 @@ public class AiService {
     public HttpEntity<ChatGptRequest> createHttpEntity(ChatGptRequest chatGptRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(ChatGptConfig.MEDIA_TYPE));
-        headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.BEARER + ChatGptConfig.CertificateKey);
+        headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.BEARER + ChatGptConfig.KEY);
         return new HttpEntity<>(chatGptRequest, headers);
     }
 
