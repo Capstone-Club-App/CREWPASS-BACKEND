@@ -1,30 +1,60 @@
 package Capstone.Crewpass.service;
 
+import Capstone.Crewpass.entity.DB.Chat;
 import Capstone.Crewpass.entity.DB.ChatRoom;
-import lombok.RequiredArgsConstructor;
+import Capstone.Crewpass.entity.DB.UserChatRoom;
+import Capstone.Crewpass.repository.ChatRepository;
+import Capstone.Crewpass.repository.ChatRoomRepository;
+import Capstone.Crewpass.repository.UserChatRoomRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class ChatService {
+    private final UserChatRoomRepository userChatRoomRepository;
+    private final ChatRepository chatRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    // 임시로 추가
+    private final ObjectMapper objectMapper;
 
-    private Map<Integer, ChatRoom> chatRoomMap;
-
-    @PostConstruct
-    // 의존관게 주입완료되면 실행되는 코드
-    private void init() {
-        chatRoomMap = new LinkedHashMap<>();
+    @Autowired
+    public ChatService(UserChatRoomRepository userChatRoomRepository, ChatRepository chatRepository, ChatRoomRepository chatRoomRepository, ObjectMapper objectMapper) {
+        this.userChatRoomRepository = userChatRoomRepository;
+        this.chatRepository = chatRepository;
+        this.chatRoomRepository = chatRoomRepository;
+        this.objectMapper = objectMapper;
     }
 
-    //채팅방 하나 불러오기
-    public ChatRoom findById(Integer chatRoomId) {
-        return chatRoomMap.get(chatRoomId);
+    // 채팅 메시지 송신
+    @Transactional
+    public Integer createChatMessage(Chat chat) {
+        this.chatRepository.save(chat);
+        return chat.getChatId();
     }
 
+//    // 채팅 메시지 조회
+//    public List<Chat> getChatHistory(Integer chatRoomId, Integer userId) {
+//        List<Chat> chatHistory;
+//        UserChatRoom userChatRoom = userChatRoomRepository.findByChatRoomIdAndUserId(chatRoomId, userId);
+//        Integer lastReadChatId = userChatRoom.getLastReadChatId();
+//
+//        chatHistory = chatRepository.findAllByChatRoomId(chatRoomId);
+//
+////        if (lastReadChatId == null) {
+////            chatHistory = chatRepository.findAllByChatRoomId(chatRoomId);
+////        } else {
+////            chatHistory = chatRepository.findByChatRoomIdAndLastReadChatId(chatRoomId, lastReadChatId);
+////        }
+//
+//        return chatHistory;
+//    }
+
+    public ChatRoom findChatRoomById(Integer chatRoomId) {
+        return chatRoomRepository.findById(chatRoomId).get();
+    }
 }
