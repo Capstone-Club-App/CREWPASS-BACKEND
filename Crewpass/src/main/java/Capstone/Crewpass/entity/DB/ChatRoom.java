@@ -1,9 +1,13 @@
 package Capstone.Crewpass.entity.DB;
 
+import Capstone.Crewpass.service.ChatService;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Table(name = "chat_room")
 @Entity
@@ -22,7 +26,7 @@ public class ChatRoom {
     @Column(name="close_time", nullable = false)
     private Timestamp closeTime;
 
-    @Column(name="isDeleted", nullable = false)
+    @Column(name="is_deleted", nullable = false)
     private Integer isDeleted;
 
     @Builder

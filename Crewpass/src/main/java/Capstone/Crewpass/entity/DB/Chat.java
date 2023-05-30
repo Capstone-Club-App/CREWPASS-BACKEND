@@ -25,10 +25,10 @@ public class Chat {
     @Column(name="content", nullable = false)
     private String content;
 
-    @Column(name = "user_user_id", nullable = false)
+    @Column(name = "user_user_id")
     private Integer userId;
 
-    @Column(name = "crew_crew_id", nullable = false)
+    @Column(name = "crew_crew_id")
     private Integer crewId;
 
     @Column(name = "chat_room_chat_room_id", nullable = false)

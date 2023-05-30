@@ -17,7 +17,7 @@ public class Recruitment {
     @Column(name = "recruitment_id", nullable = false)
     private Integer recruitmentId;
 
-    @Column(name = "isDeleted", nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private Integer isDeleted;
 
     @Column(name = "title", nullable = false, length = 25)

@@ -40,6 +40,7 @@ public class ResponseMessage {
     public static final String REGISTER_FAIL_QUESTION = "질문 등록 실패";
 
     public static final String REGISTER_SUCCESS_APPLICATION = "지원서 등록 성공";
+    public static final String NONPASS_DUPLICATE_APPLICATION = "지원서 등록 실패 - 중복된 지원서";
     public static final String REGISTER_FAIL_APPLICATION = "지원서 등록 실패";
     public static final String READ_MY_APPLICATION_LIST = "로그인한 회원의 지원서 목록 조회 성공";
     public static final String READ_APPLICATION_DETAIL = "선택한 지원서 상세 조회 성공";
@@ -54,6 +55,15 @@ public class ResponseMessage {
 
     public static final String CREATED_SUCCESS_CHAT_ROOM = "채팅방 생성 성공";
     public static final String CREATED_FAIL_CHAT_ROOM = "채팅방 생성 실패";
+    public static final String REGISTER_SUCCESS_CREW_CHAT_ROOM = "동아리 채팅방 가입 성공";
+    public static final String REGISTER_FAIL_USER_CHAT_ROOM = "회원 채팅방 가입 성공";
+    public static final String REGISTER_SUCCESS_USER_CHAT_ROOM = "회원 채팅방 가입 성공";
+    public static final String REGISTER_FAIL_CREW_CHAT_ROOM = "동아리 채팅방 가입 성공";
+    public static final String READ_CHATROOM_INFO = "채팅방 정보 조회 성공";
+
+    public static final String SEND_SUCCESS_CHAT_MESSAGE = "채팅 메시지 전송 성공";
+    public static final String SEND_SUCCESS_CHAT_HISTORY = "채팅방 메시지 히스토리 조회 성공";
+    public static final String READ_CREW_CHATROOM_LIST = "동아리 - 채팅방 리스트 조회 성공";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
