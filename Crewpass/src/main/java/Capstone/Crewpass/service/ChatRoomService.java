@@ -1,12 +1,15 @@
 package Capstone.Crewpass.service;
 
 import Capstone.Crewpass.dto.ChatRoomInfo;
+import Capstone.Crewpass.dto.ChatRoomList;
 import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.repository.ChatRoomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -36,8 +39,13 @@ public class ChatRoomService {
         return chatRoomRepository.findInfoByChatroomId(chatroomId);
     }
 
-//    // 동아리 - 채팅방 리스트 조회
-//    public List<> findChatRoomListByCrewId(Integer crewId) {
-//        return chatRoomRepository.findAll
-//    }
+    // 동아리 - 채팅방 리스트 조회
+    public List<ChatRoomList> findChatRoomListByCrewId(Integer crewId) {
+        return chatRoomRepository.findChatRoomListByCrewId(crewId);
+    }
+
+    // 회원 - 채팅방 리스트 조회
+    public List<ChatRoomList> findChatRoomListByUserId(Integer userId) {
+        return chatRoomRepository.findChatRoomListByUserId(userId);
+    }
 }

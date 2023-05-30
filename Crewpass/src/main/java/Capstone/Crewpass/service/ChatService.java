@@ -37,22 +37,10 @@ public class ChatService {
         return chat.getChatId();
     }
 
-//    // 채팅 메시지 조회
-//    public List<Chat> getChatHistory(Integer chatRoomId, Integer userId) {
-//        List<Chat> chatHistory;
-//        UserChatRoom userChatRoom = userChatRoomRepository.findByChatRoomIdAndUserId(chatRoomId, userId);
-//        Integer lastReadChatId = userChatRoom.getLastReadChatId();
-//
-//        chatHistory = chatRepository.findAllByChatRoomId(chatRoomId);
-//
-////        if (lastReadChatId == null) {
-////            chatHistory = chatRepository.findAllByChatRoomId(chatRoomId);
-////        } else {
-////            chatHistory = chatRepository.findByChatRoomIdAndLastReadChatId(chatRoomId, lastReadChatId);
-////        }
-//
-//        return chatHistory;
-//    }
+    // 채팅 메시지 내역 조회
+    public List<Chat> getChatHistory(Integer chatRoomId) {
+        return chatRepository.findAllByChatRoomId(chatRoomId);
+    }
 
     public ChatRoom findChatRoomById(Integer chatRoomId) {
         return chatRoomRepository.findById(chatRoomId).get();

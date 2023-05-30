@@ -68,12 +68,4 @@ public class ChatRoomController {
     ) throws IOException {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CHATROOM_INFO, chatRoomService.findInfoByChatroomId(chatroomId)), HttpStatus.OK);
     }
-
-//    // 동아리 - 채팅방 리스트 조회
-//    @GetMapping("/chat/crew/myList")
-//    public ResponseEntity checkCrewChatRoomList (
-//            @RequestHeader("crewId") Integer crewId
-//    ) throws IOException {
-//        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CREW_CHATROOM_LIST, chatRoomService.findChatRoomListByCrewId(crewId)), HttpStatus.OK);
-//    }
 }

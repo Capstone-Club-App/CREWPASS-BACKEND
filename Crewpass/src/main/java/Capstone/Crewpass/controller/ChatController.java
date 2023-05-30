@@ -49,12 +49,11 @@ public class ChatController {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.SEND_SUCCESS_CHAT_MESSAGE, chat.getChatRoomId()), HttpStatus.OK);
     }
 
-//    // 회원 - 채팅 메시지 조회
-//    @GetMapping("/chat/history/{chatRoomId}")
-//    public ResponseEntity getChatHistory(
-//        @PathVariable("chatRoomId") Integer chatRoomId,
-//        @RequestHeader("userId") Integer userId
-//    ) {
-//        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.SEND_SUCCESS_CHAT_HISTORY, chatService.getChatHistory(chatRoomId, userId)), HttpStatus.OK);
-//    }
+    // 채팅 메시지 내역 조회
+    @GetMapping("/chat/history/{chatRoomId}")
+    public ResponseEntity getChatHistory(
+        @PathVariable("chatRoomId") Integer chatRoomId
+    ) {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.SEND_SUCCESS_CHAT_HISTORY, chatService.getChatHistory(chatRoomId)), HttpStatus.OK);
+    }
 }

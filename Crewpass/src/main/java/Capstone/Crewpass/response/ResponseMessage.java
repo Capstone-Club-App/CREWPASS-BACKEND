@@ -64,6 +64,7 @@ public class ResponseMessage {
     public static final String SEND_SUCCESS_CHAT_MESSAGE = "채팅 메시지 전송 성공";
     public static final String SEND_SUCCESS_CHAT_HISTORY = "채팅방 메시지 히스토리 조회 성공";
     public static final String READ_CREW_CHATROOM_LIST = "동아리 - 채팅방 리스트 조회 성공";
+    public static final String READ_USER_CHATROOM_LIST = "회원 - 채팅방 리스트 조회 성공";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
@@ -74,4 +75,5 @@ public class ResponseMessage {
     public static final String AI_ANALYZE_APPLICATION_SUCCESS = "chatGPT 통해 지원서 분석 성공";
     public static final String PASS_DUPLICATE_EMAIL = "사용 가능한 이메일";
     public static final String NONPASS_DUPLICATE_EMAIL = "사용 불가능한 이메일";
+
 }

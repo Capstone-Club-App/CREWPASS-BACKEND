@@ -5,25 +5,25 @@ import Capstone.Crewpass.entity.DB.CrewChatRoom;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
+import Capstone.Crewpass.service.ChatRoomService;
 import Capstone.Crewpass.service.CrewChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RestController
 public class CrewChatRoomController {
     private final CrewChatRoomService crewChatRoomService;
+    private final ChatRoomService chatRoomService;
 
     // 생성자로 DI 주입
     @Autowired
-    public CrewChatRoomController(CrewChatRoomService crewChatRoomService) {
+    public CrewChatRoomController(CrewChatRoomService crewChatRoomService, ChatRoomService chatRoomService) {
         this.crewChatRoomService = crewChatRoomService;
+        this.chatRoomService = chatRoomService;
     }
 
     // 채팅방 가입
@@ -41,5 +41,13 @@ public class CrewChatRoomController {
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_FAIL_CREW_CHAT_ROOM, null), HttpStatus.OK);
         }
+    }
+
+    // 동아리 - 채팅방 리스트 조회
+    @GetMapping("/chat/crew/myList")
+    public ResponseEntity checkCrewChatRoomList (
+            @RequestHeader("crewId") Integer crewId
+    ) throws IOException {
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CREW_CHATROOM_LIST, chatRoomService.findChatRoomListByCrewId(crewId)), HttpStatus.OK);
     }
 }
