@@ -74,6 +74,6 @@ public class ChatRoomController {
 //    public ResponseEntity checkCrewChatRoomList (
 //            @RequestHeader("crewId") Integer crewId
 //    ) throws IOException {
-//        chatRoomService.findChatRoomListByCrewId(crewId);
+//        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CREW_CHATROOM_LIST, chatRoomService.findChatRoomListByCrewId(crewId)), HttpStatus.OK);
 //    }
 }

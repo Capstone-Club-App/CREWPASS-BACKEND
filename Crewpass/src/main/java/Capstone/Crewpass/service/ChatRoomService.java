@@ -36,5 +36,8 @@ public class ChatRoomService {
         return chatRoomRepository.findInfoByChatroomId(chatroomId);
     }
 
-
+//    // 동아리 - 채팅방 리스트 조회
+//    public List<> findChatRoomListByCrewId(Integer crewId) {
+//        return chatRoomRepository.findAll
+//    }
 }
