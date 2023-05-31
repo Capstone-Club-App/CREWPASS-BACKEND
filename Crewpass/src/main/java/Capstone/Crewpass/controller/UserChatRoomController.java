@@ -32,7 +32,10 @@ public class UserChatRoomController {
             @PathVariable("chatroomId") Integer chatroomId,
             @RequestHeader("userId") Integer userId
     ) throws IOException {
-        UserChatRoom userChatRoom = new UserChatRoom(null, userId, chatroomId, null); // 해당 chatRoomId에서 마지막 대화 아이디 추가해야 함
+        // 해당 채팅방의 몇 번째 회원인지 구하기
+        Integer enterOrder = userChatRoomService.findLastEnterOrderByChatRoomId(chatroomId) + 1;
+
+        UserChatRoom userChatRoom = new UserChatRoom(null, userId, chatroomId, null, enterOrder); // 처음 채팅방 가입 시에는 읽은 게 없으므로 null로 표시
         Integer userChatRoomId = userChatRoomService.registerUserChatRoom(userChatRoom);
 
         if (userChatRoomId != null) {

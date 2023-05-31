@@ -23,11 +23,15 @@ public class UserChatRoom {
     @Column(name="last_read_chat_id")
     private Integer lastReadChatId;
 
+    @Column(name="enter_order")
+    private Integer enterOrder;
+
     @Builder
-    public UserChatRoom(Integer userChatRoomId, Integer userId, Integer chatRoomId, Integer lastReadChatId) {
+    public UserChatRoom(Integer userChatRoomId, Integer userId, Integer chatRoomId, Integer lastReadChatId, Integer enterOrder) {
         this.userChatRoomId = userChatRoomId;
         this.userId = userId;
         this.chatRoomId = chatRoomId;
         this.lastReadChatId = lastReadChatId;
+        this.enterOrder = enterOrder;
     }
 }

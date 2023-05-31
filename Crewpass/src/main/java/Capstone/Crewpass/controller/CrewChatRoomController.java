@@ -32,7 +32,7 @@ public class CrewChatRoomController {
             @PathVariable("chatroomId") Integer chatroomId,
             @RequestHeader("crewId") Integer crewId
     ) throws IOException {
-        CrewChatRoom crewChatRoom = new CrewChatRoom(null, crewId, chatroomId, null); // 해당 chatRoomId에서 마지막 대화 아이디 추가해야 함
+        CrewChatRoom crewChatRoom = new CrewChatRoom(null, crewId, chatroomId, null); // 처음 채팅방 가입 시에는 읽은 게 없으므로 null로 표시
         Integer crewChatRoomId = crewChatRoomService.registerCrewChatRoom(crewChatRoom);
 
         if (crewChatRoomId != null) {

@@ -21,4 +21,12 @@ public class UserChatRoomService {
         userChatRoomRepository.save(userChatRoom);
         return userChatRoom.getUserChatRoomId();
     }
+
+    public Integer findLastEnterOrderByChatRoomId(Integer chatroomId) {
+        return userChatRoomRepository.findLastEnterOrderByChatRoomId(chatroomId);
+    }
+
+    public Integer findEnterOrderByUserIdAndChatRoomId(Integer userId, Integer chatRoomId) {
+        return userChatRoomRepository.findEnterOrderByUserIdAndChatRoomId(userId, chatRoomId);
+    }
 }

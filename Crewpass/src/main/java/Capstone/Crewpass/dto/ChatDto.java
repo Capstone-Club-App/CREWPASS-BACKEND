@@ -12,22 +12,20 @@ import java.sql.Timestamp;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatDto {
-    private String senderName;
     private String content;
     private Integer chatRoomId;
     private Integer crewId;
     private Integer userId;
 
     @Builder
-    public ChatDto(String senderName, String content, Integer chatRoomId, Integer crewId, Integer userId) {
-        this.senderName = senderName;
+    public ChatDto(String content, Integer chatRoomId, Integer crewId, Integer userId) {
         this.content = content;
         this.chatRoomId = chatRoomId;
         this.crewId = crewId;
         this.userId = userId;
     }
 
-    public Chat toEntity(Timestamp sendTime) {
+    public Chat toEntity(String senderName, Timestamp sendTime) {
         return Chat.builder()
                 .senderName(senderName)
                 .sendTime(sendTime)
