@@ -221,4 +221,8 @@ public class CrewService {
 
         transaction.commit();
     }
+
+    public String findCrewNameByCrewId(Integer crewId) {
+        return crewRepository.findCrewNameByCrewId(crewId);
+    }
 }

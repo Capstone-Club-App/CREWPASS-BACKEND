@@ -31,4 +31,8 @@ public interface CrewRepository extends JpaRepository<Crew, Integer> {
     Optional<Crew> findByCrewLoginIdAndCrewEmail(@Param("loginId") String loginId, @Param("email") String email);
 
     Optional<Crew> findByCrewName(String name);
+
+
+    @Query(value = "SELECT crew_name FROM crewpass.crew WHERE crew_id = :crewId", nativeQuery = true)
+    String findCrewNameByCrewId(@Param("crewId") Integer crewId);
 }

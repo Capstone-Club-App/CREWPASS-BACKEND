@@ -6,6 +6,8 @@ import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.ChatService;
+import Capstone.Crewpass.service.CrewService;
+import Capstone.Crewpass.service.UserChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +24,16 @@ public class ChatController {
     // 메시지 브로커와 상호작용하여 WebSocket 메시지를 전송하는 데 사용
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatService chatService;
+    private final UserChatRoomService userChatRoomService;
+    private final CrewService crewService;
 
     // 생성자로 DI 주입
     @Autowired
-    public ChatController(SimpMessagingTemplate messagingTemplate, ChatService chatService) {
+    public ChatController(SimpMessagingTemplate messagingTemplate, ChatService chatService, UserChatRoomService userChatRoomService, CrewService crewService) {
         this.messagingTemplate = messagingTemplate;
         this.chatService = chatService;
+        this.userChatRoomService = userChatRoomService;
+        this.crewService = crewService;
     }
 
     // 채팅 메시지 송신
@@ -38,8 +44,18 @@ public class ChatController {
             // 회원이 보낸 경우, "crewId" : null로 보내기
             // 동아리가 보낸 경우, "userId" : null로 보내기
     ) {
+        // senderName 설정
+        String senderName = "";
+        if (chatDto.getCrewId() != null && chatDto.getUserId() == null) { // 동아리가 보낸 경우
+            senderName = crewService.findCrewNameByCrewId(chatDto.getCrewId());
+        } else { // 회원이 보낸 경우
+            senderName = "익명";
+            Integer enterOrder = userChatRoomService.findEnterOrderByUserIdAndChatRoomId(chatDto.getUserId(), chatDto.getChatRoomId());
+            senderName += enterOrder;
+        }
+
         // Dto to Entity
-        Chat chat = chatDto.toEntity(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+        Chat chat = chatDto.toEntity(senderName, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
 
         // 채팅 저장
         chatService.createChatMessage(chat);
