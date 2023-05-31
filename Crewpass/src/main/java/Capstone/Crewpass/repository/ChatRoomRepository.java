@@ -15,7 +15,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
     ChatRoom findByRecruitmentId(Integer recruitmentId);
 
     // 채팅방 정보 조회
-    @Query(value = "SELECT COUNT(*) + 1 AS count, c.crew_name " +
+    @Query(value = "SELECT COUNT(*) + 1 AS count, c.crew_name, r.title " +
             " FROM crewpass.chat_room cr" +
             " INNER JOIN crewpass.user_chat_room ucr ON ucr.chat_room_chat_room_id = cr.chat_room_id" +
             " INNER JOIN crewpass.recruitment r ON cr.recruitment_recruitment_id = r.recruitment_id" +
