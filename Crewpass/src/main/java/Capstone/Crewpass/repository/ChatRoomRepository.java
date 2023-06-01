@@ -25,7 +25,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
     ChatRoomInfo findInfoByChatroomId(@Param("chatroomId") Integer chatroomId);
 
     // 동아리 - 채팅방 리스트 조회
-    @Query(value = "SELECT c.crew_name, crew_profile, r.title " +
+    @Query(value = "SELECT c.crew_id, c.crew_name, crew_profile, r.title " +
             "  FROM crewpass.chat_room cr " +
             "   INNER JOIN crewpass.recruitment r ON r.recruitment_id = cr.recruitment_recruitment_id " +
             "   INNER JOIN crewpass.crew c ON c.crew_id = r.crew_crew_id " +
@@ -34,7 +34,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
     List<ChatRoomList> findChatRoomListByCrewId(@Param("crewId") Integer crewId);
 
     // 회원 - 채팅방 리스트 조회
-    @Query(value = "SELECT c.crew_name, crew_profile, r.title " +
+    @Query(value = "SELECT c.crew_id, c.crew_name, crew_profile, r.title " +
             "  FROM crewpass.chat_room cr " +
             "   INNER JOIN crewpass.recruitment r ON r.recruitment_id = cr.recruitment_recruitment_id " +
             "   INNER JOIN crewpass.crew c ON c.crew_id = r.crew_crew_id " +
