@@ -42,7 +42,12 @@ public class ChatService {
         return chatRepository.findAllByChatRoomId(chatRoomId);
     }
 
-    public ChatRoom findChatRoomById(Integer chatRoomId) {
-        return chatRoomRepository.findById(chatRoomId).get();
+    // LastReadChatId 조회
+    public Integer getLastReadChatId(Integer chatRoomId) {
+        Integer lastReadChatId = chatRepository.findLastReadChatIdByChatRoomId(chatRoomId);
+        if (lastReadChatId == null) {
+            lastReadChatId = 0;
+        }
+        return lastReadChatId;
     }
 }
