@@ -86,23 +86,23 @@ public class ChatController {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.SEND_SUCCESS_CHAT_MESSAGE, chat.getChatRoomId()), HttpStatus.OK);
     }
 
-    // /sub/chatroom/{chatroomId} 경로로 채팅 메시지를 받는 메소드
-    @SubscribeMapping("/sub/chatroom/{chatRoomId}")
-    public void receiveChatMessage (
-            @DestinationVariable("chatRoomId") String chatRoomId,
-            @RequestHeader("crewId") Integer crewId,
-            @RequestHeader("userId") Integer userId
-    ) {
-        // 채팅 메시지를 받는 로직 처리
-        System.out.println("여기 들어옴!!!!!!!!!!!!!!!!!!!!!");
-
-        // 채팅을 받은 동아리/회원의 last_read_chat_id 갱신
-        if (crewId != null && userId == null) { // 동아리가 보낸 경우
-            updateCrewLastReadChatId(Integer.parseInt(chatRoomId), crewId);
-        } else { // 회원이 보낸 경우
-            updateUserLastReadChatId(Integer.parseInt(chatRoomId), userId);
-        }
-    }
+//    // /sub/chatroom/{chatroomId} 경로로 채팅 메시지를 받는 메소드
+//    @SubscribeMapping("/sub/chatroom/{chatRoomId}")
+//    public void receiveChatMessage (
+//            @DestinationVariable("chatRoomId") String chatRoomId,
+//            @RequestHeader("crewId") Integer crewId,
+//            @RequestHeader("userId") Integer userId
+//    ) {
+//        // 채팅 메시지를 받는 로직 처리
+//        System.out.println("여기 들어옴!!!!!!!!!!!!!!!!!!!!!");
+//
+//        // 채팅을 받은 동아리/회원의 last_read_chat_id 갱신
+//        if (crewId != null && userId == null) { // 동아리가 보낸 경우
+//            updateCrewLastReadChatId(Integer.parseInt(chatRoomId), crewId);
+//        } else { // 회원이 보낸 경우
+//            updateUserLastReadChatId(Integer.parseInt(chatRoomId), userId);
+//        }
+//    }
 
     // 채팅 메시지 내역 조회
     @GetMapping("/chat/history/{chatRoomId}")
