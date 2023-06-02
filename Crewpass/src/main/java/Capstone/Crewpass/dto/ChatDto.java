@@ -25,7 +25,7 @@ public class ChatDto {
         this.userId = userId;
     }
 
-    public Chat toEntity(String senderName, Timestamp sendTime) {
+    public Chat toEntity(String senderName, String sendTime) {
         return Chat.builder()
                 .senderName(senderName)
                 .sendTime(sendTime)

@@ -20,7 +20,7 @@ public class Chat {
     private String senderName;
 
     @Column(name="send_time", nullable = false)
-    private Timestamp sendTime;
+    private String sendTime;
 
     @Column(name="content", nullable = false)
     private String content;
@@ -35,7 +35,7 @@ public class Chat {
     private Integer chatRoomId;
 
     @Builder
-    public Chat(Integer chatId, String senderName, Timestamp sendTime, String content, Integer userId, Integer crewId, Integer chatRoomId) {
+    public Chat(Integer chatId, String senderName, String sendTime, String content, Integer userId, Integer crewId, Integer chatRoomId) {
         this.chatId = chatId;
         this.senderName = senderName;
         this.sendTime = sendTime;

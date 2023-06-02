@@ -12,13 +12,21 @@ import Capstone.Crewpass.service.UserChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.messaging.simp.user.SimpUser;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class ChatController {
@@ -29,14 +37,17 @@ public class ChatController {
     private final UserChatRoomService userChatRoomService;
     private final CrewService crewService;
 
+    private final SimpUserRegistry userRegistry;
+
     // 생성자로 DI 주입
     @Autowired
-    public ChatController(SimpMessagingTemplate messagingTemplate, ChatService chatService, CrewChatRoomService crewChatRoomService, UserChatRoomService userChatRoomService, CrewService crewService) {
+    public ChatController(SimpMessagingTemplate messagingTemplate, ChatService chatService, CrewChatRoomService crewChatRoomService, UserChatRoomService userChatRoomService, CrewService crewService, SimpUserRegistry userRegistry) {
         this.messagingTemplate = messagingTemplate;
         this.chatService = chatService;
         this.crewChatRoomService = crewChatRoomService;
         this.userChatRoomService = userChatRoomService;
         this.crewService = crewService;
+        this.userRegistry = userRegistry;
     }
 
     // 채팅 메시지 송신
@@ -58,14 +69,14 @@ public class ChatController {
         }
 
         // Dto to Entity
-        Chat chat = chatDto.toEntity(senderName, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
+        Chat chat = chatDto.toEntity(senderName, String.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
 
         // 채팅 저장
         chatService.createChatMessage(chat);
         // 해당 채팅 메시지를 WebSocket 토픽(/sub/chatroom/채팅방ID)에 전송하여 클라이언트에게 브로드캐스팅한다.
         messagingTemplate.convertAndSend("/sub/chatroom/" + chat.getChatRoomId(), chat);
 
-        // last_read_chat_id 갱신
+        // 채팅을 보낸 동아리/회원의 last_read_chat_id 갱신
         if (chatDto.getCrewId() != null && chatDto.getUserId() == null) { // 동아리가 보낸 경우
             updateCrewLastReadChatId(chatDto.getChatRoomId(), chatDto.getCrewId());
         } else { // 회원이 보낸 경우
@@ -73,6 +84,24 @@ public class ChatController {
         }
 
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.SEND_SUCCESS_CHAT_MESSAGE, chat.getChatRoomId()), HttpStatus.OK);
+    }
+
+    // /sub/chatroom/{chatroomId} 경로로 채팅 메시지를 받는 메소드
+    @SubscribeMapping("/sub/chatroom/{chatRoomId}")
+    public void receiveChatMessage (
+            @DestinationVariable("chatRoomId") String chatRoomId,
+            @RequestHeader("crewId") Integer crewId,
+            @RequestHeader("userId") Integer userId
+    ) {
+        // 채팅 메시지를 받는 로직 처리
+        System.out.println("여기 들어옴!!!!!!!!!!!!!!!!!!!!!");
+
+        // 채팅을 받은 동아리/회원의 last_read_chat_id 갱신
+        if (crewId != null && userId == null) { // 동아리가 보낸 경우
+            updateCrewLastReadChatId(Integer.parseInt(chatRoomId), crewId);
+        } else { // 회원이 보낸 경우
+            updateUserLastReadChatId(Integer.parseInt(chatRoomId), userId);
+        }
     }
 
     // 채팅 메시지 내역 조회
