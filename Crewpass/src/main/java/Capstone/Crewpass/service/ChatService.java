@@ -1,12 +1,7 @@
 package Capstone.Crewpass.service;
 
 import Capstone.Crewpass.entity.DB.Chat;
-import Capstone.Crewpass.entity.DB.ChatRoom;
-import Capstone.Crewpass.entity.DB.UserChatRoom;
 import Capstone.Crewpass.repository.ChatRepository;
-import Capstone.Crewpass.repository.ChatRoomRepository;
-import Capstone.Crewpass.repository.UserChatRoomRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

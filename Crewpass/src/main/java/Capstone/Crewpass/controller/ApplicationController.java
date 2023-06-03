@@ -2,14 +2,12 @@ package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.DB.Application;
 import Capstone.Crewpass.entity.ApplicationId;
-import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
 import Capstone.Crewpass.service.ApplicationService;
 import Capstone.Crewpass.service.ChatRoomService;
 import Capstone.Crewpass.service.QuestionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
