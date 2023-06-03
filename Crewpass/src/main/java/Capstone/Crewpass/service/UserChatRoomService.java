@@ -1,9 +1,6 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.entity.DB.ChatRoom;
-import Capstone.Crewpass.entity.DB.CrewChatRoom;
 import Capstone.Crewpass.entity.DB.UserChatRoom;
-import Capstone.Crewpass.repository.ChatRoomRepository;
 import Capstone.Crewpass.repository.UserChatRoomRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

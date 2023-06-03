@@ -1,7 +1,5 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.entity.ApplicationId;
-import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.entity.DB.Question;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
