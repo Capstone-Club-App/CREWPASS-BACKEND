@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -49,5 +47,15 @@ public class CrewChatRoomService {
 
         transaction.commit(); // DB 트랜잭션 실행 -> 영속성 컨텍스트가 쿼리로 실행됨
         em.close(); // Entity Manager 종료 : 영속성 컨텍스트의 모든 Entity들이 준영속 상태가 됨
+    }
+
+    // 동아리 - 해당 채팅방에서 안 읽은 채팅 개수 조회
+    public Integer findUnReadChatCountBycrewId(Integer chatroomId, Integer crewId) {
+        return crewChatRoomRepository.findUnReadChatCountByCrewId(chatroomId, crewId);
+    }
+
+    // 회원 - 해당 채팅방에서 안 읽은 채팅 개수 조회
+    public Integer findUnReadChatCountByUserId(Integer chatroomId, Integer userId) {
+        return crewChatRoomRepository.findUnReadChatCountByUserId(chatroomId, userId);
     }
 }

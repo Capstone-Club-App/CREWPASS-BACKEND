@@ -1,7 +1,9 @@
 package Capstone.Crewpass.controller;
 
+import Capstone.Crewpass.entity.ApplicationId;
 import Capstone.Crewpass.entity.CrewChatRoomId;
 import Capstone.Crewpass.entity.DB.CrewChatRoom;
+import Capstone.Crewpass.entity.UnReadCount;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
@@ -49,5 +51,27 @@ public class CrewChatRoomController {
             @RequestHeader("crewId") Integer crewId
     ) throws IOException {
         return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.READ_CREW_CHATROOM_LIST, chatRoomService.findChatRoomListByCrewId(crewId)), HttpStatus.OK);
+    }
+
+    // 동아리 - 해당 채팅방에서 안 읽은 채팅 개수 조회
+    @GetMapping("/chat/count/{chatRoomId}/crew")
+    public ResponseEntity checkCrewUnReadChatCount (
+            @PathVariable("chatRoomId") Integer chatroomId,
+            @RequestHeader("crewId") Integer crewId
+    ) throws IOException {
+        Integer count = crewChatRoomService.findUnReadChatCountBycrewId(chatroomId, crewId);
+        UnReadCount response = new UnReadCount(count);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CHECK_CREW_UNREAD_CHAT_COUNT, response), HttpStatus.OK);
+    }
+
+    // 회원 - 해당 채팅방에서 안 읽은 채팅 개수 조회
+    @GetMapping("/chat/count/{chatRoomId}/user")
+    public ResponseEntity checkUserUnReadChatCount (
+            @PathVariable("chatRoomId") Integer chatroomId,
+            @RequestHeader("userId") Integer userId
+    ) throws IOException {
+        Integer count = crewChatRoomService.findUnReadChatCountByUserId(chatroomId, userId);
+        UnReadCount response = new UnReadCount(count);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CHECK_USER_UNREAD_CHAT_COUNT, response), HttpStatus.OK);
     }
 }
