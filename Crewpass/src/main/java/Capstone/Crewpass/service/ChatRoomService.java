@@ -48,4 +48,6 @@ public class ChatRoomService {
     public List<ChatRoomList> findChatRoomListByUserId(Integer userId) {
         return chatRoomRepository.findChatRoomListByUserId(userId);
     }
+
+
 }

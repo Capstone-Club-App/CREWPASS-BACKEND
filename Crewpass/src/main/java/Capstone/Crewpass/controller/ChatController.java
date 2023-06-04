@@ -30,17 +30,14 @@ public class ChatController {
     private final UserChatRoomService userChatRoomService;
     private final CrewService crewService;
 
-    private final SimpUserRegistry userRegistry;
-
     // 생성자로 DI 주입
     @Autowired
-    public ChatController(SimpMessagingTemplate messagingTemplate, ChatService chatService, CrewChatRoomService crewChatRoomService, UserChatRoomService userChatRoomService, CrewService crewService, SimpUserRegistry userRegistry) {
+    public ChatController(SimpMessagingTemplate messagingTemplate, ChatService chatService, CrewChatRoomService crewChatRoomService, UserChatRoomService userChatRoomService, CrewService crewService) {
         this.messagingTemplate = messagingTemplate;
         this.chatService = chatService;
         this.crewChatRoomService = crewChatRoomService;
         this.userChatRoomService = userChatRoomService;
         this.crewService = crewService;
-        this.userRegistry = userRegistry;
     }
 
     // 채팅 메시지 송신

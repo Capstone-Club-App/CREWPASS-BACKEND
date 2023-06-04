@@ -65,6 +65,8 @@ public class ResponseMessage {
     public static final String SEND_SUCCESS_CHAT_HISTORY = "채팅방 메시지 히스토리 조회 성공";
     public static final String READ_CREW_CHATROOM_LIST = "동아리 - 채팅방 리스트 조회 성공";
     public static final String READ_USER_CHATROOM_LIST = "회원 - 채팅방 리스트 조회 성공";
+    public static final String CHECK_CREW_UNREAD_CHAT_COUNT = "동아리 - 해당 채팅방에서 안 읽은 채팅 개수 조회 성공";
+    public static final String CHECK_USER_UNREAD_CHAT_COUNT = "회원 - 해당 채팅방에서 안 읽은 채팅 개수 조회 성공";
     public static final String UPDATE_CREW_LAST_READ_CHAT_ID = "동아리 - lastReadChatId 업데이트 성공";
     public static final String UPDATE_USER_LAST_READ_CHAT_ID = "회원 - lastReadChatId 업데이트 성공";
 
