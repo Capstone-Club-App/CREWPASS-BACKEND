@@ -59,7 +59,9 @@ public class CrewChatRoomController {
             @PathVariable("chatRoomId") Integer chatroomId,
             @RequestHeader("crewId") Integer crewId
     ) throws IOException {
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CHECK_CREW_UNREAD_CHAT_COUNT, crewChatRoomService.findUnReadChatCountBycrewId(chatroomId, crewId)), HttpStatus.OK);
+        Integer count = crewChatRoomService.findUnReadChatCountBycrewId(chatroomId, crewId);
+        UnReadCount response = new UnReadCount(count);
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.CHECK_CREW_UNREAD_CHAT_COUNT, response), HttpStatus.OK);
     }
 
     // 회원 - 해당 채팅방에서 안 읽은 채팅 개수 조회
