@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -49,5 +50,16 @@ public class ChatRoomService {
         return chatRoomRepository.findChatRoomListByUserId(userId);
     }
 
+    // 채팅방 정보 수정 (채팅방 폐쇄 날짜 수정)
+    @Transactional
+    public Integer updateChatRoom(Integer recruitmentId, Timestamp closeTime) {
+        ChatRoom chatRoom = chatRoomRepository.findByRecruitmentId(recruitmentId);
+        if (chatRoom == null) {
+            return 0;
+        }
 
+        chatRoom.setCloseTime(closeTime);
+        chatRoomRepository.save(chatRoom);
+        return 1;
+    }
 }

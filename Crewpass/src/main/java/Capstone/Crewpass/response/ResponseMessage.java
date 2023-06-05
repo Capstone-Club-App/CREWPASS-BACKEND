@@ -33,7 +33,8 @@ public class ResponseMessage {
     public static final String READ_RECRUITMENT_LIST_RECENT = "동아리 분야 별 최신순으로 모집글 목록 조회 성공";
     public static final String READ_RECRUITMENT_LIST_DEADLINE = "동아리 분야 별 마감임박순으로 모집글 목록 조회 성공";
     public static final String READ_RECRUITMENT_DETAIL = "선택한 동아리 모집글 상세 조회 성공";
-    public static final String UPDATE_RECRUITMENT = "모집글 수정 성공";
+    public static final String UPDATE_SUCCESS_RECRUITMENT = "모집글 수정 성공";
+    public static final String UPDATE_FAIL_RECRUITMENT = "모집글 수정 실패";
     public static final String DELETE_RECRUITMENT = "모집글 삭제 성공";
 
     public static final String REGISTER_SUCCESS_QUESTION = "질문 등록 성공";
@@ -76,4 +77,5 @@ public class ResponseMessage {
     public static final String NONPASS_DUPLICATE_CREW_NAME = "사용 불가능한 동아리명";
     public static final String PASS_DUPLICATE_LOGINID = "사용 가능한 로그인 아이디";
     public static final String NONPASS_DUPLICATE_LOGINID = "사용 불가능한 로그인 아이디";
+
 }

@@ -59,7 +59,7 @@ public class ChatController {
         }
 
         // Dto to Entity
-        Chat chat = chatDto.toEntity(senderName, String.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))));
+        Chat chat = chatDto.toEntity(senderName, LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")));
 
         // 채팅 저장
         chatService.createChatMessage(chat);
