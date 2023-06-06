@@ -32,7 +32,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
 
     // "전체" 동아리의 모집글 목록 "최신순"으로 조회
     @Query(value = "SELECT c.crew_id, c.crew_profile, c.crew_name, c.region1, c.region2, c.field1, c.field2," +
-            " r.recruitment_id, r.title, r.register_time, r.deadline, " +
+            " r.recruitment_id, r.title, r.register_time, r.deadline, TIMESTAMPDIFF(DAY, now(), r.deadline) d_day," +
             " q.question_id" +
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +

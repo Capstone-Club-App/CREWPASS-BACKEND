@@ -6,6 +6,7 @@ import Capstone.Crewpass.entity.DB.Scrap;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
 import Capstone.Crewpass.response.StatusCode;
+import Capstone.Crewpass.service.ChatRoomService;
 import Capstone.Crewpass.service.RecruitmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,20 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 
 @Slf4j
 @RestController
 public class RecruitmentController {
 
     private RecruitmentService recruitmentService;
+    private ChatRoomService chatRoomService;
 
     // 생성자로 DI 주입
     @Autowired
-    public RecruitmentController(RecruitmentService recruitmentService) {
+    public RecruitmentController(RecruitmentService recruitmentService, ChatRoomService chatRoomService) {
         this.recruitmentService = recruitmentService;
+        this.chatRoomService = chatRoomService;
     }
 
     // 모집글 등록
@@ -111,7 +115,18 @@ public class RecruitmentController {
         content = content.substring(1, content.length() - 1);
 
         recruitmentService.updateRecruitment(recruitmentId, crewId, title, content, recruitmentService.uploadImage(image), deadline);
-        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_RECRUITMENT, null), HttpStatus.OK);
+
+        // 채팅방 폐쇄 날짜도 수정
+        Timestamp closeTime = Timestamp.valueOf(deadline);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(closeTime);
+        cal.add(Calendar.MONTH, 1); // 한달 이후에 채팅방이 폐쇄되도록 설정
+        closeTime.setTime(cal.getTime().getTime());
+        Integer flag = chatRoomService.updateChatRoom(recruitmentId, closeTime);
+        if (flag == 1) {
+            return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
+        }
+        return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.UPDATE_FAIL_RECRUITMENT, null), HttpStatus.OK);
     }
 
     // 모집글 삭제
