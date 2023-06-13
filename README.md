@@ -44,9 +44,8 @@
   [시스템 구성도]
   </div>
   <img src="https://github.com/Capstone-Club-App/CREWPASS-BACKEND/assets/123241025/4de79ee6-26f1-486d-b885-ae0d7bb556d8" width="700" height="300"/>
-</div>
-
-📅 DB ERD
-<div>
+  <div>
+  [DB ERD]
+  </div>
   <img src="https://github.com/Capstone-Club-App/CREWPASS-BACKEND/assets/123241025/bc860687-f6b1-4eb2-9062-698ec06669a3" width="700" height="700"/>
 </div>
