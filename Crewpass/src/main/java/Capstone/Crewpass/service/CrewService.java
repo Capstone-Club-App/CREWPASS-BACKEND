@@ -60,7 +60,7 @@ public class CrewService {
                 profile.getInputStream()
         );
 
-        return fileName;
+        return "https://storage.googleapis.com/crewpass-cloud-storage/" + fileName;
     }
 
     public String joinCrew(Crew crew) {
@@ -220,5 +220,9 @@ public class CrewService {
         crew.setCrewProfile(profile); //영속 엔티티 데이터 수정
 
         transaction.commit();
+    }
+
+    public String findCrewNameByCrewId(Integer crewId) {
+        return crewRepository.findCrewNameByCrewId(crewId);
     }
 }

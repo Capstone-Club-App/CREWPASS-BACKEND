@@ -20,22 +20,22 @@ public class Chat {
     private String senderName;
 
     @Column(name="send_time", nullable = false)
-    private Timestamp sendTime;
+    private String sendTime;
 
     @Column(name="content", nullable = false)
     private String content;
 
-    @Column(name = "user_user_id", nullable = false)
+    @Column(name = "user_user_id")
     private Integer userId;
 
-    @Column(name = "crew_crew_id", nullable = false)
+    @Column(name = "crew_crew_id")
     private Integer crewId;
 
     @Column(name = "chat_room_chat_room_id", nullable = false)
     private Integer chatRoomId;
 
     @Builder
-    public Chat(Integer chatId, String senderName, Timestamp sendTime, String content, Integer userId, Integer crewId, Integer chatRoomId) {
+    public Chat(Integer chatId, String senderName, String sendTime, String content, Integer userId, Integer crewId, Integer chatRoomId) {
         this.chatId = chatId;
         this.senderName = senderName;
         this.sendTime = sendTime;

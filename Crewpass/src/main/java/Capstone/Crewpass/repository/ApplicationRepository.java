@@ -60,4 +60,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     void deleteApplication(@Param("applicationId") Integer applicationId, @Param("userId") Integer userId);
 
     Optional<Application> findByApplicationId(Integer applicationId);
+
+    Optional<Application> findByUserIdAndRecruitmentId(Integer userId, Integer recruitmentId);
 }

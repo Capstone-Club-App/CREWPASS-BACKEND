@@ -1,6 +1,5 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.entity.DB.Question;
 import Capstone.Crewpass.response.ResponseFormat;
 import Capstone.Crewpass.response.ResponseMessage;
@@ -19,12 +18,16 @@ import java.util.Objects;
 public class QuestionController {
     private QuestionService questionService;
     private ChatRoomController chatRoomController;
+    private CrewChatRoomController crewChatRoomController;
+    private ChatRoomService chatRoomService;
 
     // 생성자로 DI 주입
     @Autowired
-    public QuestionController(QuestionService questionService, ChatRoomController chatRoomController) {
+    public QuestionController(QuestionService questionService, ChatRoomController chatRoomController, CrewChatRoomController crewChatRoomController, ChatRoomService chatRoomService) {
         this.questionService = questionService;
         this.chatRoomController = chatRoomController;
+        this.crewChatRoomController = crewChatRoomController;
+        this.chatRoomService = chatRoomService;
     }
 
     // 질문 객체 생성
@@ -95,7 +98,14 @@ public class QuestionController {
         // 채팅방 생성
         ResponseFormat chatRoomResponse = (ResponseFormat) chatRoomController.createChatRoom(recruitmentId, crewId).getBody();
 
-        if(questionResult != null && Objects.requireNonNull(chatRoomResponse).getResponseMessage().equals(ResponseMessage.CREATED_SUCCESS_CHAT_ROOM)) {
+        // 동아리 채팅방 가입 (crew_chat_room)
+        Integer chatRoomId = chatRoomService.findChatRoomIdByRecruitmentId(recruitmentId);
+        ResponseFormat crewChatRoomResponse = (ResponseFormat) crewChatRoomController.registerCrewChatRoom(chatRoomId, crewId).getBody();
+
+        if(questionResult != null
+                && Objects.requireNonNull(chatRoomResponse).getResponseMessage().equals(ResponseMessage.CREATED_SUCCESS_CHAT_ROOM)
+                && Objects.requireNonNull(crewChatRoomResponse).getResponseMessage().equals(ResponseMessage.REGISTER_SUCCESS_CREW_CHAT_ROOM)
+        ) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.REGISTER_SUCCESS_QUESTION, null), HttpStatus.OK);
         } else {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.FAIL, ResponseMessage.REGISTER_FAIL_QUESTION, null), HttpStatus.OK);

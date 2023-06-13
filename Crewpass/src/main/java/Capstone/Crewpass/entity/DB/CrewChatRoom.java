@@ -3,19 +3,19 @@ package Capstone.Crewpass.entity.DB;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "user_chat_room")
+@Table(name = "crew_chat_room")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserChatRoom {
+public class CrewChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY : 기본 키 생성을 데이터베이스에 위임 (= AUTO_INCREMENT)
-    @Column(name = "user_chat_room_id", nullable = false)
-    private Integer userChatRoomId;
+    @Column(name = "crew_chat_room_id", nullable = false)
+    private Integer crewChatRoomId;
 
-    @Column(name = "user_user_id", nullable = false)
-    private Integer userId;
+    @Column(name = "crew_crew_id", nullable = false)
+    private Integer crewId;
 
     @Column(name = "chat_room_chat_room_id", nullable = false)
     private Integer chatRoomId;
@@ -23,15 +23,11 @@ public class UserChatRoom {
     @Column(name="last_read_chat_id")
     private Integer lastReadChatId;
 
-    @Column(name="enter_order")
-    private Integer enterOrder;
-
     @Builder
-    public UserChatRoom(Integer userChatRoomId, Integer userId, Integer chatRoomId, Integer lastReadChatId, Integer enterOrder) {
-        this.userChatRoomId = userChatRoomId;
-        this.userId = userId;
+    public CrewChatRoom(Integer crewChatRoomId, Integer crewId, Integer chatRoomId, Integer lastReadChatId) {
+        this.crewChatRoomId = crewChatRoomId;
+        this.crewId = crewId;
         this.chatRoomId = chatRoomId;
         this.lastReadChatId = lastReadChatId;
-        this.enterOrder = enterOrder;
     }
 }

@@ -1,30 +1,41 @@
 package Capstone.Crewpass.service;
 
-import Capstone.Crewpass.entity.DB.ChatRoom;
-import lombok.RequiredArgsConstructor;
+import Capstone.Crewpass.entity.DB.Chat;
+import Capstone.Crewpass.repository.ChatRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class ChatService {
+    private final ChatRepository chatRepository;
 
-    private Map<Integer, ChatRoom> chatRoomMap;
-
-    @PostConstruct
-    // 의존관게 주입완료되면 실행되는 코드
-    private void init() {
-        chatRoomMap = new LinkedHashMap<>();
+    @Autowired
+    public ChatService(ChatRepository chatRepository) {
+        this.chatRepository = chatRepository;
     }
 
-    //채팅방 하나 불러오기
-    public ChatRoom findById(Integer chatRoomId) {
-        return chatRoomMap.get(chatRoomId);
+    // 채팅 메시지 송신
+    @Transactional
+    public Integer createChatMessage(Chat chat) {
+        this.chatRepository.save(chat);
+        return chat.getChatId();
     }
 
+    // 채팅 메시지 내역 조회
+    public List<Chat> getChatHistory(Integer chatRoomId) {
+        return chatRepository.findAllByChatRoomId(chatRoomId);
+    }
+
+    // LastReadChatId 조회
+    public Integer getLastReadChatId(Integer chatRoomId) {
+        Integer lastReadChatId = chatRepository.findLastReadChatIdByChatRoomId(chatRoomId);
+        if (lastReadChatId == null) {
+            lastReadChatId = 0;
+        }
+        return lastReadChatId;
+    }
 }

@@ -61,7 +61,7 @@ public class RecruitmentService {
         );
 
         // 서버에 등록한 파일명을 반환
-        return fileName;
+        return "https://storage.googleapis.com/crewpass-cloud-storage/" + fileName;
     }
 
     // 모집글 등록
