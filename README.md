@@ -2,7 +2,7 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=Crewpass&fontSize=90" />
 </div>
 
-🪪 Crewpass
+📝 Crewpass 📝
 ---
 지원서 AI 분석을 이용한 동아리 모집 포탈 어플리케이션입니다.
 - "동아리 모집글 게시", "지원서 게시 및 관리" 기능을 모두 지원하는 포탈 서비스로 동아리 운영진, 동아리 지원자 모두의 편리성을 향상시켜줍니다.
