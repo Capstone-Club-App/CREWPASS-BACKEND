@@ -47,5 +47,5 @@
   <div>
   [DB ERD]
   </div>
-  <img src="https://github.com/Capstone-Club-App/CREWPASS-BACKEND/assets/123241025/bc860687-f6b1-4eb2-9062-698ec06669a3" width="700" height="700"/>
+  <img src="https://github.com/Capstone-Club-App/CREWPASS-BACKEND/assets/123241025/86d0af13-c3c1-4914-958d-23eb5646e538" width="700" height="700"/>
 </div>
