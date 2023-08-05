@@ -15,7 +15,6 @@ public class WebSocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) { // Client에서 websocket연결할 때 사용할 API 경로를 설정
         registry.addEndpoint("/ws/chat") // 연결될 엔드포인트 // STOMP 접속 주소 url => /ws/chat (이 주소로 소켓을 연결)
                 .setAllowedOriginPatterns("*"); // CORS 설정 부분 // *으로 모든 도메인 허용함
-//                .withSockJS(); // 일부 소켓을 지원하지 않는 브라우저에서 SocketJS를 사용하게 함 // 이것때문에 연결이 안 되길래 삭제함
     }
 
     @Override

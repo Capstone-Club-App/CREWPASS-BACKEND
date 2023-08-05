@@ -37,7 +37,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE r.isDeleted = 0" +
+            " WHERE r.is_deleted = 0" +
             " ORDER BY r.register_time DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findAllRecruitmentListByNewest();
@@ -49,7 +49,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE (c.field1 = :field OR c.field2 = :field) AND r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
+            " WHERE (c.field1 = :field OR c.field2 = :field) AND r.is_deleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findFieldRecruitmentListByNewest(@Param("field") String field);
@@ -61,7 +61,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
+            " WHERE r.is_deleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findAllRecruitmentListByDeadline();
@@ -73,7 +73,7 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
             " FROM crewpass.recruitment r " +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE (c.field1 = :field OR c.field2 = :field) AND r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
+            " WHERE (c.field1 = :field OR c.field2 = :field) AND r.is_deleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<RecruitmentList> findFieldRecruitmentListByDeadline(@Param("field") String field);
@@ -92,6 +92,6 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
     // 모집글 삭제
     @Modifying
     @Transactional
-    @Query(value = "UPDATE crewpass.recruitment SET isDeleted = 1 WHERE recruitment_id = :recruitmentId AND crew_crew_id = :crewId", nativeQuery = true)
+    @Query(value = "UPDATE crewpass.recruitment SET is_deleted = 1 WHERE recruitment_id = :recruitmentId AND crew_crew_id = :crewId", nativeQuery = true)
     void deleteRecruitment(@Param("recruitmentId") Integer recruitmentId, @Param("crewId") Integer crewId);
 }

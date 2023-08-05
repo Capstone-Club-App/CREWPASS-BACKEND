@@ -30,7 +30,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Integer> {
             " INNER JOIN crewpass.recruitment r ON s.recruitment_recruitment_id = r.recruitment_id" +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id" +
             " INNER JOIN crewpass.question q ON r.recruitment_id = q.recruitment_recruitment_id" +
-            " WHERE u.user_id = :userId AND r.isDeleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
+            " WHERE u.user_id = :userId AND r.is_deleted = 0 AND TIMESTAMPDIFF(DAY, now(), r.deadline) >= 0 " +
             " ORDER BY now() - r.deadline DESC, r.recruitment_id"
             , nativeQuery = true)
     List<ScrapRecruitmentDeadlineList> findAllScrapListByDeadline(@Param("userId") Integer userId);
