@@ -8,4 +8,5 @@ public interface ApplicationRecentListByUser {
     String getCrew_name();
     Integer getApplication_id();
     Timestamp getSubmit_time();
+    Integer getIs_pass();
 }

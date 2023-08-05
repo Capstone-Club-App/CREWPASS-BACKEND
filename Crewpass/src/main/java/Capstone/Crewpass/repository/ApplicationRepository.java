@@ -21,12 +21,12 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     // User Id로 해당 회원이 지원한 지원서 목록 조회
     @Query(value = "SELECT a.user_user_id, " +
             "c.crew_profile, c.crew_name, " +
-            "a.application_id, a.submit_time " +
+            "a.application_id, a.submit_time, a.is_pass " +
             "FROM crewpass.application a " +
             "INNER JOIN crewpass.question q ON a.question_question_id = q.question_id " +
             "INNER JOIN crewpass.recruitment r ON r.recruitment_id = q.recruitment_recruitment_id " +
             "INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id " +
-            "WHERE a.user_user_id = :userId", nativeQuery = true)
+            "WHERE a.user_user_id = :userId and a.is_deleted = 0", nativeQuery = true)
     List<ApplicationRecentListByUser> findMyApplicationList(@Param("userId") Integer userId);
 
     // 선택한 지원서 상세 조회
@@ -45,11 +45,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     // 선택한 모집글에 대한 지원서를 최신순으로 목록 조회
     @Query(value = "SELECT u.user_id, u.user_profile, u.user_name," +
-            " a.application_id, a.submit_time" +
+            " a.application_id, a.submit_time, a.is_pass" +
             " FROM crewpass.application a" +
             " INNER JOIN crewpass.user u ON a.user_user_id = u.user_id" +
             " INNER JOIN crewpass.question q ON a.question_question_id = q.question_id" +
-            " WHERE q.question_id = :questionId" +
+            " WHERE q.question_id = :questionId and a.is_deleted = 0" +
             " ORDER BY a.submit_time DESC"
             , nativeQuery = true)
     List<ApplicationRecentListByCrew> findApplicationListByQuestion(@Param("questionId") Integer questionId);
