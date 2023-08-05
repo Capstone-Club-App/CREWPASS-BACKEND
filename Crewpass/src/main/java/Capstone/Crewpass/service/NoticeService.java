@@ -6,6 +6,7 @@ import Capstone.Crewpass.repository.ApplicationRepository;
 import Capstone.Crewpass.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,15 +28,16 @@ public class NoticeService {
         this.applicationRepository = applicationRepository;
     }
 
+    @Transactional
     public String noticePass(Integer recruitmentId, String crewName, Integer[] userId, String msg) {
         for(int i=0;i<userId.length;i++) {
-            //userId를 통해 Application 접근
-            Application application = applicationRepository.findByUserIdAndRecruitmentId(userId[i], recruitmentId);
-            application.setIsPassed(1);
-
             //userId를 통해 userEmail 추출
             Optional<User> optionalUser = userRepository.findByUserId(userId[i]);
             if (optionalUser.isPresent()) {
+                //application 테이블에서 is_pass 속성값 변경
+                Application application = applicationRepository.findByUserIdAndRecruitmentId(userId[i], recruitmentId);
+                application.setIsPassed(1);
+
                 //userEmail 주소로 보내고자 하는 내용
                 String sender = "crewpass@crewpass.com";
                 String receiver = optionalUser.get().getUserEmail();
@@ -58,15 +60,16 @@ public class NoticeService {
         return "msg 전송 완료";
     }
 
+    @Transactional
     public String noticeNonPass(Integer recruitmentId, String crewName, Integer[] userId, String msg) {
         for(int i=0;i<userId.length;i++) {
-            //userId를 통해 Application 접근
-            Application application = applicationRepository.findByUserIdAndRecruitmentId(userId[i], recruitmentId);
-            application.setIsPassed(0);
-
             //userId를 통해 userEmail 추출
             Optional<User> optionalUser = userRepository.findByUserId(userId[i]);
             if (optionalUser.isPresent()) {
+                //application 테이블에서 is_pass 속성값 변경
+                Application application = applicationRepository.findByUserIdAndRecruitmentId(userId[i], recruitmentId);
+                application.setIsPassed(0);
+
                 //userEmail 주소로 보내고자 하는 내용
                 String sender = "crewpass@crewpass.com";
                 String receiver = optionalUser.get().getUserEmail();
