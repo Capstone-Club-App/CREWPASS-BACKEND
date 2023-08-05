@@ -61,7 +61,7 @@ public class UserService {
                 profile.getInputStream()
         );
 
-        return fileName;
+        return "https://storage.googleapis.com/crewpass-cloud-storage/" + fileName;
     }
 
     public String joinUser(User user) {
@@ -75,6 +75,15 @@ public class UserService {
             return null;
         }else{
             return "이미 사용 중인 로그인 아이디입니다.";
+        }
+    }
+
+    public String checkDuplicateUserEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByUserEmail(email);
+        if(optionalUser.isEmpty()){
+            return null;
+        }else{
+            return "이미 사용 중인 이메일입니다.";
         }
     }
 

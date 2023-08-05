@@ -60,7 +60,7 @@ public class CrewService {
                 profile.getInputStream()
         );
 
-        return fileName;
+        return "https://storage.googleapis.com/crewpass-cloud-storage/" + fileName;
     }
 
     public String joinCrew(Crew crew) {

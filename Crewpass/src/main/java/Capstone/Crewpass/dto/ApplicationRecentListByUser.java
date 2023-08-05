@@ -7,5 +7,5 @@ public interface ApplicationRecentListByUser {
     String getCrew_profile();
     String getCrew_name();
     Integer getApplication_id();
-    String getSubmit_time();
+    Timestamp getSubmit_time();
 }
