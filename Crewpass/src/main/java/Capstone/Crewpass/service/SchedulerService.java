@@ -19,7 +19,7 @@ public class SchedulerService { // 채팅방 삭제 관련 스케줄링 작업
     // (채팅방 페쇄 날짜가 지나면 매일 자정 12시에 닫히도록 할 예정)
     @Transactional
     @Async
-    @Scheduled(cron = "0 29 17 * * *", zone = "Asia/Seoul") // 매일 오전 0시에 실행
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 오전 0시에 실행
     public void deleteChatRoom() {
         chatRoomRepository.disabledSafeUpdates(); // safe update 임시 해제 (여러 열 수정 가능하도록)
         chatRoomRepository.deleteChatRoom();
