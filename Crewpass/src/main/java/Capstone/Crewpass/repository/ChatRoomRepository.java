@@ -4,9 +4,11 @@ import Capstone.Crewpass.dto.ChatRoomInfo;
 import Capstone.Crewpass.dto.ChatRoomList;
 import Capstone.Crewpass.entity.DB.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,4 +43,10 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
             "   INNER JOIN crewpass.user_chat_room ucr ON ucr.chat_room_chat_room_id = cr.chat_room_id " +
             "  WHERE ucr.user_user_id = :userId", nativeQuery = true)
     List<ChatRoomList> findChatRoomListByUserId(@Param("userId") Integer userId);
+
+    // 채팅방 삭제
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE crewpass.chatroom SET is_deleted = 1 WHERE recruitment_id = :recruitmentId AND crew_crew_id = :crewId", nativeQuery = true)
+    void deleteRecruitment(@Param("recruitmentId") Integer recruitmentId, @Param("crewId") Integer crewId);
 }
