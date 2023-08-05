@@ -62,6 +62,12 @@ public class Application {
     @Column(name="answer7_count")
     private Integer answer7Count;
 
+    @Column(name="is_deleted")
+    private Integer isDeleted;
+
+    @Column(name="is_pass")
+    private Integer isPassed;
+
     @Column(name = "user_user_id", nullable = false)
     private Integer userId;
 
@@ -95,6 +101,8 @@ public class Application {
         this.answer5Count = answer5Count;
         this.answer6Count = answer6Count;
         this.answer7Count = answer7Count;
+        this.isDeleted = isDeleted;
+        this.isPassed = isPassed;
         this.userId = userId;
         this.questionId = questionId;
         this.recruitmentId = recruitmentId;

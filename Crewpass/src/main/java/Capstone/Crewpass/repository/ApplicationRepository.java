@@ -56,7 +56,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     // 지원서 삭제
     @Modifying
-    @Query(value = "DELETE FROM crewpass.application a WHERE a.application_id = :applicationId AND a.user_user_id = :userId", nativeQuery = true)
+    @Transactional
+    @Query(value = "UPDATE crewpass.application SET is_deleted = 1 WHERE application_id = :applicationId AND user_user_id = :userId", nativeQuery = true)
     void deleteApplication(@Param("applicationId") Integer applicationId, @Param("userId") Integer userId);
 
     Optional<Application> findByApplicationId(Integer applicationId);
