@@ -1,6 +1,5 @@
 package Capstone.Crewpass.controller;
 
-import Capstone.Crewpass.entity.ApplicationId;
 import Capstone.Crewpass.entity.CrewChatRoomId;
 import Capstone.Crewpass.entity.DB.CrewChatRoom;
 import Capstone.Crewpass.entity.UnReadCount;
