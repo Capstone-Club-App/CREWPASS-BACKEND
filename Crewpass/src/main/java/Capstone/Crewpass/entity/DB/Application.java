@@ -71,8 +71,14 @@ public class Application {
     @Column(name = "question_recruitment_recruitment_id", nullable = false)
     private Integer recruitmentId;
 
+    @Column(name="is_deleted")
+    private Integer isDeleted;
+
+    @Column(name="is_pass")
+    private Integer isPassed;
+
     @Builder
-    public Application(Integer applicationId, Timestamp submitTime, String answer1, String answer2, String answer3, String answer4, String answer5, String answer6, String answer7, Integer answer1Count, Integer answer2Count, Integer answer3Count, Integer answer4Count, Integer answer5Count, Integer answer6Count, Integer answer7Count, Integer userId, Integer questionId, Integer recruitmentId) {
+    public Application(Integer applicationId, Timestamp submitTime, String answer1, String answer2, String answer3, String answer4, String answer5, String answer6, String answer7, Integer answer1Count, Integer answer2Count, Integer answer3Count, Integer answer4Count, Integer answer5Count, Integer answer6Count, Integer answer7Count, Integer userId, Integer questionId, Integer recruitmentId, Integer isDeleted, Integer isPassed) {
         this.applicationId = applicationId;
         this.submitTime = submitTime;
         this.answer1 = answer1;
@@ -92,5 +98,7 @@ public class Application {
         this.userId = userId;
         this.questionId = questionId;
         this.recruitmentId = recruitmentId;
+        this.isDeleted = isDeleted;
+        this.isPassed = isPassed;
     }
 }
