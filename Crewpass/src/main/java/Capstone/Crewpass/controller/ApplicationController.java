@@ -87,8 +87,7 @@ public class ApplicationController {
         Application application = new Application(null, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
                 answer1, answer2, answer3, answer4, answer5, answer6, answer7,
                 answer1Count, answer2Count, answer3Count, answer4Count, answer5Count, answer6Count, answer7Count,
-                0, null,
-                userId, questionId, recruitmentId);
+                userId, questionId, recruitmentId, 0, null);
 
         Integer applicationId = applicationService.registerApplication(application);
 
