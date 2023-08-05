@@ -19,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -67,7 +64,7 @@ public class AiService {
         ChatGptResponse response = askQuestionToChatGpt(prompt);
         //chatGPT API에게 받은 답변 Parsing
         ChatGptResponseText chatGptResponseText = new ChatGptResponseText(questionCount, questionAnswerHashMap, null,null);
-        return parsingResponseText(chatGptResponseText, response);
+        return parsingResponseText4Crew(chatGptResponseText, response);
     }
 
     public ChatGptResponseText analyzeApplication4User(Integer applicationId){
@@ -90,14 +87,14 @@ public class AiService {
         String prompt = "The following is the application form written by the applicant. "
                 + "The language is written in Korean.\n\n"
                 + content
-                + "Recommend 12 interview questions in Korean to ask the applicant about the overall contents of the application. "
-                + "When making recommendations, please number them under the title \"면접 질문 추천\".\n"
+                + "Recommend 5 expected questions to ask to the applicant based on the overall content of the application and 1 brief best answer to each question. "
+                + "When making recommendations, suggest it in the form of [index: expected question: best answer].\n"
                 + "Please do not return all other content except the request as a result.";
         //chatGPT API에게 요청 전송
         ChatGptResponse response = askQuestionToChatGpt(prompt);
         //chatGPT API에게 받은 답변 Parsing
-        ChatGptResponseText chatGptResponseText = new ChatGptResponseText(questionCount, null, null,null);
-        return parsingResponseText(chatGptResponseText, response);
+        ChatGptResponseText chatGptResponseText = new ChatGptResponseText(null, null, null,null);
+        return parsingResponseText4User(chatGptResponseText, response);
     }
 
     public HashMap<Integer, String[]> getQuestionAnswerHashMap(Optional<Question> optionalQuestion, Optional<Application> optionalApplication){
@@ -121,7 +118,7 @@ public class AiService {
         return questionAnswerHashMap;
     }
 
-    public ChatGptResponseText parsingResponseText(ChatGptResponseText chatGptResponseText, ChatGptResponse response){
+    public ChatGptResponseText parsingResponseText4Crew(ChatGptResponseText chatGptResponseText, ChatGptResponse response){
         List<Choice> choice = response.getChoices();
         String responseText = choice.get(0).getText();
         String[] responseTextArr = responseText.replaceAll("\n\n", "\n").split("\n");
@@ -142,6 +139,26 @@ public class AiService {
         }
         for(int j = interviewIndex; j<responseTextArr.length; j++){
             interview.add(responseTextArr[j]);
+        }
+        chatGptResponseText.setSummary(summary);
+        chatGptResponseText.setInterview(interview);
+        return chatGptResponseText;
+    }
+
+    public ChatGptResponseText parsingResponseText4User(ChatGptResponseText chatGptResponseText, ChatGptResponse response){
+        List<Choice> choice = response.getChoices();
+        String responseText = choice.get(0).getText();
+        String[] responseTextArr = responseText.replaceAll("\n\n", "\n").split("\n");
+        List<String> summary = new ArrayList<>();
+        List<String> interview = new ArrayList<>();
+        for(int i=0;i<responseTextArr.length;i++){
+            switch (responseTextArr[i]){
+                case "":
+                    break;
+                default:
+                    summary.add(responseTextArr[i].split(":")[2]);
+                    interview.add(responseTextArr[i].split(":")[1]);
+            }
         }
         chatGptResponseText.setSummary(summary);
         chatGptResponseText.setInterview(interview);

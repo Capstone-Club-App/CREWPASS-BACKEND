@@ -41,7 +41,7 @@ public class ApplicationService {
     // 지원서 중복 검증
     public String checkDuplicateApplication(Integer userId, Integer recruitmentId) {
         Application application = applicationRepository.findByUserIdAndRecruitmentId(userId, recruitmentId);
-        if (application != null) {
+        if (application == null) {
             return null; // null이면 지원서 등록 가능
         } else {
             return "이미 존재하는 지원서입니다.";
