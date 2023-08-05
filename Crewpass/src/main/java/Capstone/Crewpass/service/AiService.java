@@ -87,7 +87,7 @@ public class AiService {
         String prompt = "The following is the application form written by the applicant. "
                 + "The language is written in Korean.\n\n"
                 + content
-                + "Recommend 5 expected questions to ask to the applicant based on the overall content of the application and 1 brief best answer to each question. "
+                + "Recommend 3 expected questions to ask to the applicant based on the overall content of the application and 1 brief best answer to each question. "
                 + "When making recommendations, suggest it in the form of [index: expected question: best answer].\n"
                 + "Please do not return all other content except the request as a result.";
         //chatGPT API에게 요청 전송
