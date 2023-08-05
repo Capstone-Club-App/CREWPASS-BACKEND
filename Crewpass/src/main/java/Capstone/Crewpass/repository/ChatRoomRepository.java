@@ -4,14 +4,17 @@ import Capstone.Crewpass.dto.ChatRoomInfo;
 import Capstone.Crewpass.dto.ChatRoomList;
 import Capstone.Crewpass.entity.DB.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
+
     ChatRoom findByRecruitmentId(Integer recruitmentId);
 
     // 채팅방 정보 조회
@@ -20,6 +23,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
             " INNER JOIN crewpass.user_chat_room ucr ON ucr.chat_room_chat_room_id = cr.chat_room_id" +
             " INNER JOIN crewpass.recruitment r ON cr.recruitment_recruitment_id = r.recruitment_id" +
             " INNER JOIN crewpass.crew c ON r.crew_crew_id = c.crew_id" +
+            " WHERE cr.is_deleted = 0" +
             " GROUP BY cr.chat_room_id" +
             " HAVING cr.chat_room_id = :chatroomId", nativeQuery = true)
     ChatRoomInfo findInfoByChatroomId(@Param("chatroomId") Integer chatroomId);
@@ -30,7 +34,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
             "   INNER JOIN crewpass.recruitment r ON r.recruitment_id = cr.recruitment_recruitment_id " +
             "   INNER JOIN crewpass.crew c ON c.crew_id = r.crew_crew_id " +
             "   INNER JOIN crewpass.crew_chat_room ccr ON ccr.chat_room_chat_room_id = cr.chat_room_id " +
-            "  WHERE ccr.crew_crew_id = :crewId", nativeQuery = true)
+            "  WHERE ccr.crew_crew_id = :crewId and cr.is_deleted = 0", nativeQuery = true)
     List<ChatRoomList> findChatRoomListByCrewId(@Param("crewId") Integer crewId);
 
     // 회원 - 채팅방 리스트 조회
@@ -39,6 +43,18 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
             "   INNER JOIN crewpass.recruitment r ON r.recruitment_id = cr.recruitment_recruitment_id " +
             "   INNER JOIN crewpass.crew c ON c.crew_id = r.crew_crew_id " +
             "   INNER JOIN crewpass.user_chat_room ucr ON ucr.chat_room_chat_room_id = cr.chat_room_id " +
-            "  WHERE ucr.user_user_id = :userId", nativeQuery = true)
+            "  WHERE ucr.user_user_id = :userId and cr.is_deleted = 0", nativeQuery = true)
     List<ChatRoomList> findChatRoomListByUserId(@Param("userId") Integer userId);
+
+    // 채팅방 삭제
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE crewpass.chat_room SET is_deleted = 1 WHERE close_time < now()", nativeQuery = true)
+    void deleteChatRoom();
+
+    // 일시적으로 Safe Update 해제
+    @Modifying
+    @Transactional
+    @Query(value = "set sql_safe_updates=0", nativeQuery = true)
+    void disabledSafeUpdates();
 }

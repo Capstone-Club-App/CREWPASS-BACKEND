@@ -1,6 +1,7 @@
 package Capstone.Crewpass.controller;
 
 import Capstone.Crewpass.entity.*;
+import Capstone.Crewpass.entity.DB.ChatRoom;
 import Capstone.Crewpass.entity.DB.Recruitment;
 import Capstone.Crewpass.entity.DB.Scrap;
 import Capstone.Crewpass.response.ResponseFormat;
@@ -122,7 +123,17 @@ public class RecruitmentController {
         cal.setTime(closeTime);
         cal.add(Calendar.MONTH, 1); // 한달 이후에 채팅방이 폐쇄되도록 설정
         closeTime.setTime(cal.getTime().getTime());
-        Integer flag = chatRoomService.updateChatRoom(recruitmentId, closeTime);
+
+        // 폐쇄 날짜 수정에 따라 채팅방 삭제 여부도 수정
+        ChatRoom chatRoom = chatRoomService.findByRecruitmentId(recruitmentId);
+        Integer isDeleted = chatRoom.getIsDeleted();
+
+        if (Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))).before(closeTime)) { // 채팅방 폐쇄 날짜가 현재 시점 이후인 경우(폐쇄했던 채팅방은 다시 오픈)
+            isDeleted = 0;
+        } else {
+            isDeleted = 1;
+        }
+        Integer flag = chatRoomService.updateChatRoom(recruitmentId, closeTime, isDeleted);
         if (flag == 1) {
             return new ResponseEntity(ResponseFormat.responseFormat(StatusCode.SUCCESS, ResponseMessage.UPDATE_SUCCESS_RECRUITMENT, null), HttpStatus.OK);
         }

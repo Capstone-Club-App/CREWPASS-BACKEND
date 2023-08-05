@@ -87,7 +87,7 @@ public class ApplicationController {
         Application application = new Application(null, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Seoul"))),
                 answer1, answer2, answer3, answer4, answer5, answer6, answer7,
                 answer1Count, answer2Count, answer3Count, answer4Count, answer5Count, answer6Count, answer7Count,
-                userId, questionId, recruitmentId);
+                userId, questionId, recruitmentId, 0, null);
 
         Integer applicationId = applicationService.registerApplication(application);
 
@@ -173,7 +173,7 @@ public class ApplicationController {
     }
 
     // 지원서 삭제
-    @DeleteMapping("/application/{applicationId}/delete")
+    @PutMapping(value = "/application/{applicationId}/delete")
     public ResponseEntity deleteApplication(
             @PathVariable("applicationId") Integer applicationId,
             @RequestHeader("userId") Integer userId

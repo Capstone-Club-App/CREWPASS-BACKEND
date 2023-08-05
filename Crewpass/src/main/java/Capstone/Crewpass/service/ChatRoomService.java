@@ -52,14 +52,20 @@ public class ChatRoomService {
 
     // 채팅방 정보 수정 (채팅방 폐쇄 날짜 수정)
     @Transactional
-    public Integer updateChatRoom(Integer recruitmentId, Timestamp closeTime) {
+    public Integer updateChatRoom(Integer recruitmentId, Timestamp closeTime, Integer isDeleted) {
         ChatRoom chatRoom = chatRoomRepository.findByRecruitmentId(recruitmentId);
         if (chatRoom == null) {
             return 0;
         }
 
         chatRoom.setCloseTime(closeTime);
+        chatRoom.setIsDeleted(isDeleted);
         chatRoomRepository.save(chatRoom);
         return 1;
+    }
+
+    // 모집글 아이디로 채팅방 찾기
+    public ChatRoom findByRecruitmentId(Integer recruitmentId) {
+        return chatRoomRepository.findByRecruitmentId(recruitmentId);
     }
 }

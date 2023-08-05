@@ -3,9 +3,11 @@ package Capstone.Crewpass;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.TimeZone;
 
+@EnableScheduling
 @EnableJpaAuditing //Auditing이 가능하도록 어노테이션 설정
 @SpringBootApplication
 public class CrewpassApplication {
