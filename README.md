@@ -49,3 +49,8 @@
   </div>
   <img src="https://github.com/Capstone-Club-App/CREWPASS-BACKEND/assets/123241025/86d0af13-c3c1-4914-958d-23eb5646e538" width="700" height="700"/>
 </div>
+
+
+🎥 실행 영상
+---
+[영상](https://youtu.be/ajjFTGtolcE)
